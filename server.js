@@ -20,9 +20,11 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
+app.use("/uploads", express.static("uploads"));
 // api routes
 app.use("/api/test", testRoutes);
 app.use("/api/auth", authRoutes);
+
 app.use("/api/upload", uploadRoutes);
 
 // global error handler
