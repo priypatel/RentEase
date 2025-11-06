@@ -37,7 +37,6 @@ build/
 coverage/
 
 # Local uploads or temp storage (if any)
-uploads/
 temp/
 
 # npm lock file optional (if you prefer yarn)
