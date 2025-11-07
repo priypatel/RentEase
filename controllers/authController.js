@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
+import { passwordResetTemplate } from "../utils/emailTemplates.js";
+import { transporter } from "../config/mail.js";
 
 const signToken = (user) => {
   return jwt.sign(
@@ -75,5 +77,60 @@ export const getProfile = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+// ==============================
+// 🔹 Forgot Password Controller
+// ==============================
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: "User not found with that email" });
+
+    // Generate token (valid 15 minutes)
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "15m",
+    });
+
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
+    const htmlContent = passwordResetTemplate(resetLink); // 👈 Use template
+
+    await transporter.sendMail({
+      from: `"RentEase Support" <${process.env.SMTP_USER}>`,
+      to: email,
+      subject: "Reset Your Password - RentEase",
+      html: htmlContent,
+    });
+
+    res.json({ message: "Password reset link sent successfully" });
+  } catch (error) {
+    console.error("Error in forgotPassword:", error);
+    res.status(500).json({ message: "Failed to send reset email" });
+  }
+};
+
+// ==============================
+// 🔹 Reset Password Controller
+// ==============================
+export const resetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const hashed = await bcrypt.hash(password, 10);
+
+    await User.findByIdAndUpdate(decoded.id, { password: hashed });
+
+    res.json({ message: "Password reset successful" });
+  } catch (error) {
+    console.error("Error in resetPassword:", error);
+    res.status(400).json({ message: "Invalid or expired token" });
   }
 };
