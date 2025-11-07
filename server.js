@@ -1,8 +1,14 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const morgan = require("morgan");
-const connectDB = require("./config/db");
+import dotenv from "dotenv";
+dotenv.config();
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+import connectDB from "./config/db.js";
+
+// routes
+import uploadRoutes from "./routes/api/upload.js";
+import testRoutes from "./routes/api/test.js";
+import authRoutes from "./routes/api/authRoutes.js";
 
 // connect database
 connectDB();
@@ -14,11 +20,6 @@ const PORT = process.env.PORT || 5001;
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
-
-// routes
-const authRoutes = require("./routes/api/authRoutes");
-const testRoutes = require("./routes/api/test");
-const uploadRoutes = require("./routes/api/upload");
 
 app.use("/uploads", express.static("uploads"));
 

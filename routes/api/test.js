@@ -1,6 +1,7 @@
-const express = require("express");
+import express from "express";
+import { verifyToken, verifyRole } from "../../middleware/authMiddleware.js";
+
 const router = express.Router();
-const { verifyToken, verifyRole } = require("../../middleware/authMiddleware");
 
 router.get(
   "/landlord/dashboard",
@@ -19,4 +20,4 @@ router.get(
   }
 );
 
-module.exports = router;
+export default router;

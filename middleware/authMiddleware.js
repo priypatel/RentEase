@@ -1,9 +1,7 @@
-// middleware/authMiddleware.js
-
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
 // ✅ Verify token middleware
-const verifyToken = (req, res, next) => {
+export const verifyToken = (req, res, next) => {
   const authHeader = req.headers.authorization || req.headers.Authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -24,7 +22,7 @@ const verifyToken = (req, res, next) => {
 };
 
 // ✅ Verify role middleware
-const verifyRole = (...allowedRoles) => {
+export const verifyRole = (...allowedRoles) => {
   return (req, res, next) => {
     if (!req.user) {
       return res
@@ -41,5 +39,3 @@ const verifyRole = (...allowedRoles) => {
     next();
   };
 };
-
-module.exports = { verifyToken, verifyRole };
