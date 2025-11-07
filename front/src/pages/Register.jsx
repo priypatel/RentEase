@@ -4,15 +4,14 @@ import axiosInstance from "../api/axiosInstance";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // 👁️ for toggle icons
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import RoleSelect from "../components/forms/RoleSelect";
 
 export default function Register() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
-  // -----------------------------
-  // 🔹 Validation Schema (Yup)
-  // -----------------------------
+  // ✅ Validation Schema
   const validationSchema = Yup.object({
     name: Yup.string()
       .min(3, "Name must be at least 3 characters long")
@@ -29,21 +28,13 @@ export default function Register() {
       .required("Role is required"),
   });
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
-    role: "",
-  });
   const formik = useFormik({
     initialValues: { name: "", email: "", password: "", role: "tenant" },
     validationSchema,
     onSubmit: handleRegister,
   });
 
-  // -----------------------------
-  // 🔹 Submit Handler
-  // -----------------------------
+  // ✅ Submit handler
   async function handleRegister(values, { setSubmitting, resetForm }) {
     try {
       const res = await axiosInstance.post("/auth/register", values);
@@ -58,17 +49,17 @@ export default function Register() {
     }
   }
 
-  // -----------------------------
-  // 🔹 Render UI
-  // -----------------------------
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-600 via-indigo-500 to-blue-500">
-      <div className="bg-white/20 backdrop-blur-md p-8 rounded-3xl shadow-2xl w-full max-w-md text-white relative">
-        <h1 className="text-3xl font-bold text-center mb-6">
+    <div className="flex items-center justify-center min-h-screen px-4 sm:px-0 bg-gradient-to-br from-purple-600 via-indigo-500 to-blue-500">
+      <div className="bg-white/20 backdrop-blur-md p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-md text-white relative">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">
           Create Account 🏠
         </h1>
 
-        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-5">
+        <form
+          onSubmit={formik.handleSubmit}
+          className="flex flex-col gap-4 sm:gap-5"
+        >
           {/* Full Name */}
           <div>
             <label className="text-sm font-semibold">Full Name</label>
@@ -76,11 +67,11 @@ export default function Register() {
               type="text"
               name="name"
               {...formik.getFieldProps("name")}
-              className={`w-full mt-1 p-3 rounded-md border ${
+              className={`input-primary ${
                 formik.touched.name && formik.errors.name
                   ? "border-red-400"
-                  : "border-white/30"
-              } bg-white/10 placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-300`}
+                  : ""
+              }`}
             />
             {formik.touched.name && formik.errors.name && (
               <p className="text-red-300 text-sm mt-1">{formik.errors.name}</p>
@@ -94,11 +85,11 @@ export default function Register() {
               type="email"
               name="email"
               {...formik.getFieldProps("email")}
-              className={`w-full mt-1 p-3 rounded-md border ${
+              className={`input-primary ${
                 formik.touched.email && formik.errors.email
                   ? "border-red-400"
-                  : "border-white/30"
-              } bg-white/10 placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-300`}
+                  : ""
+              }`}
             />
             {formik.touched.email && formik.errors.email && (
               <p className="text-red-300 text-sm mt-1">{formik.errors.email}</p>
@@ -113,14 +104,14 @@ export default function Register() {
                 type={showPassword ? "text" : "password"}
                 name="password"
                 {...formik.getFieldProps("password")}
-                className={`w-full mt-1 p-3 pr-10 rounded-md border ${
+                className={`input-primary ${
                   formik.touched.password && formik.errors.password
                     ? "border-red-400"
-                    : "border-white/30"
-                } bg-white/10 placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-300`}
+                    : ""
+                }`}
               />
 
-              {/* 👁️ Toggle button perfectly centered */}
+              {/* 👁️ Toggle button */}
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -139,9 +130,9 @@ export default function Register() {
           </div>
 
           {/* Role Select */}
-          <div>
-            <label className="text-sm font-semibold">Role</label>
-            <select
+          <div className="relative z-40">
+            {/* <label className="text-sm font-semibold">Role</label> */}
+            {/* <select
               name="role"
               {...formik.getFieldProps("role")}
               className={`w-full mt-1 p-3 rounded-md border ${
@@ -152,24 +143,38 @@ export default function Register() {
             >
               <option value="tenant">Tenant</option>
               <option value="landlord">Landlord</option>
-            </select>
-            {formik.touched.role && formik.errors.role && (
-              <p className="text-red-300 text-sm mt-1">{formik.errors.role}</p>
-            )}
+            </select> */}
+            {/* <select
+              name="role"
+              {...formik.getFieldProps("role")}
+              className={`w-full mt-1 p-3 rounded-md border ${
+                formik.touched.role && formik.errors.role
+                  ? "border-red-400"
+                  : "border-purple-300"
+              } bg-white/10 backdrop-blur-md text-white font-medium focus:outline-none focus:ring-2 focus:ring-purple-300 appearance-none transition-all duration-300`}
+            >
+              <option value="tenant" className="text-gray-800">
+                Tenant
+              </option>
+              <option value="landlord" className="text-gray-800">
+                Landlord
+              </option>
+            </select> */}
+            <RoleSelect formik={formik} />
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className="w-full bg-white text-purple-700 font-semibold py-2 mt-3 rounded-md hover:bg-purple-100 transition duration-300 disabled:opacity-50"
+            className="btn-primary w-full mt-3 disabled:opacity-50"
           >
             {formik.isSubmitting ? "Registering..." : "Register"}
           </button>
         </form>
 
         {/* Footer */}
-        <p className="text-center text-sm text-white/70 mt-6">
+        <p className="text-center text-xs sm:text-sm text-white/70 mt-6">
           Already have an account?{" "}
           <Link
             to="/login"
