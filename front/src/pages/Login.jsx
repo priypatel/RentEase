@@ -13,9 +13,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
-  // -----------------------------
-  // 🔹 Validation Schema
-  // -----------------------------
+  // ✅ Validation Schema
   const validationSchema = Yup.object({
     email: Yup.string()
       .email("Invalid email address")
@@ -26,18 +24,14 @@ export default function Login() {
       .required("Password is required"),
   });
 
-  // -----------------------------
-  // 🔹 Formik Setup
-  // -----------------------------
+  // ✅ Formik setup
   const formik = useFormik({
     initialValues: { email: "", password: "" },
     validationSchema,
     onSubmit: handleLogin,
   });
 
-  // -----------------------------
-  // 🔹 Submit Handler
-  // -----------------------------
+  // ✅ Submit Handler
   async function handleLogin(values, { setSubmitting, resetForm }) {
     try {
       const res = await axiosInstance.post("/auth/login", values);
@@ -57,16 +51,18 @@ export default function Login() {
     }
   }
 
-  // -----------------------------
-  // 🔹 Render UI
-  // -----------------------------
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600">
-      <div className="bg-white/20 backdrop-blur-md p-8 rounded-3xl shadow-2xl w-full max-w-md text-white">
-        <h1 className="text-3xl font-bold text-center mb-6">Welcome Back 👋</h1>
+    <div className="flex items-center justify-center min-h-screen px-4 sm:px-0 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600">
+      <div className="bg-white/20 backdrop-blur-md p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-md text-white">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">
+          Welcome Back 👋
+        </h1>
 
         {/* Login Form */}
-        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-5">
+        <form
+          onSubmit={formik.handleSubmit}
+          className="flex flex-col gap-4 sm:gap-5"
+        >
           {/* Email */}
           <div>
             <label className="text-sm font-semibold">Email</label>
@@ -74,11 +70,11 @@ export default function Login() {
               type="email"
               name="email"
               {...formik.getFieldProps("email")}
-              className={`w-full mt-1 p-3 rounded-md border ${
+              className={`input-primary ${
                 formik.touched.email && formik.errors.email
                   ? "border-red-400"
-                  : "border-white/30"
-              } bg-white/10 placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-300`}
+                  : ""
+              }`}
             />
             {formik.touched.email && formik.errors.email && (
               <p className="text-red-300 text-sm mt-1">{formik.errors.email}</p>
@@ -93,14 +89,14 @@ export default function Login() {
                 type={showPassword ? "text" : "password"}
                 name="password"
                 {...formik.getFieldProps("password")}
-                className={`w-full mt-1 p-3 pr-10 rounded-md border ${
+                className={`input-primary ${
                   formik.touched.password && formik.errors.password
                     ? "border-red-400"
-                    : "border-white/30"
-                } bg-white/10 placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-blue-300`}
+                    : ""
+                }`}
               />
 
-              {/* 👁️ Centered Toggle Button */}
+              {/* 👁️ Eye Toggle */}
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
@@ -122,14 +118,14 @@ export default function Login() {
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className="w-full bg-white text-blue-700 font-semibold py-2 mt-3 rounded-md hover:bg-blue-100 transition duration-300 disabled:opacity-50"
+            className="btn-primary w-full mt-3 disabled:opacity-50"
           >
             {formik.isSubmitting ? "Logging in..." : "Login"}
           </button>
         </form>
 
         {/* Footer */}
-        <p className="text-center text-sm text-white/70 mt-6">
+        <p className="text-center text-xs sm:text-sm text-white/70 mt-6">
           Don’t have an account?{" "}
           <Link
             to="/register"
