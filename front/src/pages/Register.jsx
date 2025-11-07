@@ -81,7 +81,7 @@ export default function Register() {
               name="role"
               value={formData.role}
               onChange={handleChange}
-              className="w-full mt-1 p-3 rounded-md border border-white/30 bg-white/10 text-white focus:outline-none focus:ring-2 focus:ring-purple-300"
+              className="w-full mt-1 p-3 rounded-md border border-purple-300 bg-white text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all duration-200"
             >
               <option value="tenant">Tenant</option>
               <option value="landlord">Landlord</option>
