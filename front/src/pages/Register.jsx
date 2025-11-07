@@ -7,7 +7,6 @@ import { toast } from "react-toastify";
 import { FaEye, FaEyeSlash } from "react-icons/fa"; // 👁️ for toggle icons
 
 export default function Register() {
-<<<<<<< Updated upstream
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -28,18 +27,14 @@ export default function Register() {
     role: Yup.string()
       .oneOf(["tenant", "landlord"], "Invalid role")
       .required("Role is required"),
-=======
+  });
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
     role: "",
->>>>>>> Stashed changes
   });
-
-  // -----------------------------
-  // 🔹 Formik Setup
-  // -----------------------------
   const formik = useFormik({
     initialValues: { name: "", email: "", password: "", role: "tenant" },
     validationSchema,
