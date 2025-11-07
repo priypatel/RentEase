@@ -1,21 +1,30 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import { Routes,Route, BrowserRouter } from 'react-router-dom'
-import Register from './Pages/Register'
-import "./index.css";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   return (
-    <BrowserRouter>
+    <Router>
       <Routes>
         <Route path="/register" element={<Register />} />
-      {/* //  <Route path="/" element={<Home />} /> */}
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/"
+          element={
+            isAuthenticated ? (
+              <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
+                <h1 className="text-3xl font-semibold">Welcome Home 🎉</h1>
+              </div>
+            ) : (
+              <Navigate to="/login" replace />
+            )
+          }
+        />
       </Routes>
-    </BrowserRouter>
-  )
+    </Router>
+  );
 }
-
-export default App
