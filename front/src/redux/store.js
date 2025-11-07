@@ -7,4 +7,4 @@ export const store = configureStore({
   },
 });
 
-// Optional: export RootState and AppDispatch types if using TypeScript
+export default store;
