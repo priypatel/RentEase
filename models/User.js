@@ -17,6 +17,8 @@ const userSchema = new mongoose.Schema(
       enum: ["tenant", "landlord", "admin"],
       default: "tenant",
     },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
     createdAt: { type: Date, default: Date.now },
   },
   { timestamps: true }

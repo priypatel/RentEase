@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 import { passwordResetTemplate } from "../utils/emailTemplates.js";
 import { transporter } from "../config/mail.js";
+import crypto from "crypto";
 
 const signToken = (user) => {
   return jwt.sign(
@@ -84,34 +85,48 @@ export const getProfile = async (req, res) => {
 // 🔹 Forgot Password Controller
 // ==============================
 export const forgotPassword = async (req, res) => {
-  const { email } = req.body;
-
   try {
+    const { email } = req.body;
     const user = await User.findOne({ email });
-    if (!user)
-      return res
-        .status(404)
-        .json({ message: "User not found with that email" });
 
-    // Generate token (valid 15 minutes)
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "15m",
-    });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
-    const resetLink = `${process.env.FRONTEND_URL}/reset-password/${token}`;
-    const htmlContent = passwordResetTemplate(resetLink); // 👈 Use template
+    // Generate reset token (JWT)
+    const resetToken = jwt.sign(
+      { id: user._id },
+      process.env.RESET_PASSWORD_SECRET,
+      { expiresIn: "15m" }
+    );
 
+    // Save hashed token in DB
+    const hashedToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 mins
+    await user.save();
+
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
+    // Call your template
+    const htmlContent = passwordResetTemplate(resetLink);
     await transporter.sendMail({
-      from: `"RentEase Support" <${process.env.SMTP_USER}>`,
-      to: email,
-      subject: "Reset Your Password - RentEase",
+      to: user.email,
+      subject: "Reset Your Password",
       html: htmlContent,
     });
 
-    res.json({ message: "Password reset link sent successfully" });
-  } catch (error) {
-    console.error("Error in forgotPassword:", error);
-    res.status(500).json({ message: "Failed to send reset email" });
+    return res.json({
+      message: "Password reset link sent successfully",
+      resetLink, // for Postman testing
+      token: resetToken,
+    });
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -119,18 +134,33 @@ export const forgotPassword = async (req, res) => {
 // 🔹 Reset Password Controller
 // ==============================
 export const resetPassword = async (req, res) => {
-  const { token } = req.params;
-  const { password } = req.body;
-
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const hashed = await bcrypt.hash(password, 10);
+    const { token } = req.params;
+    const { password } = req.body;
 
-    await User.findByIdAndUpdate(decoded.id, { password: hashed });
+    // Hash incoming token
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
 
-    res.json({ message: "Password reset successful" });
-  } catch (error) {
-    console.error("Error in resetPassword:", error);
-    res.status(400).json({ message: "Invalid or expired token" });
+    // Find user with matching token & expiry
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired token" });
+    }
+
+    // Update password
+    user.password = password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    return res.json({ message: "Password reset successful" });
+  } catch (err) {
+    console.error("Error:", err);
+    res.status(500).json({ message: "Server error" });
   }
 };

@@ -9,12 +9,13 @@ import connectDB from "./config/db.js";
 import uploadRoutes from "./routes/api/upload.js";
 import testRoutes from "./routes/api/test.js";
 import authRoutes from "./routes/api/authRoutes.js";
+import propertyRoutes from "./routes/api/propertyRoutes.js";
 
 // connect database
 connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5005;
 
 // middleware
 app.use(cors());
@@ -27,6 +28,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/auth", authRoutes);
 app.use("/api/test", testRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/properties", propertyRoutes);
 
 // global error handler
 app.use((err, req, res, next) => {
