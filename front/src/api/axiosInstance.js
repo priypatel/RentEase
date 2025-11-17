@@ -1,20 +1,17 @@
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL, // your backend base URL
-  headers: {
-    "Content-Type": "application/json",
-  },
+  baseURL: "http://172.16.5.17:5005/api",
 });
 
-// Optional: Add token automatically for protected routes
+// Automatically attach token
 axiosInstance.interceptors.request.use((config) => {
-  const user = localStorage.getItem("user")
-    ? JSON.parse(localStorage.getItem("user"))
+  const authData = localStorage.getItem("auth")
+    ? JSON.parse(localStorage.getItem("auth"))
     : null;
 
-  if (user?.token) {
-    config.headers.Authorization = `Bearer ${user.token}`;
+  if (authData?.token) {
+    config.headers.Authorization = `Bearer ${authData.token}`;
   }
 
   return config;

@@ -1,11 +1,14 @@
-import Login from "./pages/Login";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-import Register from "./Pages/Register";
 import "./index.css";
 import TenantDashboard from "./pages/TenantDashboard";
 import LandlordDashboard from "./pages/LandlordDashboard";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ResetPassword from "./pages/ResetPassword";
+import ForgotPassword from "./pages/ForgotPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
-
+import AddProperty from "./pages/AddProperty";
+import MyProperties from "./pages/MyProperties";
 function App() {
   return (
     <BrowserRouter>
@@ -21,6 +24,9 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* Protected Landlord Routes */}
+        
         <Route
           path="/landlord/dashboard"
           element={
@@ -29,7 +35,37 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/my-properties"
+          element={
+            <ProtectedRoute>
+              <MyProperties />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/add-property"
+          element={
+            <ProtectedRoute>
+              <AddProperty />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/edit-property/:id"
+          element={
+            <ProtectedRoute>
+              <AddProperty />
+            </ProtectedRoute>
+          }
+        />
+
         {/* //  <Route path="/" element={<Home />} /> */}
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </BrowserRouter>
   );

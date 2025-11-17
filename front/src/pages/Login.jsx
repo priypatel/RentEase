@@ -35,11 +35,23 @@ export default function Login() {
   async function handleLogin(values, { setSubmitting, resetForm }) {
     try {
       const res = await axiosInstance.post("/auth/login", values);
-      const { user } = res.data;
+      const { token, user } = res.data;
 
-      dispatch(loginSuccess(user));
+      // ✅ Save token + user in ONE place only
+      localStorage.setItem(
+        "auth",
+        JSON.stringify({
+          user,
+          token,
+        })
+      );
+
+      // ✅ Redux: send BOTH token + user
+      dispatch(loginSuccess({ user, token }));
+
       toast.success("Login successful!");
 
+      // Redirect based on role
       if (user.role === "tenant") navigate("/tenant/dashboard");
       else if (user.role === "landlord") navigate("/landlord/dashboard");
 
@@ -123,6 +135,14 @@ export default function Login() {
             {formik.isSubmitting ? "Logging in..." : "Login"}
           </button>
         </form>
+        <p className="text-right text-xs sm:text-sm mt-1">
+          <Link
+            to="/forgot-password"
+            className="text-yellow-300 hover:text-yellow-400 font-semibold"
+          >
+            Forgot Password?
+          </Link>
+        </p>
 
         {/* Footer */}
         <p className="text-center text-xs sm:text-sm text-white/70 mt-6">
