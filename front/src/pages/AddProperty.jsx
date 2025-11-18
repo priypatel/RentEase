@@ -19,7 +19,7 @@
 //     items: properties,
 //     creating,
 //     updating,
-//   } = useSelector((state) => state.properties);
+//   } = useSelector((state) => state.properties || { items: [] });
 
 //   // -------------------------------
 //   // FORM STATES
@@ -29,48 +29,120 @@
 //   const [rent, setRent] = useState("");
 //   const [description, setDescription] = useState("");
 
+//   // New files to upload (File[])
 //   const [images, setImages] = useState([]);
+//   // Previews for newly selected files: { id, url, file }
 //   const [previewImages, setPreviewImages] = useState([]);
+//   // Existing images from server: { _id?, public_id?, url }
 //   const [existingImages, setExistingImages] = useState([]);
+//   // IDs (/_id or public_id) of existing images removed by user — send to backend on update
+//   const [removedExistingIds, setRemovedExistingIds] = useState([]);
 
 //   // -------------------------------
 //   // LOAD PROPERTY IN EDIT MODE
 //   // -------------------------------
 //   useEffect(() => {
-//     if (id && properties.length === 0) {
+//     if (id && (!properties || properties.length === 0)) {
 //       dispatch(getMyProperties());
 //     }
 //   }, [id, properties, dispatch]);
 
 //   useEffect(() => {
-//     if (id && properties.length > 0) {
+//     if (id && properties && properties.length > 0) {
 //       const p = properties.find((prop) => prop._id === id);
 //       if (!p) return;
 
-//       setTitle(p.title);
-//       setLocation(p.location);
-//       setRent(p.rent);
-//       setDescription(p.description);
-//       setExistingImages(p.images || []);
+//       setTitle(p.title || "");
+//       setLocation(p.location || "");
+//       setRent(p.rent || "");
+//       setDescription(p.description || "");
+//       // ensure server images are objects with url + id fields
+//       setExistingImages(Array.isArray(p.images) ? p.images : []);
 //     }
 //   }, [id, properties]);
+
+//   // -------------------------------
+//   // Helpers for previews
+//   // -------------------------------
+//   const makePreview = (file) => {
+//     const url = URL.createObjectURL(file);
+//     const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+//     return { id: uniqueId, url, file };
+//   };
+
+//   // Cleanup object URLs on unmount
+//   useEffect(() => {
+//     return () => {
+//       previewImages.forEach((p) => {
+//         try {
+//           URL.revokeObjectURL(p.url);
+//         } catch (e) {}
+//       });
+//     };
+//     // eslint-disable-next-line react-hooks/exhaustive-deps
+//   }, []);
 
 //   // -------------------------------
 //   // IMAGE HANDLING
 //   // -------------------------------
 //   const handleImageChange = (e) => {
 //     const files = Array.from(e.target.files || []);
-//     setImages(files);
+//     if (files.length === 0) return;
 
-//     const previews = files.map((file) => URL.createObjectURL(file));
-//     setPreviewImages(previews);
+//     const newPreviews = files.map((f) => makePreview(f));
+
+//     // Append new files & previews (do not replace existing ones)
+//     setImages((prev) => [...prev, ...newPreviews.map((p) => p.file)]);
+//     setPreviewImages((prev) => [...prev, ...newPreviews]);
+
+//     // Clear the input so same file can be chosen again if needed
+//     e.target.value = "";
 //   };
 
-//   useEffect(() => {
-//     return () => {
-//       previewImages.forEach((url) => URL.revokeObjectURL(url));
-//     };
-//   }, [previewImages]);
+//   // Remove a newly selected preview (by preview id)
+//   const handleRemovePreview = (previewId) => {
+//     setPreviewImages((prevPreviews) => {
+//       const removed = prevPreviews.find((p) => p.id === previewId);
+//       const next = prevPreviews.filter((p) => p.id !== previewId);
+
+//       // revoke object url of removed
+//       if (removed) {
+//         try {
+//           URL.revokeObjectURL(removed.url);
+//         } catch (e) {}
+//       }
+
+//       // sync images[] (File[]) to the remaining previews
+//       setImages(next.map((p) => p.file));
+//       return next;
+//     });
+//   };
+
+//   // Remove an existing image (edit mode)
+//   // Accepts identifier: prefer _id, else public_id, else index fallback
+//   const handleRemoveExisting = (identifier) => {
+//     setExistingImages((prev) => {
+//       const idx =
+//         typeof identifier === "number"
+//           ? identifier
+//           : prev.findIndex(
+//               (it) => it._id === identifier || it.public_id === identifier
+//             );
+
+//       if (idx === -1) return prev;
+
+//       const removed = prev[idx];
+//       const next = [...prev.slice(0, idx), ...prev.slice(idx + 1)];
+
+//       // gather id to tell backend to delete
+//       const idToRemove = removed._id || removed.public_id || null;
+//       if (idToRemove) {
+//         setRemovedExistingIds((prevIds) => [...prevIds, idToRemove]);
+//       }
+
+//       return next;
+//     });
+//   };
 
 //   // -------------------------------
 //   // HANDLE SUBMIT
@@ -87,11 +159,18 @@
 //     formData.append("title", title);
 //     formData.append("location", location);
 //     formData.append("rent", rent);
-//     formData.append("description", description);
+//     formData.append("description", description || "");
 
+//     // Append newly selected files
 //     images.forEach((file) => formData.append("images", file));
 
+//     // On update, inform backend which existing images were removed
 //     if (id) {
+//       // append removed ids as removedImages[] so backend can iterate
+//       removedExistingIds.forEach((rid) =>
+//         formData.append("removedImages[]", rid)
+//       );
+
 //       dispatch(updateProperty({ id, formData }))
 //         .unwrap()
 //         .then(() => {
@@ -111,20 +190,6 @@
 //         navigate("/my-properties");
 //       })
 //       .catch((err) => toast.error(err || "Create failed"));
-//   };
-//   // DELETE preview image (newly selected)
-//   const handleRemovePreview = (index) => {
-//     const updatedPreviews = previewImages.filter((_, i) => i !== index);
-//     const updatedFiles = images.filter((_, i) => i !== index);
-
-//     setPreviewImages(updatedPreviews);
-//     setImages(updatedFiles);
-//   };
-
-//   // DELETE existing image (edit mode)
-//   const handleRemoveExisting = (index) => {
-//     const updatedExisting = existingImages.filter((_, i) => i !== index);
-//     setExistingImages(updatedExisting);
 //   };
 
 //   // -------------------------------
@@ -221,6 +286,8 @@
 //                 <span className="text-green-600 underline">Browse Files</span>
 //               </p>
 
+//               <p className="text-xs text-gray-500">Upload multiple images</p>
+
 //               <input
 //                 id="imageInput"
 //                 type="file"
@@ -232,59 +299,62 @@
 //             </div>
 
 //             {/* Existing Images (edit mode) */}
-//             {id && existingImages.length > 0 && previewImages.length === 0 && (
+//             {id && existingImages.length > 0 && (
 //               <div className="grid grid-cols-3 gap-4 mt-4">
-//                 {existingImages.map((img, idx) => (
-//                   <div
-//                     key={idx}
-//                     className="relative group rounded-xl overflow-hidden shadow-md border border-gray-200"
-//                   >
-//                     {/* <img
-//                       src={img.url}
-//                       className="w-full h-28 object-cover transition group-hover:scale-110"
-//                     /> */}
-//                     <img
-//                       src={img?.url || ""}
-//                       onError={(e) => (e.target.style.display = "none")}
-//                       className="w-full h-28 object-cover transition group-hover:scale-110"
-//                     />
-
-//                     {/* Delete Button */}
-//                     <button
-//                       type="button"
-//                       onClick={() => handleRemoveExisting(idx)}
-//                       className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full
-//                        shadow-md opacity-0 group-hover:opacity-100 transition"
+//                 {existingImages.map((img, idx) => {
+//                   const key = img._id || img.public_id || `${img.url}-${idx}`;
+//                   return (
+//                     <div
+//                       key={key}
+//                       className="relative group rounded-xl overflow-hidden shadow-md border border-gray-200"
 //                     >
-//                       ✕
-//                     </button>
-//                   </div>
-//                 ))}
+//                       <img
+//                         src={img?.url || ""}
+//                         onError={(e) => {
+//                           e.target.style.display = "none";
+//                         }}
+//                         className="w-full h-28 object-cover transition group-hover:scale-110"
+//                         alt="existing"
+//                       />
+
+//                       {/* Delete Button */}
+//                       <button
+//                         type="button"
+//                         onClick={() =>
+//                           handleRemoveExisting(img._id || img.public_id || idx)
+//                         }
+//                         className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full
+//                        shadow-md opacity-0 group-hover:opacity-100 transition"
+//                       >
+//                         ✕
+//                       </button>
+//                     </div>
+//                   );
+//                 })}
 //               </div>
 //             )}
 
 //             {/* New selected preview images */}
 //             {previewImages.length > 0 && (
 //               <div className="grid grid-cols-3 gap-4 mt-4">
-//                 {previewImages.map((src, idx) => (
+//                 {previewImages.map((p) => (
 //                   <div
-//                     key={idx}
+//                     key={p.id}
 //                     className="relative group rounded-xl overflow-hidden shadow-md border border-gray-200"
 //                   >
-//                     {/* <img
-//                       src={src}
-//                       className="w-full h-28 object-cover transition group-hover:scale-110"
-//                     /> */}
 //                     <img
-//                       src={src || ""}
-//                       onError={(e) => (e.target.style.display = "none")}
+//                       src={p.url || ""}
+//                       onError={(e) => {
+//                         e.target.style.display = "none";
+//                       }}
 //                       className="w-full h-28 object-cover transition group-hover:scale-110"
+//                       alt="preview"
 //                     />
 
 //                     {/* Delete Button */}
 //                     <button
 //                       type="button"
-//                       onClick={() => handleRemovePreview(idx)}
+//                       onClick={() => handleRemovePreview(p.id)}
 //                       className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full
 //                        shadow-md opacity-0 group-hover:opacity-100 transition"
 //                     >
@@ -315,7 +385,6 @@
 //     </div>
 //   );
 // }
-
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
@@ -347,13 +416,12 @@ export default function AddProperty() {
   const [rent, setRent] = useState("");
   const [description, setDescription] = useState("");
 
-  // New files to upload (File[])
-  const [images, setImages] = useState([]);
-  // Previews for newly selected files: { id, url, file }
-  const [previewImages, setPreviewImages] = useState([]);
-  // Existing images from server: { _id?, public_id?, url }
-  const [existingImages, setExistingImages] = useState([]);
-  // IDs (/_id or public_id) of existing images removed by user — send to backend on update
+  // NEW IMAGES
+  const [images, setImages] = useState([]); // File[]
+  const [previewImages, setPreviewImages] = useState([]); // [{id,url,file}]
+
+  // EXISTING IMAGES (from DB)
+  const [existingImages, setExistingImages] = useState([]); // [{_id,public_id,url}]
   const [removedExistingIds, setRemovedExistingIds] = useState([]);
 
   // -------------------------------
@@ -374,91 +442,85 @@ export default function AddProperty() {
       setLocation(p.location || "");
       setRent(p.rent || "");
       setDescription(p.description || "");
-      // ensure server images are objects with url + id fields
       setExistingImages(Array.isArray(p.images) ? p.images : []);
     }
   }, [id, properties]);
 
   // -------------------------------
-  // Helpers for previews
+  // PREVIEW HELPER
   // -------------------------------
-  const makePreview = (file) => {
-    const url = URL.createObjectURL(file);
-    const uniqueId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-    return { id: uniqueId, url, file };
-  };
+  const makePreview = (file) => ({
+    id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    url: URL.createObjectURL(file),
+    file,
+  });
 
-  // Cleanup object URLs on unmount
   useEffect(() => {
     return () => {
       previewImages.forEach((p) => {
         try {
           URL.revokeObjectURL(p.url);
-        } catch (e) {}
+        } catch {}
       });
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [previewImages]);
 
   // -------------------------------
-  // IMAGE HANDLING
+  // HANDLE FILE SELECT
   // -------------------------------
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files || []);
-    if (files.length === 0) return;
+    if (!files.length) return;
 
-    const newPreviews = files.map((f) => makePreview(f));
+    const previews = files.map((f) => makePreview(f));
 
-    // Append new files & previews (do not replace existing ones)
-    setImages((prev) => [...prev, ...newPreviews.map((p) => p.file)]);
-    setPreviewImages((prev) => [...prev, ...newPreviews]);
+    setPreviewImages((prev) => [...prev, ...previews]);
+    setImages((prev) => [...prev, ...previews.map((p) => p.file)]);
 
-    // Clear the input so same file can be chosen again if needed
     e.target.value = "";
   };
 
-  // Remove a newly selected preview (by preview id)
+  // -------------------------------
+  // REMOVE NEW PREVIEW IMAGE
+  // -------------------------------
   const handleRemovePreview = (previewId) => {
-    setPreviewImages((prevPreviews) => {
-      const removed = prevPreviews.find((p) => p.id === previewId);
-      const next = prevPreviews.filter((p) => p.id !== previewId);
-
-      // revoke object url of removed
+    setPreviewImages((prev) => {
+      const removed = prev.find((p) => p.id === previewId);
       if (removed) {
         try {
           URL.revokeObjectURL(removed.url);
-        } catch (e) {}
+        } catch {}
       }
 
-      // sync images[] (File[]) to the remaining previews
-      setImages(next.map((p) => p.file));
-      return next;
+      const updated = prev.filter((p) => p.id !== previewId);
+
+      // sync file list
+      setImages(updated.map((p) => p.file));
+
+      return updated;
     });
   };
 
-  // Remove an existing image (edit mode)
-  // Accepts identifier: prefer _id, else public_id, else index fallback
+  // -------------------------------
+  // REMOVE EXISTING IMAGE
+  // -------------------------------
   const handleRemoveExisting = (identifier) => {
     setExistingImages((prev) => {
-      const idx =
-        typeof identifier === "number"
-          ? identifier
-          : prev.findIndex(
-              (it) => it._id === identifier || it.public_id === identifier
-            );
-
+      const idx = prev.findIndex(
+        (it) => it._id === identifier || it.public_id === identifier
+      );
       if (idx === -1) return prev;
 
-      const removed = prev[idx];
-      const next = [...prev.slice(0, idx), ...prev.slice(idx + 1)];
+      const removedImage = prev[idx];
+      const updated = prev.filter((_, i) => i !== idx);
 
-      // gather id to tell backend to delete
-      const idToRemove = removed._id || removed.public_id || null;
-      if (idToRemove) {
-        setRemovedExistingIds((prevIds) => [...prevIds, idToRemove]);
+      // track for backend deletion
+      const removeId = removedImage._id || removedImage.public_id;
+      if (removeId) {
+        setRemovedExistingIds((prevIds) => [...prevIds, removeId]);
       }
 
-      return next;
+      return updated;
     });
   };
 
@@ -479,12 +541,9 @@ export default function AddProperty() {
     formData.append("rent", rent);
     formData.append("description", description || "");
 
-    // Append newly selected files
     images.forEach((file) => formData.append("images", file));
 
-    // On update, inform backend which existing images were removed
     if (id) {
-      // append removed ids as removedImages[] so backend can iterate
       removedExistingIds.forEach((rid) =>
         formData.append("removedImages[]", rid)
       );
@@ -616,43 +675,35 @@ export default function AddProperty() {
               />
             </div>
 
-            {/* Existing Images (edit mode) */}
+            {/* EXISTING IMAGES */}
             {id && existingImages.length > 0 && (
               <div className="grid grid-cols-3 gap-4 mt-4">
-                {existingImages.map((img, idx) => {
-                  const key = img._id || img.public_id || `${img.url}-${idx}`;
-                  return (
-                    <div
-                      key={key}
-                      className="relative group rounded-xl overflow-hidden shadow-md border border-gray-200"
+                {existingImages.map((img, idx) => (
+                  <div
+                    key={img._id || img.public_id || idx}
+                    className="relative group rounded-xl overflow-hidden shadow-md border border-gray-200"
+                  >
+                    <img
+                      src={img?.url || ""}
+                      onError={(e) => (e.target.style.display = "none")}
+                      className="w-full h-28 object-cover transition group-hover:scale-110"
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleRemoveExisting(img._id || img.public_id)
+                      }
+                      className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full 
+                          shadow-md opacity-0 group-hover:opacity-100 transition"
                     >
-                      <img
-                        src={img?.url || ""}
-                        onError={(e) => {
-                          e.target.style.display = "none";
-                        }}
-                        className="w-full h-28 object-cover transition group-hover:scale-110"
-                        alt="existing"
-                      />
-
-                      {/* Delete Button */}
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleRemoveExisting(img._id || img.public_id || idx)
-                        }
-                        className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full 
-                       shadow-md opacity-0 group-hover:opacity-100 transition"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  );
-                })}
+                      ✕
+                    </button>
+                  </div>
+                ))}
               </div>
             )}
 
-            {/* New selected preview images */}
+            {/* NEW PREVIEW IMAGES */}
             {previewImages.length > 0 && (
               <div className="grid grid-cols-3 gap-4 mt-4">
                 {previewImages.map((p) => (
@@ -661,20 +712,14 @@ export default function AddProperty() {
                     className="relative group rounded-xl overflow-hidden shadow-md border border-gray-200"
                   >
                     <img
-                      src={p.url || ""}
-                      onError={(e) => {
-                        e.target.style.display = "none";
-                      }}
+                      src={p.url}
                       className="w-full h-28 object-cover transition group-hover:scale-110"
-                      alt="preview"
                     />
-
-                    {/* Delete Button */}
                     <button
                       type="button"
                       onClick={() => handleRemovePreview(p.id)}
                       className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full 
-                       shadow-md opacity-0 group-hover:opacity-100 transition"
+                          shadow-md opacity-0 group-hover:opacity-100 transition"
                     >
                       ✕
                     </button>
