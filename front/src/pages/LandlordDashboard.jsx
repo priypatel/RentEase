@@ -1,18 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Wallet, Users, Home, Bell, PlusCircle } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 import { getMyProperties } from "../redux/slices/propertySlice";
+import useCountUp from "../hooks/useCountUp";
+import { logoutUser } from "../redux/slices/userSlice";
 import ConfirmModal from "../components/common/ConfirmModal";
 import PropertyCardMini from "../components/property/PropertyCardMini";
 import SkeletonCardMini from "../components/common/SkeletonCardMini";
-import useCountUp from "../hooks/useCountUp";
-import { useState, useRef } from "react";
-import { logoutUser } from "../redux/slices/userSlice";
-import { useNavigate } from "react-router-dom";
-
 export default function LandlordDashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();

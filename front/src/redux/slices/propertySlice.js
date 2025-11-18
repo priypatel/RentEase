@@ -1,7 +1,24 @@
-// export default propertySlice.reducer;
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "../../api/axiosInstance";
 
+// ==========================================
+// GET ALL PROPERTIES (PUBLIC / TENANT)
+// ==========================================
+export const getAllProperties = createAsyncThunk(
+  "properties/getAllProperties",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get("/properties");
+      return res.data.properties;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message);
+    }
+  }
+);
+
+// ==========================================
+// GET MY PROPERTIES (LANDLORD)
+// ==========================================
 export const getMyProperties = createAsyncThunk(
   "properties/getMyProperties",
   async (_, { rejectWithValue }) => {
@@ -14,6 +31,9 @@ export const getMyProperties = createAsyncThunk(
   }
 );
 
+// ==========================================
+// CREATE PROPERTY
+// ==========================================
 export const createProperty = createAsyncThunk(
   "properties/createProperty",
   async (formData, { rejectWithValue }) => {
@@ -26,6 +46,9 @@ export const createProperty = createAsyncThunk(
   }
 );
 
+// ==========================================
+// UPDATE PROPERTY
+// ==========================================
 export const updateProperty = createAsyncThunk(
   "properties/updateProperty",
   async ({ id, formData }, { rejectWithValue }) => {
@@ -38,6 +61,9 @@ export const updateProperty = createAsyncThunk(
   }
 );
 
+// ==========================================
+// DELETE PROPERTY
+// ==========================================
 export const deleteProperty = createAsyncThunk(
   "properties/deleteProperty",
   async (id, { rejectWithValue }) => {
@@ -50,6 +76,9 @@ export const deleteProperty = createAsyncThunk(
   }
 );
 
+// ==========================================
+// SLICE
+// ==========================================
 const propertySlice = createSlice({
   name: "properties",
   initialState: {
@@ -67,7 +96,21 @@ const propertySlice = createSlice({
     builder
 
       // ==========================================
-      // GET MY PROPERTIES
+      // GET ALL PROPERTIES (TENANT)
+      // ==========================================
+      .addCase(getAllProperties.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getAllProperties.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(getAllProperties.rejected, (state) => {
+        state.loading = false;
+      })
+
+      // ==========================================
+      // GET MY PROPERTIES (LANDLORD)
       // ==========================================
       .addCase(getMyProperties.pending, (state) => {
         state.loading = true;
@@ -81,7 +124,7 @@ const propertySlice = createSlice({
       })
 
       // ==========================================
-      // CREATE PROPERTY
+      // CREATE
       // ==========================================
       .addCase(createProperty.pending, (state) => {
         state.creating = true;
@@ -95,7 +138,7 @@ const propertySlice = createSlice({
       })
 
       // ==========================================
-      // UPDATE PROPERTY (THIS WAS BROKEN)
+      // UPDATE
       // ==========================================
       .addCase(updateProperty.pending, (state) => {
         state.updating = true;
