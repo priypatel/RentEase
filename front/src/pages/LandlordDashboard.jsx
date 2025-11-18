@@ -103,6 +103,15 @@ export default function LandlordDashboard() {
 
           {/* Right Side Buttons */}
           <div className="flex items-center gap-3 mt-4 sm:mt-0">
+            {/* Add Property Button */}
+            <Link
+              to="/add-property"
+              className="flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-xl shadow-lg hover:bg-green-700 transition-all hover:shadow-xl active:scale-95"
+            >
+              <PlusCircle className="w-5 h-5" />
+              Add Property
+            </Link>
+
             {/* Profile Dropdown */}
             <div className="relative" ref={dropdownRef}>
               <button
@@ -127,22 +136,6 @@ export default function LandlordDashboard() {
                     Profile
                   </Link>
 
-                  {/* <Link
-                    to="/settings"
-                    className="block px-4 py-2 rounded-lg hover:bg-green-50 text-gray-700 transition"
-                  >
-                    Settings
-                  </Link> */}
-
-                  {/* <button
-                    onClick={() => {
-                      dispatch(logoutUser());
-                      navigate("/login");
-                    }}
-                    className="w-full text-left px-4 py-2 rounded-lg hover:bg-red-50 text-red-600 transition"
-                  >
-                    Logout
-                  </button> */}
                   <button
                     onClick={() => setShowLogoutConfirm(true)}
                     className="w-full text-left px-4 py-2 rounded-lg hover:bg-red-50 text-red-600 transition"
@@ -152,15 +145,6 @@ export default function LandlordDashboard() {
                 </div>
               )}
             </div>
-
-            {/* Add Property Button */}
-            <Link
-              to="/add-property"
-              className="flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-xl shadow-lg hover:bg-green-700 transition-all hover:shadow-xl active:scale-95"
-            >
-              <PlusCircle className="w-5 h-5" />
-              Add Property
-            </Link>
           </div>
         </div>
 
