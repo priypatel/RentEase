@@ -5,13 +5,33 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { getMyProperties } from "../redux/slices/propertySlice";
-
+import ConfirmModal from "../components/common/ConfirmModal";
 import PropertyCardMini from "../components/property/PropertyCardMini";
 import SkeletonCardMini from "../components/common/SkeletonCardMini";
 import useCountUp from "../hooks/useCountUp";
+import { useState, useRef } from "react";
+import { logoutUser } from "../redux/slices/userSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function LandlordDashboard() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [openDropdown, setOpenDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
+  // close dropdown when clicking outside
+  useEffect(() => {
+    const handler = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setOpenDropdown(false);
+      }
+    };
+
+    document.addEventListener("click", handler);
+    return () => document.removeEventListener("click", handler);
+  }, []);
 
   const { items: properties, loading } = useSelector(
     (state) => state.properties
@@ -58,6 +78,9 @@ export default function LandlordDashboard() {
       isCurrency: false,
     },
   ];
+  const handleLogoutConfirm = () => {
+    dispatch(logoutUser()).then(() => navigate("/login"));
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-green-100 py-10 px-6">
@@ -78,13 +101,67 @@ export default function LandlordDashboard() {
             </p>
           </div>
 
-          <Link
-            to="/add-property"
-            className="mt-4 sm:mt-0 flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-xl shadow-lg hover:bg-green-700 transition-all hover:shadow-xl active:scale-95"
-          >
-            <PlusCircle className="w-5 h-5" />
-            Add Property
-          </Link>
+          {/* Right Side Buttons */}
+          <div className="flex items-center gap-3 mt-4 sm:mt-0">
+            {/* Profile Dropdown */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setOpenDropdown(!openDropdown)}
+                className="flex items-center gap-2 bg-white border border-green-300 text-green-700 px-4 py-2.5 rounded-xl shadow-sm hover:bg-green-50 transition-all active:scale-95"
+              >
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                  alt="profile"
+                  className="w-6 h-6"
+                />
+                <span className="font-medium">Account</span>
+              </button>
+
+              {/* Dropdown Menu */}
+              {openDropdown && (
+                <div className="absolute right-0 mt-2 w-44 bg-white shadow-lg rounded-xl border border-gray-200 p-2 z-50 animate-fadeIn">
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 rounded-lg hover:bg-green-50 text-gray-700 transition"
+                  >
+                    Profile
+                  </Link>
+
+                  {/* <Link
+                    to="/settings"
+                    className="block px-4 py-2 rounded-lg hover:bg-green-50 text-gray-700 transition"
+                  >
+                    Settings
+                  </Link> */}
+
+                  {/* <button
+                    onClick={() => {
+                      dispatch(logoutUser());
+                      navigate("/login");
+                    }}
+                    className="w-full text-left px-4 py-2 rounded-lg hover:bg-red-50 text-red-600 transition"
+                  >
+                    Logout
+                  </button> */}
+                  <button
+                    onClick={() => setShowLogoutConfirm(true)}
+                    className="w-full text-left px-4 py-2 rounded-lg hover:bg-red-50 text-red-600 transition"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Add Property Button */}
+            <Link
+              to="/add-property"
+              className="flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-xl shadow-lg hover:bg-green-700 transition-all hover:shadow-xl active:scale-95"
+            >
+              <PlusCircle className="w-5 h-5" />
+              Add Property
+            </Link>
+          </div>
         </div>
 
         {/* Stats */}
@@ -148,6 +225,13 @@ export default function LandlordDashboard() {
             )}
           </div>
         </div>
+        <ConfirmModal
+          show={showLogoutConfirm}
+          onClose={() => setShowLogoutConfirm(false)}
+          onConfirm={handleLogoutConfirm}
+          message="Are you sure you want to logout?"
+          confirmText="Yes, Logout"
+        />
       </motion.div>
     </div>
   );
