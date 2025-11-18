@@ -10,6 +10,7 @@ import uploadRoutes from "./routes/api/upload.js";
 import testRoutes from "./routes/api/test.js";
 import authRoutes from "./routes/api/authRoutes.js";
 import propertyRoutes from "./routes/api/propertyRoutes.js";
+import userRoutes from "./routes/api/userRoutes.js";
 
 // connect database
 connectDB();
@@ -30,6 +31,7 @@ app.use("/api/test", testRoutes);
 // app.use("/api/upload", uploadRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/api/properties", propertyRoutes);
+app.use("/api/users", userRoutes);
 
 // global error handler
 app.use((err, req, res, next) => {
