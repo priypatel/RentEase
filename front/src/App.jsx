@@ -1,6 +1,7 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import "./index.css";
 import TenantDashboard from "./pages/TenantDashboard";
+import TenantLayout from "./components/layout/TenantLayout";
 import LandlordDashboard from "./pages/LandlordDashboard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -17,14 +18,27 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         {/* Protected Routes */}
-        <Route
+        {/* <Route
           path="/tenant/dashboard"
           element={
             <ProtectedRoute>
               <TenantDashboard />
             </ProtectedRoute>
           }
-        />
+        /> */}
+
+        <Route
+          element={
+            <ProtectedRoute>
+              <TenantLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="/tenant/dashboard" element={<TenantDashboard />} />
+          <Route path="/payments" element={<TenantDashboard />} />
+          <Route path="/rent-requests" element={<TenantDashboard />} />
+          <Route path="/profile" element={<TenantDashboard />} />
+        </Route>
 
         {/* Protected Landlord Routes */}
 
