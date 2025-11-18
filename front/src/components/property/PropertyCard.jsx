@@ -82,6 +82,7 @@ export default function PropertyCard({ property, index }) {
         onClose={() => setShowDeleteModal(false)}
         onConfirm={confirmDelete}
         message="Are you sure you want to delete this property?"
+        confirmText="Yes, Delete"
       />
     </>
   );

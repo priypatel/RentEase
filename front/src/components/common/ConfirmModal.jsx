@@ -1,7 +1,13 @@
 import React from "react";
 import { motion } from "framer-motion";
 
-export default function ConfirmModal({ show, onClose, onConfirm, message }) {
+export default function ConfirmModal({
+  show,
+  onClose,
+  onConfirm,
+  message,
+  confirmText = "Confirm",
+}) {
   if (!show) return null;
 
   return (
@@ -27,7 +33,7 @@ export default function ConfirmModal({ show, onClose, onConfirm, message }) {
             onClick={onConfirm}
             className="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition"
           >
-            Yes, Delete
+            {confirmText}
           </button>
         </div>
       </motion.div>
