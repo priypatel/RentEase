@@ -51,7 +51,7 @@ export const getProperties = async (req, res) => {
 
     // If landlord is logged in and hitting /my-properties
     if (req.originalUrl.includes("my-properties")) {
-      query.owner = req.user.id;
+      query.ownerId = req.user.id;
     }
 
     const properties = await Property.find(query).sort({ createdAt: -1 });

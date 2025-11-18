@@ -27,14 +27,17 @@ router.put(
   updateProperty
 );
 
-router.get("/", getProperties);
-router.get("/:id", getPropertyById);
+// MUST COME FIRST
 router.get(
   "/my-properties",
   verifyToken,
   verifyRole("landlord"),
   getProperties
 );
+
+// THEN PUBLIC ROUTES
+router.get("/", getProperties);
+router.get("/:id", getPropertyById);
 
 // Delete property (owner-only check inside controller)
 router.delete("/:id", verifyToken, verifyRole("landlord"), deleteProperty);
