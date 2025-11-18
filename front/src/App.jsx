@@ -9,6 +9,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AddProperty from "./pages/AddProperty";
 import MyProperties from "./pages/MyProperties";
+import ProfilePage from "./pages/ProfilePage";
 function App() {
   return (
     <BrowserRouter>
@@ -26,7 +27,7 @@ function App() {
         />
 
         {/* Protected Landlord Routes */}
-        
+
         <Route
           path="/landlord/dashboard"
           element={
@@ -59,6 +60,15 @@ function App() {
           element={
             <ProtectedRoute>
               <AddProperty />
+            </ProtectedRoute>
+          }
+        />
+        {/* Protected Routes */}
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
             </ProtectedRoute>
           }
         />
