@@ -5,14 +5,16 @@ import { useNavigate } from "react-router-dom";
 import ConfirmModal from "../common/ConfirmModal";
 import { deleteProperty } from "../../redux/slices/propertySlice";
 import { toast } from "react-toastify";
+import PropertyDetailModal from "./PropertyDetailModal";
 
 export default function PropertyCard({ property, index }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
 
-  // OPEN CONFIRM MODAL
+  // OPEN DELETE CONFIRM MODAL
   const openDeleteModal = () => {
     setShowDeleteModal(true);
   };
@@ -59,6 +61,15 @@ export default function PropertyCard({ property, index }) {
 
           {/* ACTION BUTTONS */}
           <div className="flex justify-between mt-5">
+            {/* VIEW DETAILS */}
+            <button
+              onClick={() => setShowDetailModal(true)}
+              className="px-4 py-1.5 bg-blue-50 text-blue-700 rounded-lg font-medium border border-blue-200 hover:bg-blue-100 transition"
+            >
+              View
+            </button>
+
+            {/* EDIT */}
             <button
               onClick={() => navigate(`/edit-property/${property._id}`)}
               className="px-4 py-1.5 bg-green-50 text-green-700 rounded-lg font-medium border border-green-200 hover:bg-green-100 transition"
@@ -66,6 +77,7 @@ export default function PropertyCard({ property, index }) {
               Edit
             </button>
 
+            {/* DELETE */}
             <button
               onClick={openDeleteModal}
               className="px-4 py-1.5 bg-red-50 text-red-600 rounded-lg font-medium border border-red-200 hover:bg-red-100 transition"
@@ -83,6 +95,13 @@ export default function PropertyCard({ property, index }) {
         onConfirm={confirmDelete}
         message="Are you sure you want to delete this property?"
         confirmText="Yes, Delete"
+      />
+
+      {/* VIEW DETAIL MODAL */}
+      <PropertyDetailModal
+        show={showDetailModal}
+        onClose={() => setShowDetailModal(false)}
+        property={property}
       />
     </>
   );
