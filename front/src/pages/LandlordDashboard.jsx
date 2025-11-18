@@ -3,23 +3,22 @@ import { motion } from "framer-motion";
 import { Wallet, Users, Home, Bell, PlusCircle } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 
-import { getMyProperties, deleteProperty } from "../redux/slices/propertySlice";
+import { getMyProperties } from "../redux/slices/propertySlice";
+
+import PropertyCardMini from "../components/property/PropertyCardMini";
+import SkeletonCardMini from "../components/common/SkeletonCardMini";
+import useCountUp from "../hooks/useCountUp";
 
 export default function LandlordDashboard() {
   const dispatch = useDispatch();
 
-  const {
-    items: properties,
-    loading,
-    deleting,
-  } = useSelector((state) => state.properties);
+  const { items: properties, loading } = useSelector(
+    (state) => state.properties
+  );
 
   useEffect(() => {
-    dispatch(getMyProperties())
-      .unwrap()
-      .catch(() => {});
+    dispatch(getMyProperties());
   }, [dispatch]);
 
   // Stats
@@ -28,96 +27,107 @@ export default function LandlordDashboard() {
     (sum, p) => sum + (Number(p.rent) || 0),
     0
   );
-  const activeTenants = 0;
-  const pendingRents = 0;
 
   const statCards = [
     {
       title: "Total Properties",
       value: totalProperties,
-      icon: <Home className="w-6 h-6 text-blue-600" />,
+      icon: <Home className="w-7 h-7 text-green-600" />,
+      color: "bg-green-50",
+      isCurrency: false,
     },
     {
       title: "Active Tenants",
-      value: activeTenants,
-      icon: <Users className="w-6 h-6 text-blue-600" />,
+      value: 0,
+      icon: <Users className="w-7 h-7 text-emerald-600" />,
+      color: "bg-emerald-50",
+      isCurrency: false,
     },
     {
       title: "Monthly Income",
-      value: `₹${monthlyIncome}`,
-      icon: <Wallet className="w-6 h-6 text-blue-600" />,
+      value: monthlyIncome,
+      icon: <Wallet className="w-7 h-7 text-teal-600" />,
+      color: "bg-teal-50",
+      isCurrency: true,
     },
     {
       title: "Pending Rents",
-      value: pendingRents,
-      icon: <Bell className="w-6 h-6 text-blue-600" />,
+      value: 0,
+      icon: <Bell className="w-7 h-7 text-red-600" />,
+      color: "bg-red-50",
+      isCurrency: false,
     },
   ];
 
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure to delete this property?")) return;
-
-    try {
-      await dispatch(deleteProperty(id)).unwrap();
-      toast.success("Property deleted");
-    } catch {
-      toast.error("Failed to delete");
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 py-10 px-6">
+    <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-green-100 py-10 px-6">
       <motion.div
-        initial={{ opacity: 0, y: -10 }}
+        initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="max-w-6xl mx-auto"
       >
         {/* Header */}
-        <div className="flex flex-col sm:flex-row items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row items-center justify-between mb-10">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">
-              🏠 Landlord Dashboard
+            <h1 className="text-4xl font-bold text-gray-900 tracking-tight">
+              Landlord Dashboard
             </h1>
-            <p className="text-gray-600">
-              Manage your properties and rentals easily.
+            <p className="text-gray-600 mt-1">
+              Manage properties, tenants, and financials effortlessly.
             </p>
           </div>
 
           <Link
             to="/add-property"
-            className="mt-4 sm:mt-0 flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700 transition"
+            className="mt-4 sm:mt-0 flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-xl shadow-lg hover:bg-green-700 transition-all hover:shadow-xl active:scale-95"
           >
             <PlusCircle className="w-5 h-5" />
-            Add New Property
+            Add Property
           </Link>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {statCards.map((stat, idx) => (
-            <div
-              key={idx}
-              className="flex items-center p-5 rounded-xl bg-white shadow-md border border-gray-200"
-            >
-              <div className="mr-4">{stat.icon}</div>
-              <div>
-                <p className="text-gray-500 text-sm">{stat.title}</p>
-                <h2 className="text-2xl font-semibold text-gray-800">
-                  {stat.value}
-                </h2>
-              </div>
-            </div>
-          ))}
+          {statCards.map((stat, idx) => {
+            const animatedValue = useCountUp(stat.value);
+
+            return (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: idx * 0.1, duration: 0.4 }}
+                whileHover={{ y: -4, scale: 1.02 }}
+                className={`rounded-2xl p-5 shadow-lg border border-gray-200 ${stat.color}`}
+              >
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-xl bg-white shadow-md">
+                    {stat.icon}
+                  </div>
+                  <div>
+                    <p className="text-gray-500 text-sm">{stat.title}</p>
+
+                    <h2 className="text-3xl font-semibold text-gray-900">
+                      {stat.isCurrency ? `₹${animatedValue}` : animatedValue}
+                    </h2>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* Recent Properties */}
-        <div className="mt-10">
+        <div className="mt-12">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-semibold text-gray-800">
+            <h3 className="text-2xl font-semibold text-gray-900">
               Recently Added Properties
             </h3>
-            <Link to="/my-properties" className="text-blue-600 hover:underline">
+            <Link
+              to="/my-properties"
+              className="text-green-600 hover:underline font-medium"
+            >
               View All →
             </Link>
           </div>
@@ -125,51 +135,16 @@ export default function LandlordDashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {loading ? (
               Array.from({ length: 3 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="h-52 rounded-xl bg-gray-200 animate-pulse"
-                />
+                <SkeletonCardMini key={i} />
               ))
             ) : properties.length === 0 ? (
-              <p className="text-gray-600">No properties added yet.</p>
+              <p className="text-gray-600">No properties found.</p>
             ) : (
-              properties.slice(0, 3).map((p) => (
-                <div
-                  key={p._id}
-                  className="bg-white shadow-lg rounded-xl border border-gray-200 overflow-hidden"
-                >
-                  <img
-                    src={p.images?.[0]?.url}
-                    alt={p.title}
-                    className="w-full h-40 object-cover"
-                  />
-                  <div className="p-4">
-                    <h4 className="text-lg font-semibold text-gray-800">
-                      {p.title}
-                    </h4>
-                    <p className="text-sm text-gray-500">{p.location}</p>
-                    <p className="font-semibold text-blue-600 mt-2">
-                      ₹{p.rent}/month
-                    </p>
-
-                    <div className="flex items-center justify-between mt-3">
-                      <Link
-                        to={`/edit-property/${p._id}`}
-                        className="bg-blue-50 text-blue-700 px-3 py-1 rounded hover:bg-blue-100"
-                      >
-                        Edit
-                      </Link>
-
-                      <button
-                        onClick={() => handleDelete(p._id)}
-                        className="bg-red-50 text-red-600 px-3 py-1 rounded hover:bg-red-100"
-                      >
-                        {deleting ? "Deleting…" : "Delete"}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))
+              properties
+                .slice(0, 3)
+                .map((p, index) => (
+                  <PropertyCardMini key={p._id} property={p} index={index} />
+                ))
             )}
           </div>
         </div>
