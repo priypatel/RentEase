@@ -16,14 +16,15 @@ router.post(
   "/",
   verifyToken,
   verifyRole("landlord"),
-  upload.array("images"),
+  // upload.array("images"),
+  upload.array("images",10),
   createProperty
 );
 router.put(
   "/:id",
   verifyToken,
   verifyRole("landlord"),
-  upload.array("images"),
+  upload.array("images",10),
   updateProperty
 );
 

@@ -27,7 +27,8 @@ app.use("/uploads", express.static("uploads"));
 // api routes
 app.use("/api/auth", authRoutes);
 app.use("/api/test", testRoutes);
-app.use("/api/upload", uploadRoutes);
+// app.use("/api/upload", uploadRoutes);
+app.use("/uploads", express.static("uploads"));
 app.use("/api/properties", propertyRoutes);
 
 // global error handler
