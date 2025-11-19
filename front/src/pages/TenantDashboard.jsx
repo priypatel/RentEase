@@ -9,8 +9,10 @@ import { logoutUser } from "../redux/slices/userSlice";
 import TenantPropertyCard from "../components/property/TenantPropertyCard";
 import SkeletonCard from "../components/common/SkeletonCardMini";
 import ConfirmModal from "../components/common/ConfirmModal";
+import useCountUp from "../hooks/useCountUp";
 
-// ⭐ IMPORT LAYOUT
+// ICONS (same style as landlord)
+import { Home, Wallet, CheckCircle, Clock } from "lucide-react";
 
 export default function TenantDashboard() {
   const dispatch = useDispatch();
@@ -23,26 +25,29 @@ export default function TenantDashboard() {
   const loading = propertyState?.loading || false;
   const user = authState?.user || {};
 
-  // Dropdown & logout state
+  // dropdown + logout modal state
   const [openDropdown, setOpenDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
+  // Fetch properties
   useEffect(() => {
     dispatch(getAllProperties());
   }, [dispatch]);
 
-  // Close dropdown when clicking outside
+  // Close dropdown on outside click
   useEffect(() => {
     const handler = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setOpenDropdown(false);
       }
     };
+
     document.addEventListener("click", handler);
     return () => document.removeEventListener("click", handler);
   }, []);
 
+  // Handle logout
   const handleLogoutConfirm = () => {
     dispatch(logoutUser()).then(() => navigate("/login"));
   };
@@ -51,7 +56,40 @@ export default function TenantDashboard() {
     ? user.name.charAt(0).toUpperCase() + user.name.slice(1)
     : "";
 
+  // ⭐ Tenant Stats (IDENTICAL structure to landlord stats)
+  const statCards = [
+    {
+      title: "Available Properties",
+      value: items.length,
+      icon: <Home className="w-7 h-7 text-green-600" />,
+      color: "bg-green-50",
+      isCurrency: false,
+    },
+    {
+      title: "Requests Sent",
+      value: 0,
+      icon: <Wallet className="w-7 h-7 text-blue-600" />,
+      color: "bg-blue-50",
+      isCurrency: false,
+    },
+    {
+      title: "Approved",
+      value: 0,
+      icon: <CheckCircle className="w-7 h-7 text-emerald-600" />,
+      color: "bg-emerald-50",
+      isCurrency: false,
+    },
+    {
+      title: "Pending",
+      value: 0,
+      icon: <Clock className="w-7 h-7 text-yellow-600" />,
+      color: "bg-yellow-50",
+      isCurrency: false,
+    },
+  ];
+
   return (
+    <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-green-100 py-10 px-6">
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
@@ -108,49 +146,53 @@ export default function TenantDashboard() {
           </div>
         </div>
 
-        {/* ------------------ STATS SECTION ------------------ */}
+        {/* ------------------ GLASS STATS SECTION ------------------ */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-            className="rounded-2xl p-5 shadow-lg border border-gray-200 bg-green-50"
-          >
-            <p className="text-gray-600">Available Properties</p>
-            <h2 className="text-3xl font-semibold text-green-700 mt-1">
-              {items.length}
-            </h2>
-          </motion.div>
+          {statCards.map((stat, idx) => {
+            const animatedValue = useCountUp(stat.value);
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1, duration: 0.3 }}
-            className="rounded-2xl p-5 shadow-lg border border-gray-200 bg-blue-50"
-          >
-            <p className="text-gray-600">Requests Sent</p>
-            <h2 className="text-3xl font-semibold text-blue-700 mt-1">0</h2>
-          </motion.div>
+            return (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -6, scale: 1.03 }}
+                transition={{ delay: idx * 0.1, duration: 0.4 }}
+                className="
+          rounded-2xl p-6 
+          shadow-lg hover:shadow-2xl 
+          cursor-pointer transition-all 
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.3 }}
-            className="rounded-2xl p-5 shadow-lg border border-gray-200 bg-emerald-50"
-          >
-            <p className="text-gray-600">Approved</p>
-            <h2 className="text-3xl font-semibold text-emerald-700 mt-1">0</h2>
-          </motion.div>
+          /* 🌟 GLASS EFFECT */
+          backdrop-blur-xl 
+          bg-gradient-to-br from-white/50 to-[#e0f6ea]/40 
+          border border-white/30 
+        "
+              >
+                <div className="flex items-center gap-5">
+                  {/* Icon container — glass inner */}
+                  <div
+                    className="
+            p-3 rounded-xl  
+            shadow-md 
+            bg-gradient-to-br from-white/60 to-[#f1faf5]
+            border border-white/40
+          "
+                  >
+                    {stat.icon}
+                  </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.3 }}
-            className="rounded-2xl p-5 shadow-lg border border-gray-200 bg-yellow-50"
-          >
-            <p className="text-gray-600">Pending</p>
-            <h2 className="text-3xl font-semibold text-yellow-700 mt-1">0</h2>
-          </motion.div>
+                  <div>
+                    <p className="text-gray-600 text-sm">{stat.title}</p>
+
+                    <h2 className="text-3xl font-semibold text-gray-900">
+                      {stat.isCurrency ? `₹${animatedValue}` : animatedValue}
+                    </h2>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
 
         {/* ------------------ PROPERTIES ------------------ */}
@@ -181,5 +223,6 @@ export default function TenantDashboard() {
           confirmText="Yes, Logout"
         />
       </motion.div>
+    </div>
   );
 }
