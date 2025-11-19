@@ -111,9 +111,28 @@ export default function LandlordDashboard() {
 
             {/* Profile Dropdown */}
             <div className="relative" ref={dropdownRef}>
-              <button
+              {/* <button
                 onClick={() => setOpenDropdown(!openDropdown)}
                 className="flex items-center gap-2 bg-white border border-green-300 text-green-700 px-4 py-2.5 rounded-xl shadow-sm hover:bg-green-50 transition-all active:scale-95"
+              >
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                  alt="profile"
+                  className="w-6 h-6"
+                />
+                <span className="font-medium">Account</span>
+              </button> */}
+              <button
+                onClick={() => setOpenDropdown(!openDropdown)}
+                className="
+                  flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all shadow-md
+
+                  /* 🌟 GLASS NAVBAR BUTTON */
+                  bg-white/50 backdrop-blur-xl 
+                  border border-white/30 
+                  hover:bg-white/70 hover:shadow-lg active:scale-95
+                  text-green-800
+                "
               >
                 <img
                   src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
