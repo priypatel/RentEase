@@ -1,86 +1,148 @@
-// import React, { useState } from "react";
-// import { Link, useLocation } from "react-router-dom";
-// import {
-//   Home,
-//   Wallet,
-//   FileText,
-//   User,
-//   LogOut,
-//   ChevronLeft,
-//   ChevronRight,
-// } from "lucide-react";
+// MobileTenantSidebar.jsx
+import React from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import {
+  Home,
+  FileText,
+  CreditCard,
+  Wrench,
+  User,
+  LogOut,
+  X,
+} from "lucide-react";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../../redux/slices/userSlice";
+import ConfirmModal from "../common/ConfirmModal";
 
-// export default function TenantSidebar({ onLogout }) {
-//   const { pathname } = useLocation();
-//   const [collapsed, setCollapsed] = useState(false);
+export default function MobileTenantSidebar({
+  mobileOpen,
+  setMobileOpen,
+  collapsed,
+  setCollapsed,
+}) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-//   const menuItems = [
-//     { name: "Dashboard", path: "/tenant/dashboard", icon: <Home size={20} /> },
-//     { name: "Payments", path: "/payments", icon: <Wallet size={20} /> },
-//     { name: "Requests", path: "/rent-requests", icon: <FileText size={20} /> },
-//     { name: "Profile", path: "/profile", icon: <User size={20} /> },
-//   ];
+  const [showLogoutConfirm, setShowLogoutConfirm] = React.useState(false);
 
-//   return (
-//     <div
-//       className={`hidden md:flex flex-col h-screen fixed top-0 left-0 shadow-sm border-r border-gray-200 bg-white transition-all duration-300 
-//         ${collapsed ? "w-16" : "w-64"}
-//       `}
-//     >
-//       {/* Header */}
-//       <div className="flex items-center justify-between p-5 border-b">
-//         {!collapsed && (
-//           <h1 className="text-2xl font-bold text-green-700">RentEase</h1>
-//         )}
+  const nav = [
+    { name: "Dashboard", to: "/tenant/dashboard", icon: Home },
+    { name: "Properties", to: "/tenant/properties", icon: Home },
+    { name: "Payments", to: "/tenant/payments", icon: CreditCard },
+    { name: "Requests", to: "/tenant/maintenance", icon: Wrench },
+    { name: "Documents", to: "/tenant/documents", icon: FileText },
+  ];
 
-//         <button
-//           onClick={() => setCollapsed(!collapsed)}
-//           className="p-2 rounded-lg hover:bg-gray-100 text-green-700 transition"
-//         >
-//           {collapsed ? <ChevronRight /> : <ChevronLeft />}
-//         </button>
-//       </div>
+  const isActive = (to) =>
+    location.pathname === to || location.pathname.startsWith(to + "/");
 
-//       {/* Menu */}
-//       <div className="flex-1 mt-4 space-y-1">
-//         {menuItems.map((item) => {
-//           const isActive = pathname === item.path;
+  const handleLogout = () => {
+    dispatch(logoutUser()).then(() => navigate("/login"));
+  };
 
-//           return (
-//             <Link
-//               key={item.path}
-//               to={item.path}
-//               className={`
-//                 flex items-center gap-3 rounded-xl transition-all font-medium
-//                 ${collapsed ? "px-3 py-3 justify-center" : "px-4 py-3"}
-//                 ${
-//                   isActive
-//                     ? collapsed
-//                       ? "bg-green-100 text-green-700"
-//                       : "bg-green-100 text-green-700"
-//                     : "text-gray-700 hover:bg-green-50"
-//                 }
-//               `}
-//             >
-//               <div className="text-green-700">{item.icon}</div>
+  return (
+    <>
+      {/* BACKDROP */}
+      {mobileOpen && (
+        <div
+          onClick={() => setMobileOpen(false)}
+          className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden"
+        />
+      )}
 
-//               {!collapsed && <span>{item.name}</span>}
-//             </Link>
-//           );
-//         })}
-//       </div>
+      {/* MOBILE SIDEBAR */}
+      <div
+        className={`
+          fixed top-0 left-0 h-full w-72 z-50 md:hidden
+          transition-transform duration-300 
+          ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
 
-//       {/* Logout */}
-//       <button
-//         onClick={onLogout}
-//         className={`
-//           mb-6 mx-3 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 transition flex items-center gap-3
-//           ${collapsed ? "justify-center px-3 py-3" : "px-4 py-3"}
-//         `}
-//       >
-//         <LogOut size={20} />
-//         {!collapsed && <span>Logout</span>}
-//       </button>
-//     </div>
-//   );
-// }
+          /* glass */
+          backdrop-blur-2xl
+          bg-gradient-to-b from-white/70 via-white/50 to-green-50/40
+          border-r border-white/30 shadow-xl
+        `}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between p-5 border-b border-white/30">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/70 to-green-50/60 shadow flex items-center justify-center">
+              <span className="font-semibold text-[#046c4a]">RE</span>
+            </div>
+            <h1 className="text-lg font-semibold text-[#044f39]">
+              Tenant Menu
+            </h1>
+          </div>
+
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="p-2 rounded-lg hover:bg-white/30"
+          >
+            <X className="w-6 h-6 text-[#044f39]" />
+          </button>
+        </div>
+
+        {/* Nav Items */}
+        <nav className="p-4">
+          {nav.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <Link
+                key={item.to}
+                to={item.to}
+                onClick={() => setMobileOpen(false)}
+                className={`
+                  flex items-center gap-4 p-3 rounded-xl mb-2
+                  transition-all
+
+                  hover:bg-white/40 hover:shadow-lg
+                  hover:scale-[1.02]
+
+                  ${
+                    isActive(item.to)
+                      ? "bg-green-100/70 text-[#044f39]"
+                      : "text-[#28523d]"
+                  }
+                `}
+              >
+                <Icon className="w-6 h-6" />
+                <span>{item.name}</span>
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Bottom Section */}
+        <div className="mt-auto p-4 border-t border-white/30 bg-white/10 backdrop-blur-xl">
+          <Link
+            to="/tenant/profile"
+            onClick={() => setMobileOpen(false)}
+            className="flex items-center gap-4 py-3 px-3 rounded-xl text-[#28523d] hover:bg-white/30 transition"
+          >
+            <User className="w-6 h-6" />
+            <span>Profile</span>
+          </Link>
+
+          <button
+            onClick={() => setShowLogoutConfirm(true)}
+            className="flex items-center gap-4 py-3 px-3 rounded-xl text-red-600 hover:bg-red-50 transition mt-2 w-full"
+          >
+            <LogOut className="w-6 h-6" />
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+
+      {/* CONFIRM LOGOUT */}
+      <ConfirmModal
+        show={showLogoutConfirm}
+        onClose={() => setShowLogoutConfirm(false)}
+        onConfirm={handleLogout}
+        message="Are you sure you want to logout?"
+        confirmText="Yes, Logout"
+      />
+    </>
+  );
+}

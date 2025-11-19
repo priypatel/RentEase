@@ -128,7 +128,7 @@ export default function TenantDashboard() {
               {openDropdown && (
                 <div className="absolute right-0 mt-2 w-44 bg-white shadow-lg rounded-xl border border-gray-200 p-2 z-50 animate-fadeIn">
                   <Link
-                    to="/profile"
+                    to="/tenant/profile"
                     className="block px-4 py-2 rounded-lg hover:bg-green-50 text-gray-700 transition"
                   >
                     Profile

@@ -118,7 +118,7 @@ export default function TenantSidebar({ collapsed, setCollapsed }) {
         {/* Bottom Section */}
         <div className="p-4 border-t border-white/40 mt-auto bg-white/10 backdrop-blur-xl">
           <Link
-            to="/profile"
+            to="/tenant/profile"
             className="flex items-center gap-4 py-3 px-3 rounded-xl text-[#28523d] hover:scale-[1.03] hover:-translate-y-[2px]
                   hover:shadow-lg hover:bg-white/40"
           >
