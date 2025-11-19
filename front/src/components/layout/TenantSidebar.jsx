@@ -1,143 +1,121 @@
-// import React from "react";
-// import { Link, useLocation } from "react-router-dom";
-// import { Home, Wallet, FileText, User, LogOut } from "lucide-react";
-
-// export default function TenantSidebar({ onLogout }) {
-//   const { pathname } = useLocation();
-
-//   const menuItems = [
-//     { name: "Dashboard", path: "/tenant/dashboard", icon: <Home size={20} /> },
-//     { name: "Payments", path: "/payments", icon: <Wallet size={20} /> },
-//     { name: "Requests", path: "/rent-requests", icon: <FileText size={20} /> },
-//     { name: "Profile", path: "/profile", icon: <User size={20} /> },
-//   ];
-
-//   return (
-//     <div className="w-64 bg-white border-r border-gray-200 h-screen fixed top-0 left-0 shadow-sm">
-//       <div className="p-5 border-b">
-//         <h1 className="text-2xl font-bold text-green-700">RentEase</h1>
-//       </div>
-
-//       <div className="px-3 mt-6 space-y-1">
-//         {menuItems.map((item) => (
-//           <Link
-//             key={item.path}
-//             to={item.path}
-//             className={`flex items-center gap-3 px-4 py-3 rounded-xl text-gray-700 font-medium transition-all
-//               ${
-//                 pathname === item.path
-//                   ? "bg-green-100 text-green-700"
-//                   : "hover:bg-green-50"
-//               }
-//             `}
-//           >
-//             {item.icon}
-//             {item.name}
-//           </Link>
-//         ))}
-//       </div>
-
-//       {/* Logout Bottom */}
-//       <button
-//         onClick={onLogout}
-//         className="absolute bottom-6 left-4 right-4 flex items-center gap-3 px-4 py-3 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 transition"
-//       >
-//         <LogOut size={20} />
-//         Logout
-//       </button>
-//     </div>
-//   );
-// }
-
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   Home,
-  Wallet,
   FileText,
+  CreditCard,
+  Wrench,
   User,
   LogOut,
-  ChevronLeft,
-  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
 } from "lucide-react";
 
-export default function TenantSidebar({ onLogout, collapsed, setCollapsed }) {
-  const { pathname } = useLocation();
+export default function TenantSidebar({ collapsed, setCollapsed }) {
+  const location = useLocation();
 
-  const menuItems = [
-    { name: "Dashboard", path: "/tenant/dashboard", icon: <Home size={20} /> },
-    { name: "Payments", path: "/payments", icon: <Wallet size={20} /> },
-    { name: "Requests", path: "/rent-requests", icon: <FileText size={20} /> },
-    { name: "Profile", path: "/profile", icon: <User size={20} /> },
+  const nav = [
+    { name: "Dashboard", to: "/tenant/dashboard", icon: Home },
+    { name: "Properties", to: "/tenant/properties", icon: Home },
+    { name: "Payments", to: "/tenant/payments", icon: CreditCard },
+    { name: "Requests", to: "/tenant/maintenance", icon: Wrench },
+    { name: "Documents", to: "/tenant/documents", icon: FileText },
   ];
 
+  const isActive = (to) =>
+    location.pathname === to || location.pathname.startsWith(to + "/");
+
   return (
-    <div
+    <aside
       className={`
-        hidden md:flex flex-col h-screen fixed top-0 left-0
-        bg-white border-r border-gray-200 shadow-sm
+        hidden md:flex flex-col 
+        ${collapsed ? "w-20" : "w-64 lg:w-72"} 
+        fixed top-0 left-0 h-screen 
+        bg-[#F4FBF6] border-r border-gray-200 
         transition-all duration-300
-        ${collapsed ? "w-16" : "w-64"}
+        ${collapsed ? "overflow-hidden" : "overflow-y-auto"}
       `}
     >
-      {/* Collapse Button - ALWAYS visible */}
-      <div className="flex items-center justify-end p-3 border-b">
+      {/* Header */}
+      <div
+        className={`flex items-center ${
+          collapsed ? "flex-col gap-3 p-4" : "justify-between p-6 pb-3"
+        }`}
+      >
+        {/* Logo */}
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#e0f6ea] to-[#cdeee0] flex items-center justify-center">
+            <span className="font-semibold text-[#046c4a]">RE</span>
+          </div>
+
+          {!collapsed && (
+            <div>
+              <h1 className="text-lg font-semibold text-[#0f5132]">RentEase</h1>
+              <p className="text-sm text-[#2d6b4d]">Tenant</p>
+            </div>
+          )}
+        </div>
+
+        {/* Collapse toggle */}
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="p-2 rounded-lg hover:bg-gray-100 text-green-700 transition"
+          className={`p-2 rounded-lg hover:bg-[#eaf7f0] transition ${
+            collapsed ? "mt-2" : ""
+          }`}
         >
-          {collapsed ? <ChevronRight /> : <ChevronLeft />}
+          {collapsed ? (
+            <ChevronsRight className="w-6 h-6 text-[#28523d]" />
+          ) : (
+            <ChevronsLeft className="w-6 h-6 text-[#28523d]" />
+          )}
         </button>
-        {console.log("🚀 ~ TenantSidebar ~ collapsed:", collapsed)}
       </div>
 
-      {/* Logo ONLY when expanded */}
-      {!collapsed && (
-        <div className="px-5 mt-3">
-          <h1 className="text-2xl font-bold text-green-700">RentEase</h1>
-        </div>
-      )}
-      {console.log("🚀 ~ logo ~ collapsed:", collapsed)}
-      {/* MENU */}
-      <div className="flex-1 mt-4 space-y-1">
-        {menuItems.map((item) => {
-          const active = pathname === item.path;
+      {/* Navigation */}
+      <nav className="flex-1 px-3 mt-4">
+        {nav.map((item) => {
+          const Icon = item.icon;
+          const active = isActive(item.to);
 
           return (
             <Link
-              key={item.path}
-              to={item.path}
+              key={item.to}
+              to={item.to}
               className={`
-                flex items-center rounded-xl font-medium transition-all
-                ${collapsed ? "justify-center px-3 py-3" : "px-4 py-3 gap-3"}
+                flex items-center gap-4 py-3 px-3 rounded-xl mb-2 transition-all 
                 ${
                   active
-                    ? "bg-green-100 text-green-700"
-                    : "text-gray-700 hover:bg-green-50"
+                    ? "bg-[#DAF7EB] text-[#044f39]"
+                    : "text-[#28523d] hover:bg-[#eaf7f0]"
                 }
               `}
             >
-              {/* Icon */}
-              <div className="text-green-700">{item.icon}</div>
+              <Icon className="w-6 h-6" />
 
-              {/* Text hidden when collapsed */}
               {!collapsed && <span>{item.name}</span>}
             </Link>
           );
         })}
-      </div>
+      </nav>
 
-      {/* LOGOUT BUTTON */}
-      <button
-        onClick={onLogout}
-        className={`
-          mx-3 mb-6 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 transition flex items-center gap-3
-          ${collapsed ? "justify-center px-3 py-3" : "px-4 py-3"}
-        `}
-      >
-        <LogOut size={20} />
-        {!collapsed && "Logout"}
-      </button>
-    </div>
+      {/* Bottom Section */}
+      <div className="p-4 border-t border-gray-200">
+        <Link
+          to="/profile"
+          className="flex items-center gap-4 py-3 px-3 rounded-xl text-[#28523d] hover:bg-[#eaf7f0]"
+        >
+          <User className="w-6 h-6" />
+          {!collapsed && <span>Profile</span>}
+        </Link>
+
+        <button
+          onClick={() => (window.location.href = "/logout")}
+          className="flex items-center gap-4 py-3 px-3 rounded-xl text-[#b42323] hover:bg-[#feeaea] mt-3 w-full"
+        >
+          <LogOut className="w-6 h-6" />
+          {!collapsed && <span>Logout</span>}
+        </button>
+      </div>
+    </aside>
   );
 }

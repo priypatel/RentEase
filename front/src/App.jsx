@@ -18,15 +18,17 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         {/* Protected Routes */}
-        {/* <Route
+        <Route
           path="/tenant/dashboard"
           element={
             <ProtectedRoute>
-              <TenantDashboard />
+              <TenantLayout>
+                <TenantDashboard />
+              </TenantLayout>
             </ProtectedRoute>
           }
-        /> */}
-
+        />
+        {/* 
         <Route
           element={
             <ProtectedRoute>
@@ -38,7 +40,7 @@ function App() {
           <Route path="/payments" element={<TenantDashboard />} />
           <Route path="/rent-requests" element={<TenantDashboard />} />
           <Route path="/profile" element={<TenantDashboard />} />
-        </Route>
+        </Route> */}
 
         {/* Protected Landlord Routes */}
 
