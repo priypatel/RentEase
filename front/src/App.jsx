@@ -4,6 +4,7 @@ import "./index.css";
 import TenantDashboard from "./pages/TenantDashboard";
 import TenantLayout from "./components/layout/TenantLayout";
 import LandlordDashboard from "./pages/LandlordDashboard";
+import LandlordLayout from "./components/layout/LandlordLayout";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -41,7 +42,7 @@ function App() {
           path="/landlord"
           element={
             <ProtectedRoute>
-              <LandlordDashboard />
+              <LandlordLayout />
             </ProtectedRoute>
           }
         >
