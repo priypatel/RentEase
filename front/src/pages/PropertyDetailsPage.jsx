@@ -65,7 +65,7 @@ export default function PropertyDetailsPage() {
       await dispatch(
         createRentalRequest({
           propertyId: property._id,
-          tenantId: user._id,
+          tenantId: user.id,
           landlordId: property.ownerId._id,
           depositAmount,
         })
