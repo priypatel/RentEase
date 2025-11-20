@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { getAllProperties } from "../redux/slices/propertySlice";
 import { logoutUser } from "../redux/slices/userSlice";
 
-import TenantPropertyCard from "../components/property/TenantPropertyCard";
+import PropertyCard from "../components/property/PropertyCard";
 import SkeletonCard from "../components/common/SkeletonCardMini";
 import ConfirmModal from "../components/common/ConfirmModal";
 import useCountUp from "../hooks/useCountUp";
@@ -209,7 +209,7 @@ export default function TenantDashboard() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {items?.map((p, index) => (
-              <TenantPropertyCard key={p._id} property={p} index={index} />
+              <PropertyCard key={p._id} property={p} index={index} />
             ))}
           </div>
         )}

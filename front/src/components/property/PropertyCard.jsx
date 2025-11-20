@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import ConfirmModal from "../common/ConfirmModal";
 import { deleteProperty } from "../../redux/slices/propertySlice";
@@ -10,6 +10,8 @@ import PropertyDetailModal from "./PropertyDetailModal";
 export default function PropertyCard({ property, index }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const user = useSelector((state) => state.auth.user); // ⭐ Get logged-in user
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -61,7 +63,7 @@ export default function PropertyCard({ property, index }) {
 
           {/* ACTION BUTTONS */}
           <div className="flex justify-between mt-5">
-            {/* VIEW DETAILS */}
+            {/* VIEW BUTTON → shown for everyone */}
             <button
               onClick={() => setShowDetailModal(true)}
               className="px-4 py-1.5 bg-blue-50 text-blue-700 rounded-lg font-medium border border-blue-200 hover:bg-blue-100 transition"
@@ -69,21 +71,24 @@ export default function PropertyCard({ property, index }) {
               View
             </button>
 
-            {/* EDIT */}
-            <button
-              onClick={() => navigate(`/edit-property/${property._id}`)}
-              className="px-4 py-1.5 bg-green-50 text-green-700 rounded-lg font-medium border border-green-200 hover:bg-green-100 transition"
-            >
-              Edit
-            </button>
+            {/* LANDLORD ONLY → EDIT + DELETE */}
+            {user?.role === "landlord" && (
+              <>
+                <button
+                  onClick={() => navigate(`/edit-property/${property._id}`)}
+                  className="px-4 py-1.5 bg-green-50 text-green-700 rounded-lg font-medium border border-green-200 hover:bg-green-100 transition"
+                >
+                  Edit
+                </button>
 
-            {/* DELETE */}
-            <button
-              onClick={openDeleteModal}
-              className="px-4 py-1.5 bg-red-50 text-red-600 rounded-lg font-medium border border-red-200 hover:bg-red-100 transition"
-            >
-              Delete
-            </button>
+                <button
+                  onClick={openDeleteModal}
+                  className="px-4 py-1.5 bg-red-50 text-red-600 rounded-lg font-medium border border-red-200 hover:bg-red-100 transition"
+                >
+                  Delete
+                </button>
+              </>
+            )}
           </div>
         </div>
       </motion.div>

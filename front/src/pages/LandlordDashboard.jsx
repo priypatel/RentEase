@@ -8,8 +8,8 @@ import { getMyProperties } from "../redux/slices/propertySlice";
 import useCountUp from "../hooks/useCountUp";
 import { logoutUser } from "../redux/slices/userSlice";
 import ConfirmModal from "../components/common/ConfirmModal";
-import PropertyCardMini from "../components/property/PropertyCardMini";
-import SkeletonCardMini from "../components/common/SkeletonCardMini";
+import PropertyCard from "../components/property/PropertyCard";
+import SkeletonCard from "../components/common/SkeletonCard";
 export default function LandlordDashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -211,16 +211,14 @@ export default function LandlordDashboard() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {loading ? (
-              Array.from({ length: 3 }).map((_, i) => (
-                <SkeletonCardMini key={i} />
-              ))
+              Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={i} />)
             ) : properties.length === 0 ? (
               <p className="text-gray-600">No properties found.</p>
             ) : (
               properties
                 .slice(0, 3)
                 .map((p, index) => (
-                  <PropertyCardMini key={p._id} property={p} index={index} />
+                  <PropertyCard key={p._id} property={p} index={index} />
                 ))
             )}
           </div>
