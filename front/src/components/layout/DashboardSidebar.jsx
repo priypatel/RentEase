@@ -1,21 +1,16 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
-  Home,
-  Users,
-  FileText,
-  CreditCard,
-  Wrench,
   UserRound,
   LogOut,
   ChevronsLeft,
   ChevronsRight,
-  Building2,
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/userSlice";
 import ConfirmModal from "../../components/common/ConfirmModal";
 import { landlordNav, tenantNav } from "../../config/navConfig";
+import { iconMap } from "../../config/iconMap";
 
 export default function DashboardSidebar({ collapsed, setCollapsed }) {
   const location = useLocation();
@@ -25,9 +20,6 @@ export default function DashboardSidebar({ collapsed, setCollapsed }) {
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   // 🟢 ROLE SELECTOR (from your localStorage-loaded Redux slice)
-  //   const { user } = useSelector((state) => state.user) || {};
-
-  //   const role = user?.role; // "tenant" or "landlord"
   const { user } = useSelector((state) => state.auth) || {};
   const role = user?.role;
 
@@ -94,7 +86,7 @@ export default function DashboardSidebar({ collapsed, setCollapsed }) {
         {/* Navigation */}
         <nav className="flex-1 px-3 mt-4">
           {nav.map((item) => {
-            const Icon = item.icon;
+            const Icon = iconMap[item.icon];
             const active = isActive(item.to);
 
             return (
