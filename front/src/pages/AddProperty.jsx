@@ -28,6 +28,7 @@ export default function AddProperty() {
   const [location, setLocation] = useState("");
   const [rent, setRent] = useState("");
   const [description, setDescription] = useState("");
+  const [status, setStatus] = useState("available");
 
   // NEW IMAGES
   const [images, setImages] = useState([]); // File[]
@@ -56,6 +57,7 @@ export default function AddProperty() {
       setRent(p.rent || "");
       setDescription(p.description || "");
       setExistingImages(Array.isArray(p.images) ? p.images : []);
+      setStatus(p.status || "available");
     }
   }, [id, properties]);
 
@@ -153,6 +155,7 @@ export default function AddProperty() {
     formData.append("location", location);
     formData.append("rent", rent);
     formData.append("description", description || "");
+    formData.append("status", status);
 
     images.forEach((file) => formData.append("images", file));
 
@@ -244,6 +247,38 @@ export default function AddProperty() {
               placeholder="Describe the property..."
               className="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-300"
             />
+          </div>
+          {/* STATUS */}
+          {/* <div>
+            <label className="text-gray-700 font-semibold">Status *</label>
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-gray-50 
+               focus:outline-none focus:ring-2 focus:ring-green-300"
+            >
+              <option value="available">Available</option>
+              <option value="rented">Rented</option>
+              <option value="pending">Pending</option>
+            </select>
+          </div> */}
+          <div className="relative">
+            <select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              className="w-full p-3 rounded-xl border border-gray-300 bg-gray-50
+               text-gray-800 focus:outline-none focus:ring-2 
+               focus:ring-green-300 appearance-none"
+            >
+              <option value="available">Available</option>
+              <option value="rented">Rented</option>
+              <option value="pending">Pending</option>
+            </select>
+
+            {/* Dropdown icon */}
+            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500">
+              ▼
+            </span>
           </div>
 
           {/* IMAGE UPLOAD */}
