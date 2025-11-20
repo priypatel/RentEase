@@ -122,42 +122,128 @@ export default function PropertyDetailsPage() {
           {property.description}
         </p>
 
-        {/* LANDLORD DETAILS (Tenant only) */}
+        {/* LANDLORD DETAILS + REQUEST + DEPOSIT INFO */}
         {user?.role === "tenant" && (
-          <div className="mt-8 p-4 bg-gray-100 rounded-xl border">
-            <h3 className="text-xl font-semibold">Landlord Details</h3>
-            <p className="mt-1">
-              <strong>Name:</strong> {property.ownerId?.name}
-            </p>
-            <p className="mt-1">
-              <strong>Email:</strong> {property.ownerId?.email}
-            </p>
-            <p className="mt-1">
-              <strong>Phone:</strong> {property.ownerId?.phone}
-            </p>
-          </div>
-        )}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
+            {/* LANDLORD DETAILS */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1, duration: 0.4 }}
+              className="glass-card p-6 rounded-2xl border border-white/30 shadow-lg"
+            >
+              <h3 className="text-xl font-semibold text-green-900 flex items-center gap-2">
+                <svg
+                  className="w-6 h-6 text-green-700"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M5.121 17.804A9 9 0 1119 12v1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                Landlord Details
+              </h3>
 
-        {/* REQUEST SECTION */}
-        {user?.role === "tenant" && (
-          <div className="mt-8 p-5 bg-green-50 border border-green-200 rounded-xl">
-            <h3 className="text-lg font-semibold text-green-800">
-              Rent this Property
-            </h3>
-
-            {localStatus === "requested" ? (
-              <p className="text-yellow-700 font-medium mt-2">
-                Request already sent
+              <p className="mt-2 text-gray-700">
+                <strong>Name:</strong> {property.ownerId?.name}
               </p>
-            ) : (
-              <button
-                onClick={() => setShowConfirm(true)} // ⭐ CHANGE HERE
-                className="mt-3 px-6 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700"
-              >
-                Request to Rent
-              </button>
-            )}
-          </div>
+              <p className="mt-1 text-gray-700">
+                <strong>Email:</strong> {property.ownerId?.email}
+              </p>
+              <p className="mt-1 text-gray-700">
+                <strong>Phone:</strong> {property.ownerId?.phone}
+              </p>
+
+              {/* ⭐ Deposit highlight box */}
+              <div className="mt-5 p-3 rounded-xl bg-green-100 border border-green-300 flex items-start gap-3">
+                <svg
+                  className="w-6 h-6 text-green-700 flex-shrink-0 mt-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 8V4m0 0L8 8m4-4l4 4M6 12h12"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M6 16h12"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <p className="text-green-900 font-medium">
+                  Deposit Amount: <strong>₹{property.rent * 2}</strong> (2×
+                  monthly rent)
+                </p>
+              </div>
+            </motion.div>
+
+            {/* REQUEST TO RENT */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.4 }}
+              className="glass-card p-6 rounded-2xl border border-white/30 shadow-lg bg-green-50/50"
+            >
+              <h3 className="text-lg font-semibold text-green-800 flex items-center gap-2">
+                <svg
+                  className="w-6 h-6 text-green-700"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 6v6l4 2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <circle cx="12" cy="12" r="10" />
+                </svg>
+                Rent this Property
+              </h3>
+
+              {localStatus === "requested" ? (
+                <p className="text-yellow-700 font-medium mt-3">
+                  Request already sent
+                </p>
+              ) : (
+                <button
+                  onClick={() => setShowConfirm(true)}
+                  className="w-full mt-4 px-5 py-2.5 rounded-full text-sm flex items-center justify-center gap-2 glass-btn-blue"
+                >
+                  <svg
+                    className="w-4 h-4 text-blue-900"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M5 13l4 4L19 7"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  Request to Rent
+                </button>
+              )}
+            </motion.div>
+          </motion.div>
         )}
       </div>
 
