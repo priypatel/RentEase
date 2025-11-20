@@ -1,3 +1,4 @@
+
 export const landlordNav = [
   { name: "Dashboard", to: "/landlord/dashboard", icon: "Home" },
   { name: "My Properties", to: "/my-properties", icon: "Building2" },

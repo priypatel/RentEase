@@ -1,21 +1,16 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
-  Home,
-  Users,
-  FileText,
-  CreditCard,
-  Wrench,
   User,
   LogOut,
   X,
-  Building2,
 } from "lucide-react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/userSlice";
 import ConfirmModal from "../../components/common/ConfirmModal";
 import { landlordNav, tenantNav } from "../../config/navConfig";
+import { iconMap } from "../../config/iconMap";
 
 export default function DashboardSidebarMobile({
   mobileOpen,
@@ -86,7 +81,7 @@ export default function DashboardSidebarMobile({
         {/* Menu */}
         <nav className="p-4">
           {nav.map((item) => {
-            const Icon = item.icon;
+            const Icon = iconMap[item.icon];
 
             return (
               <Link

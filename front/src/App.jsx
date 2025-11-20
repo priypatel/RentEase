@@ -17,10 +17,13 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AddProperty from "./pages/AddProperty";
 import MyProperties from "./pages/MyProperties";
 import ProfilePage from "./pages/ProfilePage";
+import PropertyDetailsPage from "./pages/PropertyDetailsPage";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         {/* Public */}
         <Route path="/register" element={<Register />} />
@@ -40,6 +43,7 @@ function App() {
           {/* Tenant Routes */}
           <Route path="tenant/dashboard" element={<TenantDashboardContent />} />
           <Route path="tenant/profile" element={<ProfilePage />} />
+          <Route path="tenant/property/:id" element={<PropertyDetailsPage />} />
 
           {/* Landlord Routes */}
           <Route
@@ -47,6 +51,10 @@ function App() {
             element={<LandlordDashboardContent />}
           />
           <Route path="landlord/profile" element={<ProfilePage />} />
+          <Route
+            path="landlord/property/:id"
+            element={<PropertyDetailsPage />}
+          />
 
           {/* Common / Shared Routes */}
           <Route path="my-properties" element={<MyProperties />} />
