@@ -3,110 +3,80 @@ import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
-import { getAllProperties } from "../redux/slices/propertySlice";
-import { logoutUser } from "../redux/slices/userSlice";
+import { getAllProperties } from "../../redux/slices/propertySlice";
+import { logoutUser } from "../../redux/slices/userSlice";
 
-import PropertyCard from "../components/property/PropertyCard";
-import SkeletonCard from "../components/common/SkeletonCard";
-import ConfirmModal from "../components/common/ConfirmModal";
-import useCountUp from "../hooks/useCountUp";
+import PropertyCard from "../../components/property/PropertyCard";
+import SkeletonCard from "../../components/common/SkeletonCard";
+import ConfirmModal from "../../components/common/ConfirmModal";
+import useCountUp from "../../hooks/useCountUp";
 
-// ICONS (same style as landlord)
-import { Home, Wallet, CheckCircle, Clock } from "lucide-react";
+import { Home, Wallet, CheckCircle, Clock, Building2 } from "lucide-react";
 
-export default function TenantDashboard() {
+export default function TenantDashboardContent() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const propertyState = useSelector((state) => state.properties);
-  const authState = useSelector((state) => state.auth);
+  const { items, loading } = useSelector((state) => state.properties);
+  const { user } = useSelector((state) => state.user);
 
-  const items = propertyState?.items || [];
-  const loading = propertyState?.loading || false;
-  const user = authState?.user || {};
-
-  // dropdown + logout modal state
   const [openDropdown, setOpenDropdown] = useState(false);
   const dropdownRef = useRef(null);
+
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
-  // Fetch properties
   useEffect(() => {
     dispatch(getAllProperties());
   }, [dispatch]);
-
-  // Close dropdown on outside click
-  useEffect(() => {
-    const handler = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpenDropdown(false);
-      }
-    };
-
-    document.addEventListener("click", handler);
-    return () => document.removeEventListener("click", handler);
-  }, []);
-
-  // Handle logout
-  const handleLogoutConfirm = () => {
-    dispatch(logoutUser()).then(() => navigate("/login"));
-  };
 
   const displayName = user?.name
     ? user.name.charAt(0).toUpperCase() + user.name.slice(1)
     : "";
 
-  // ⭐ Tenant Stats (IDENTICAL structure to landlord stats)
   const statCards = [
     {
       title: "Available Properties",
       value: items.length,
-      icon: <Home className="w-7 h-7 text-green-600" />,
+      icon: <Building2 className="w-7 h-7 text-green-600" />,
       color: "bg-green-50",
-      isCurrency: false,
     },
     {
       title: "Requests Sent",
       value: 0,
       icon: <Wallet className="w-7 h-7 text-blue-600" />,
       color: "bg-blue-50",
-      isCurrency: false,
     },
     {
       title: "Approved",
       value: 0,
       icon: <CheckCircle className="w-7 h-7 text-emerald-600" />,
       color: "bg-emerald-50",
-      isCurrency: false,
     },
     {
       title: "Pending",
       value: 0,
       icon: <Clock className="w-7 h-7 text-yellow-600" />,
       color: "bg-yellow-50",
-      isCurrency: false,
     },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-green-100 py-10 px-6">
+    <div className="min-h-screen py-10 px-6">
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="max-w-6xl mx-auto"
       >
-        {/* ------------------ HEADER ------------------ */}
+        {/* Header */}
         <div className="flex flex-col sm:flex-row items-center justify-between mb-10">
           <div>
             <h1 className="text-4xl font-bold text-gray-900 tracking-tight">
-              {displayName ? `${displayName}'s Dashboard` : "Dashboard"}
+              {displayName ? `${displayName}'s Dashboard` : "Tenant Dashboard"}
             </h1>
 
             <p className="text-gray-600 mt-1">
-              {displayName
-                ? `Welcome back, ${displayName}! Explore available properties.`
-                : "Explore available properties and manage your rental activity."}
+              Explore properties and manage your rental activity.
             </p>
           </div>
 
@@ -146,11 +116,10 @@ export default function TenantDashboard() {
           </div>
         </div>
 
-        {/* ------------------ GLASS STATS SECTION ------------------ */}
+        {/* Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           {statCards.map((stat, idx) => {
             const animatedValue = useCountUp(stat.value);
-
             return (
               <motion.div
                 key={idx}
@@ -159,32 +128,26 @@ export default function TenantDashboard() {
                 whileHover={{ y: -6, scale: 1.03 }}
                 transition={{ delay: idx * 0.1, duration: 0.4 }}
                 className="
-          rounded-2xl p-6 
-          shadow-lg hover:shadow-2xl 
-          cursor-pointer transition-all 
-
-          /* 🌟 GLASS EFFECT */
-          backdrop-blur-xl 
-          bg-gradient-to-br from-white/50 to-[#e0f6ea]/40 
-          border border-white/30 
-        "
+                  rounded-2xl p-6 
+                  shadow-lg hover:shadow-2xl 
+                  transition-all cursor-pointer
+                  backdrop-blur-xl 
+                  bg-gradient-to-br from-white/50 to-[#e0f6ea]/40 
+                  border border-white/30
+                "
               >
                 <div className="flex items-center gap-5">
-                  {/* Icon container — glass inner */}
                   <div
                     className="
-            p-3 rounded-xl  
-            shadow-md 
-            bg-gradient-to-br from-white/60 to-[#f1faf5]
-            border border-white/40
-          "
+                      p-3 rounded-xl bg-gradient-to-br from-white/60 to-[#f1faf5]
+                      border border-white/40 shadow-md
+                    "
                   >
                     {stat.icon}
                   </div>
 
                   <div>
                     <p className="text-gray-600 text-sm">{stat.title}</p>
-
                     <h2 className="text-3xl font-semibold text-gray-900">
                       {stat.isCurrency ? `₹${animatedValue}` : animatedValue}
                     </h2>
@@ -195,7 +158,7 @@ export default function TenantDashboard() {
           })}
         </div>
 
-        {/* ------------------ PROPERTIES ------------------ */}
+        {/* Properties */}
         <h2 className="text-2xl font-semibold text-green-700 mb-4">
           Available Properties
         </h2>
@@ -214,11 +177,10 @@ export default function TenantDashboard() {
           </div>
         )}
 
-        {/* Logout Popup */}
         <ConfirmModal
           show={showLogoutConfirm}
           onClose={() => setShowLogoutConfirm(false)}
-          onConfirm={handleLogoutConfirm}
+          onConfirm={() => navigate("/login")}
           message="Are you sure you want to logout?"
           confirmText="Yes, Logout"
         />
