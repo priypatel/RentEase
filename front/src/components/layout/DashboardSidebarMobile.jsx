@@ -15,6 +15,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/userSlice";
 import ConfirmModal from "../../components/common/ConfirmModal";
+import { landlordNav, tenantNav } from "../../config/navConfig";
 
 export default function DashboardSidebarMobile({
   mobileOpen,
@@ -29,28 +30,8 @@ export default function DashboardSidebarMobile({
   const [showLogoutConfirm, setShowLogoutConfirm] = React.useState(false);
 
   // 🟢 ROLE
-  const { user } = useSelector((state) => state.user);
-
-  const role = user?.role; // landlord | tenant
-
-  // 🟩 LANDLORD NAV
-  const landlordNav = [
-    { name: "Dashboard", to: "/landlord/dashboard", icon: Home },
-    { name: "My Properties", to: "/my-properties", icon: Building2 },
-    { name: "Tenants", to: "/landlord/tenants", icon: Users },
-    { name: "Payments", to: "/landlord/payments", icon: CreditCard },
-    { name: "Requests", to: "/landlord/requests", icon: Wrench },
-    { name: "Documents", to: "/landlord/documents", icon: FileText },
-  ];
-
-  // 🟦 TENANT NAV
-  const tenantNav = [
-    { name: "Dashboard", to: "/tenant/dashboard", icon: Home },
-    { name: "Properties", to: "/tenant/properties", icon: Building2 },
-    { name: "Payments", to: "/tenant/payments", icon: CreditCard },
-    { name: "Requests", to: "/tenant/maintenance", icon: Wrench },
-    { name: "Documents", to: "/tenant/documents", icon: FileText },
-  ];
+  const { user } = useSelector((state) => state.auth) || {};
+  const role = user?.role;
 
   const nav = role === "landlord" ? landlordNav : tenantNav;
 
