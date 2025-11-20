@@ -6,6 +6,7 @@ import { getAllProperties } from "../redux/slices/propertySlice";
 import { createRentalRequest } from "../redux/slices/rentalRequestSlice";
 import { toast } from "react-toastify";
 import ImagePreviewModal from "../components/common/ImagePreviewModal";
+import ConfirmModal from "../components/common/ConfirmModal"; // ⭐ ADD THIS
 
 export default function PropertyDetailsPage() {
   const { id } = useParams();
@@ -17,7 +18,9 @@ export default function PropertyDetailsPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPreview, setShowPreview] = useState(false);
 
-  // fetch properties if not loaded
+  // ⭐ NEW STATE FOR CONFIRM POPUP
+  const [showConfirm, setShowConfirm] = useState(false);
+
   useEffect(() => {
     if (!items.length) {
       dispatch(getAllProperties());
@@ -25,28 +28,11 @@ export default function PropertyDetailsPage() {
   }, [dispatch]);
 
   const property = items.find((p) => p._id === id);
-
-  // Local rental status
   const [localStatus, setLocalStatus] = useState(property?.rentalStatus);
 
-  // ----------- LOADING STATES -------------
-  if (loading) {
-    return <p className="p-6 text-gray-600">Loading property...</p>;
-  }
+  if (loading) return <p className="p-6">Loading...</p>;
+  if (!property) return <p className="p-6 text-red-600">Property not found</p>;
 
-  if (!loading && !items.length) {
-    return <p className="p-6 text-gray-600">Preparing properties...</p>;
-  }
-
-  if (!property) {
-    return (
-      <p className="p-6 text-red-600 font-semibold">
-        Property not found or removed
-      </p>
-    );
-  }
-
-  // ----------- IMAGE SLIDER CONTROLS -------------
   const next = () =>
     setCurrentIndex((prev) =>
       prev === property.images.length - 1 ? 0 : prev + 1
@@ -57,8 +43,8 @@ export default function PropertyDetailsPage() {
       prev === 0 ? property.images.length - 1 : prev - 1
     );
 
-  // ----------- SEND RENTAL REQUEST -------------
-  const handleRequest = async () => {
+  // ⭐ FINAL API CALL (AFTER CONFIRM)
+  const handleRequestConfirm = async () => {
     try {
       const depositAmount = property.rent * 2;
 
@@ -75,10 +61,11 @@ export default function PropertyDetailsPage() {
       toast.success("Request sent to landlord");
     } catch (err) {
       toast.error(err || "Failed to send request");
+    } finally {
+      setShowConfirm(false); // close modal
     }
   };
 
-  // ----------- RENDER PAGE -------------
   return (
     <div className="min-h-screen px-6 py-8">
       <div className="max-w-5xl mx-auto">
@@ -90,15 +77,16 @@ export default function PropertyDetailsPage() {
             transition={{ duration: 0.4 }}
           >
             {property.images?.map((img, i) => (
-              <img
-                key={i}
-                src={img.url}
-                className="w-full h-72 object-cover flex-shrink-0 rounded-xl cursor-pointer"
-                onClick={() => {
-                  setShowPreview(true);
-                  setCurrentIndex(i);
-                }}
-              />
+              <div key={i} className="min-w-full h-72 flex-shrink-0">
+                <img
+                  src={img.url}
+                  className="w-full h-72 object-cover rounded-xl cursor-pointer"
+                  onClick={() => {
+                    setShowPreview(true);
+                    setCurrentIndex(i);
+                  }}
+                />
+              </div>
             ))}
           </motion.div>
 
@@ -121,7 +109,7 @@ export default function PropertyDetailsPage() {
           )}
         </div>
 
-        {/* INFO */}
+        {/* CONTENT */}
         <h1 className="text-3xl font-bold">{property.title}</h1>
         <p className="text-gray-600 mt-1 text-lg">📍 {property.location}</p>
         <p className="text-green-700 font-bold text-xl mt-3">
@@ -150,7 +138,7 @@ export default function PropertyDetailsPage() {
           </div>
         )}
 
-        {/* REQUEST BUTTON */}
+        {/* REQUEST SECTION */}
         {user?.role === "tenant" && (
           <div className="mt-8 p-5 bg-green-50 border border-green-200 rounded-xl">
             <h3 className="text-lg font-semibold text-green-800">
@@ -163,7 +151,7 @@ export default function PropertyDetailsPage() {
               </p>
             ) : (
               <button
-                onClick={handleRequest}
+                onClick={() => setShowConfirm(true)} // ⭐ CHANGE HERE
                 className="mt-3 px-6 py-2 rounded-lg bg-green-600 text-white hover:bg-green-700"
               >
                 Request to Rent
@@ -171,25 +159,24 @@ export default function PropertyDetailsPage() {
             )}
           </div>
         )}
-
-        {/* LANDLORD FEATURES (future) */}
-        {user?.role === "landlord" && (
-          <div className="mt-8 p-4 bg-blue-50 border rounded-xl">
-            <h3 className="text-lg font-semibold text-blue-800">
-              Landlord Actions
-            </h3>
-            <p className="text-blue-700 mt-1">(Approve/Reject coming soon)</p>
-          </div>
-        )}
       </div>
 
-      {/* IMAGE PREVIEW MODAL */}
+      {/* IMAGE PREVIEW */}
       <ImagePreviewModal
         show={showPreview}
         onClose={() => setShowPreview(false)}
         images={property.images}
         index={currentIndex}
         setIndex={setCurrentIndex}
+      />
+
+      {/* ⭐ CONFIRM POPUP BEFORE API CALL */}
+      <ConfirmModal
+        show={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        onConfirm={handleRequestConfirm}
+        message="Are you sure you want to request this property?"
+        confirmText="Send Request"
       />
     </div>
   );
