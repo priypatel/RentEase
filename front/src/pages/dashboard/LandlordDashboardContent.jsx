@@ -2,33 +2,22 @@ import React, { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { Wallet, Users, Home, Bell, PlusCircle } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
-import { getMyProperties } from "../redux/slices/propertySlice";
-import useCountUp from "../hooks/useCountUp";
-import { logoutUser } from "../redux/slices/userSlice";
-import ConfirmModal from "../components/common/ConfirmModal";
-import PropertyCard from "../components/property/PropertyCard";
-import SkeletonCard from "../components/common/SkeletonCard";
-export default function LandlordDashboard() {
+import { Link, useNavigate } from "react-router-dom";
+
+import { getMyProperties } from "../../redux/slices/propertySlice";
+import useCountUp from "../../hooks/useCountUp";
+
+import PropertyCard from "../../components/property/PropertyCard";
+import SkeletonCard from "../../components/common/SkeletonCard";
+import ConfirmModal from "../../components/common/ConfirmModal";
+
+export default function LandlordDashboardContent() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [openDropdown, setOpenDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
-
-  // close dropdown when clicking outside
-  useEffect(() => {
-    const handler = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
-        setOpenDropdown(false);
-      }
-    };
-
-    document.addEventListener("click", handler);
-    return () => document.removeEventListener("click", handler);
-  }, []);
 
   const { items: properties, loading } = useSelector(
     (state) => state.properties
@@ -51,14 +40,12 @@ export default function LandlordDashboard() {
       value: totalProperties,
       icon: <Home className="w-7 h-7 text-green-600" />,
       color: "bg-green-50",
-      isCurrency: false,
     },
     {
       title: "Active Tenants",
       value: 0,
       icon: <Users className="w-7 h-7 text-emerald-600" />,
       color: "bg-emerald-50",
-      isCurrency: false,
     },
     {
       title: "Monthly Income",
@@ -72,15 +59,11 @@ export default function LandlordDashboard() {
       value: 0,
       icon: <Bell className="w-7 h-7 text-red-600" />,
       color: "bg-red-50",
-      isCurrency: false,
     },
   ];
-  const handleLogoutConfirm = () => {
-    dispatch(logoutUser()).then(() => navigate("/login"));
-  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-green-100 py-10 px-6">
+    <div className="min-h-screen py-10 px-6">
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
@@ -98,9 +81,7 @@ export default function LandlordDashboard() {
             </p>
           </div>
 
-          {/* Right Side Buttons */}
           <div className="flex items-center gap-3 mt-4 sm:mt-0">
-            {/* Add Property Button */}
             <Link
               to="/add-property"
               className="flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-xl shadow-lg hover:bg-green-700 transition-all hover:shadow-xl active:scale-95"
@@ -111,28 +92,9 @@ export default function LandlordDashboard() {
 
             {/* Profile Dropdown */}
             <div className="relative" ref={dropdownRef}>
-              {/* <button
-                onClick={() => setOpenDropdown(!openDropdown)}
-                className="flex items-center gap-2 bg-white border border-green-300 text-green-700 px-4 py-2.5 rounded-xl shadow-sm hover:bg-green-50 transition-all active:scale-95"
-              >
-                <img
-                  src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-                  alt="profile"
-                  className="w-6 h-6"
-                />
-                <span className="font-medium">Account</span>
-              </button> */}
               <button
                 onClick={() => setOpenDropdown(!openDropdown)}
-                className="
-                  flex items-center gap-2 px-5 py-2.5 rounded-xl transition-all shadow-md
-
-                  /* 🌟 GLASS NAVBAR BUTTON */
-                  bg-white/50 backdrop-blur-xl 
-                  border border-white/30 
-                  hover:bg-white/70 hover:shadow-lg active:scale-95
-                  text-green-800
-                "
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl shadow-md bg-white/50 backdrop-blur-xl border border-white/30 hover:bg-white/70 hover:shadow-lg active:scale-95 text-green-800"
               >
                 <img
                   src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
@@ -142,11 +104,10 @@ export default function LandlordDashboard() {
                 <span className="font-medium">Account</span>
               </button>
 
-              {/* Dropdown Menu */}
               {openDropdown && (
                 <div className="absolute right-0 mt-2 w-44 bg-white shadow-lg rounded-xl border border-gray-200 p-2 z-50 animate-fadeIn">
                   <Link
-                    to="/profile"
+                    to="/landlord/profile"
                     className="block px-4 py-2 rounded-lg hover:bg-green-50 text-gray-700 transition"
                   >
                     Profile
@@ -168,7 +129,6 @@ export default function LandlordDashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {statCards.map((stat, idx) => {
             const animatedValue = useCountUp(stat.value);
-
             return (
               <motion.div
                 key={idx}
@@ -184,7 +144,6 @@ export default function LandlordDashboard() {
                   </div>
                   <div>
                     <p className="text-gray-500 text-sm">{stat.title}</p>
-
                     <h2 className="text-3xl font-semibold text-gray-900">
                       {stat.isCurrency ? `₹${animatedValue}` : animatedValue}
                     </h2>
@@ -223,10 +182,11 @@ export default function LandlordDashboard() {
             )}
           </div>
         </div>
+
         <ConfirmModal
           show={showLogoutConfirm}
           onClose={() => setShowLogoutConfirm(false)}
-          onConfirm={handleLogoutConfirm}
+          onConfirm={() => navigate("/login")}
           message="Are you sure you want to logout?"
           confirmText="Yes, Logout"
         />

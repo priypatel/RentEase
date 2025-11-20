@@ -1,11 +1,13 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import "./index.css";
 
-import TenantDashboard from "./pages/TenantDashboard";
-import TenantLayout from "./components/layout/TenantLayout";
-import LandlordDashboard from "./pages/LandlordDashboard";
-import LandlordLayout from "./components/layout/LandlordLayout";
+import DashboardLayout from "./components/layout/DashboardLayout";
 
+// DASHBOARD PAGES
+import TenantDashboardContent from "./pages/dashboard/TenantDashboardContent";
+import LandlordDashboardContent from "./pages/dashboard/LandlordDashboardContent";
+
+// COMMON PAGES
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
@@ -24,59 +26,33 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
 
-        {/* =============== TENANT ROUTES =============== */}
+        {/* ============================================
+           UNIFIED LAYOUT FOR BOTH ROLES
+        ============================================ */}
         <Route
-          path="/tenant"
+          path="/"
           element={
             <ProtectedRoute>
-              <TenantLayout />
+              <DashboardLayout />
             </ProtectedRoute>
           }
         >
-          <Route path="dashboard" element={<TenantDashboard />} />
-          <Route path="profile" element={<ProfilePage />} />
+          {/* Tenant Routes */}
+          <Route path="tenant/dashboard" element={<TenantDashboardContent />} />
+          <Route path="tenant/profile" element={<ProfilePage />} />
+
+          {/* Landlord Routes */}
+          <Route
+            path="landlord/dashboard"
+            element={<LandlordDashboardContent />}
+          />
+          <Route path="landlord/profile" element={<ProfilePage />} />
+
+          {/* Common / Shared Routes */}
+          <Route path="my-properties" element={<MyProperties />} />
+          <Route path="add-property" element={<AddProperty />} />
+          <Route path="edit-property/:id" element={<AddProperty />} />
         </Route>
-
-        {/* =============== LANDLORD ROUTES =============== */}
-        <Route
-          path="/landlord"
-          element={
-            <ProtectedRoute>
-              <LandlordLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route path="dashboard" element={<LandlordDashboard />} />
-          <Route path="profile" element={<ProfilePage />} />
-        </Route>
-
-        {/* =============== PROPERTY ROUTES =============== */}
-        <Route
-          path="/my-properties"
-          element={
-            <ProtectedRoute>
-              <MyProperties />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/add-property"
-          element={
-            <ProtectedRoute>
-              <AddProperty />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/edit-property/:id"
-          element={
-            <ProtectedRoute>
-              <AddProperty />
-            </ProtectedRoute>
-          }
-        />
 
         {/* Password */}
         <Route path="/reset-password/:token" element={<ResetPassword />} />

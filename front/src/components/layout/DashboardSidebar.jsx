@@ -12,18 +12,26 @@ import {
   ChevronsRight,
   Building2,
 } from "lucide-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/userSlice";
-import ConfirmModal from "../common/ConfirmModal";
+import ConfirmModal from "../../components/common/ConfirmModal";
 
-export default function LandlordSidebar({ collapsed, setCollapsed }) {
+export default function DashboardSidebar({ collapsed, setCollapsed }) {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
-  const nav = [
+  // 🟢 ROLE SELECTOR (from your localStorage-loaded Redux slice)
+  //   const { user } = useSelector((state) => state.user) || {};
+
+  //   const role = user?.role; // "tenant" or "landlord"
+  const { user } = useSelector((state) => state.auth) || {};
+  const role = user?.role;
+
+  // 🟩 LANDLORD MENU
+  const landlordNav = [
     { name: "Dashboard", to: "/landlord/dashboard", icon: Home },
     { name: "My Properties", to: "/my-properties", icon: Building2 },
     { name: "Tenants", to: "/landlord/tenants", icon: Users },
@@ -31,6 +39,18 @@ export default function LandlordSidebar({ collapsed, setCollapsed }) {
     { name: "Requests", to: "/landlord/requests", icon: Wrench },
     { name: "Documents", to: "/landlord/documents", icon: FileText },
   ];
+
+  // 🟦 TENANT MENU
+  const tenantNav = [
+    { name: "Dashboard", to: "/tenant/dashboard", icon: Home },
+    { name: "Properties", to: "/tenant/properties", icon: Building2 },
+    { name: "Payments", to: "/tenant/payments", icon: CreditCard },
+    { name: "Requests", to: "/tenant/maintenance", icon: Wrench },
+    { name: "Documents", to: "/tenant/documents", icon: FileText },
+  ];
+
+  // 🟠 CHOOSE MENU BASED ON ROLE
+  const nav = role === "landlord" ? landlordNav : tenantNav;
 
   const isActive = (to) =>
     location.pathname === to || location.pathname.startsWith(to + "/");
@@ -50,7 +70,7 @@ export default function LandlordSidebar({ collapsed, setCollapsed }) {
           backdrop-blur-2xl 
           bg-gradient-to-b from-white/60 via-white/40 to-green-50/30
           border-r border-white/30 shadow-lg
-          overflow-y-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-green-200
+          overflow-y-auto scrollbar-thin scrollbar-thumb-green-200
         `}
       >
         {/* Header */}
@@ -70,7 +90,9 @@ export default function LandlordSidebar({ collapsed, setCollapsed }) {
                 <h1 className="text-lg font-semibold text-[#044f39]">
                   RentEase
                 </h1>
-                <p className="text-sm text-[#28523d]">Landlord</p>
+                <p className="text-sm text-[#28523d]">
+                  {role === "landlord" ? "Landlord" : "Tenant"}
+                </p>
               </div>
             )}
           </div>
@@ -98,26 +120,24 @@ export default function LandlordSidebar({ collapsed, setCollapsed }) {
                 key={item.to}
                 to={item.to}
                 className={`
-    flex items-center 
-    ${collapsed ? "justify-center" : "justify-start gap-4"} 
-    py-3 px-3 rounded-xl mb-3 transition-all cursor-pointer
+                  flex items-center 
+                  ${collapsed ? "justify-center" : "justify-start gap-4"} 
+                  py-3 px-3 rounded-xl mb-3 transition-all cursor-pointer
 
-    hover:scale-[1.03] hover:-translate-y-[2px]
-    hover:shadow-lg hover:bg-white/40
+                  hover:scale-[1.03] hover:-translate-y-[2px]
+                  hover:shadow-lg hover:bg-white/40
 
-    ${
-      active
-        ? "bg-green-100/70 text-[#044f39] shadow-inner"
-        : "text-[#28523d] hover:text-[#044f39]"
-    }
-  `}
+                  ${
+                    active
+                      ? "bg-green-100/70 text-[#044f39] shadow-inner"
+                      : "text-[#28523d] hover:text-[#044f39]"
+                  }
+                `}
               >
-                {/* 👇 ICON WRAPPER — Forces perfect centering */}
                 <div className="w-10 h-6 flex items-center justify-center">
                   <Icon className="w-6 h-6" />
                 </div>
 
-                {/* Show text only when not collapsed */}
                 {!collapsed && <span>{item.name}</span>}
               </Link>
             );
@@ -125,37 +145,35 @@ export default function LandlordSidebar({ collapsed, setCollapsed }) {
         </nav>
 
         {/* Footer */}
+        {/* Footer */}
         <div className="p-4 border-t border-white/40 mt-auto bg-white/10 backdrop-blur-xl">
-          {/* Profile */}
           <Link
-            to="/landlord/profile"
+            to={`/${role}/profile`}
             className={`
-    flex items-center 
-    ${collapsed ? "justify-center" : "justify-start gap-4"} 
-    py-3 px-3 rounded-xl text-[#28523d]
-    hover:bg-white/40 hover:shadow-lg hover:scale-[1.03] transition
-  `}
+      flex items-center 
+      ${collapsed ? "justify-center" : "justify-start gap-4"} 
+      py-3 px-3 rounded-xl text-[#28523d]
+      hover:bg-white/40 hover:shadow-lg hover:scale-[1.03] transition
+    `}
           >
-            <div className="w-10 h-6 flex items-center justify-center">
+            <div className="w-10 h-10 flex items-center justify-center">
               <UserRound className="w-6 h-6" />
             </div>
-
             {!collapsed && <span>Profile</span>}
           </Link>
 
           <button
             onClick={() => setShowLogoutConfirm(true)}
             className={`
-    flex items-center 
-    ${collapsed ? "justify-center" : "justify-start gap-4"} 
-    py-3 px-3 rounded-xl text-red-600 mt-2 w-full
-    hover:bg-red-50 hover:shadow-lg hover:scale-[1.03] transition
-  `}
+      flex items-center 
+      ${collapsed ? "justify-center" : "justify-start gap-4"} 
+      py-3 px-3 rounded-xl text-red-600 mt-2 w-full
+      hover:bg-red-50 hover:shadow-lg hover:scale-[1.03] transition
+    `}
           >
-            <div className="w-10 h-6 flex items-center justify-center">
+            <div className="w-10 h-10 flex items-center justify-center">
               <LogOut className="w-6 h-6" />
             </div>
-
             {!collapsed && <span>Logout</span>}
           </button>
         </div>

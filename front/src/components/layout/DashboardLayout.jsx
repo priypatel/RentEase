@@ -1,28 +1,34 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
-import LandlordSidebar from "./LandlordSidebar";
-import MobileLandlordSidebar from "./MobileLandlordSidebar";
 
-export default function LandlordLayout() {
+// Unified sidebars
+import DashboardSidebar from "./DashboardSidebar";
+import DashboardSidebarMobile from "./DashboardSidebarMobile";
+
+export default function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-white via-green-50 to-green-100 relative">
-      <LandlordSidebar collapsed={collapsed} setCollapsed={setCollapsed} />
+      {/* Desktop Sidebar */}
+      <DashboardSidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
-      <MobileLandlordSidebar
+      {/* Mobile Sidebar */}
+      <DashboardSidebarMobile
         mobileOpen={mobileOpen}
         setMobileOpen={setMobileOpen}
         collapsed={collapsed}
         setCollapsed={setCollapsed}
       />
 
+      {/* Main content wrapper */}
       <div
         className={`flex-1 transition-all duration-300 ${
           collapsed ? "md:ml-20" : "md:ml-64 lg:ml-72"
         }`}
       >
+        {/* Mobile Menu Toggle Button */}
         <button
           className="md:hidden p-3 m-4 rounded-xl bg-white/50 backdrop-blur-xl border border-white/40 shadow active:scale-95"
           onClick={() => setMobileOpen(true)}
@@ -38,6 +44,7 @@ export default function LandlordLayout() {
           </svg>
         </button>
 
+        {/* Content */}
         <main className="py-8 px-6 md:px-10">
           <Outlet />
         </main>
