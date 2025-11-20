@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
+import { useSelector } from "react-redux";
 
 // ⭐ FULLSCREEN IMAGE PREVIEW MODAL ⭐
 function ImagePreviewModal({ show, onClose, images, index }) {
@@ -29,7 +30,6 @@ function ImagePreviewModal({ show, onClose, images, index }) {
         className="max-h-[90vh] max-w-[90vw] object-contain rounded-xl"
       />
 
-      {/* Prev */}
       <button
         onClick={prev}
         className="absolute left-8 text-white text-5xl select-none"
@@ -37,7 +37,6 @@ function ImagePreviewModal({ show, onClose, images, index }) {
         ‹
       </button>
 
-      {/* Next */}
       <button
         onClick={next}
         className="absolute right-8 text-white text-5xl select-none"
@@ -54,6 +53,8 @@ export default function PropertyDetailModal({ show, onClose, property }) {
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPreview, setShowPreview] = useState(false);
+
+  const user = useSelector((state) => state.auth.user); // ⭐ Get logged-in user
 
   const nextImage = () =>
     setCurrentIndex((prev) =>
@@ -89,7 +90,6 @@ export default function PropertyDetailModal({ show, onClose, property }) {
           <div className="overflow-y-auto px-6 pb-6 pt-2 flex-1">
             {/* ⭐ IMAGE SLIDER ⭐ */}
             <div className="relative w-full h-72 mb-5 overflow-hidden rounded-xl">
-              {/* IMAGES */}
               <motion.div
                 className="flex h-full"
                 animate={{ x: `-${currentIndex * 100}%` }}
@@ -135,8 +135,9 @@ export default function PropertyDetailModal({ show, onClose, property }) {
                   <div
                     key={i}
                     onClick={() => setCurrentIndex(i)}
-                    className={`w-2.5 h-2.5 rounded-full cursor-pointer transition
-                      ${i === currentIndex ? "bg-green-600" : "bg-white/70"}`}
+                    className={`w-2.5 h-2.5 rounded-full cursor-pointer transition ${
+                      i === currentIndex ? "bg-green-600" : "bg-white/70"
+                    }`}
                   ></div>
                 ))}
               </div>
@@ -164,6 +165,27 @@ export default function PropertyDetailModal({ show, onClose, property }) {
             <p className="text-gray-700 mt-2 whitespace-pre-line">
               {property.description || "No description available."}
             </p>
+
+            {/* ⭐ TENANT ONLY: LANDLORD DETAILS ⭐ */}
+            {user?.role === "tenant" && (
+              <div className="mt-6 p-4 rounded-xl bg-gray-100 border border-gray-300">
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                  Landlord Details
+                </h3>
+
+                <p className="text-gray-700">
+                  <strong>Name:</strong> {property?.ownerId?.name}
+                </p>
+
+                <p className="text-gray-700 mt-1">
+                  <strong>Email:</strong> {property?.ownerId?.email}
+                </p>
+
+                <p className="text-gray-700 mt-1">
+                  <strong>Phone:</strong> {property?.ownerId?.phone}
+                </p>
+              </div>
+            )}
           </div>
 
           {/* FOOTER */}
