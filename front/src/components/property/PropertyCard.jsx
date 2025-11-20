@@ -62,11 +62,11 @@ export default function PropertyCard({ property, index }) {
           </p>
 
           {/* ACTION BUTTONS */}
-          {/* FIRST ROW → STATUS (LEFT) + VIEW (RIGHT) */}
+          {/* FIRST ROW → STATUS + VIEW */}
           <div className="flex justify-between items-center mt-4">
-            {/* STATUS */}
+            {/* STATUS WITH ICON */}
             <span
-              className={`px-4 py-1 font-medium text-xs rounded-full border 
+              className={`px-4 py-1 flex items-center gap-1.5 font-medium text-xs rounded-full border 
       ${
         property.status === "available"
           ? "bg-green-50 text-green-700 border-green-300"
@@ -74,38 +74,147 @@ export default function PropertyCard({ property, index }) {
           ? "bg-red-50 text-red-700 border-red-300"
           : "bg-yellow-50 text-yellow-700 border-yellow-300"
       }
+      transition-transform duration-150 ease-out hover:scale-105
     `}
             >
+              {/* status icon */}
+              {property.status === "available" && (
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M5 13l4 4L19 7"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
+
+              {property.status === "rented" && (
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M18 6L6 18"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M6 6l12 12"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              )}
+
+              {property.status === "pending" && (
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M12 6v6l4 2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <circle cx="12" cy="12" r="10" />
+                </svg>
+              )}
+
               {property.status?.toUpperCase()}
             </span>
 
-            {/* VIEW (same style as status) */}
+            {/* VIEW BUTTON WITH ICON */}
             <button
               onClick={() => setShowDetailModal(true)}
-              className="px-4 py-1 text-xs font-medium rounded-full 
+              className="px-4 py-1 flex items-center gap-1.5 text-xs font-medium rounded-full 
                bg-blue-50 text-blue-700 border border-blue-300 
-               hover:bg-blue-100 transition"
+               hover:bg-blue-100 transition-transform duration-150 ease-out hover:scale-105"
             >
-              VIEW
+              {/* eye icon */}
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              View
             </button>
           </div>
 
           {/* SECOND ROW → EDIT + DELETE (LANDLORD ONLY) */}
           {user?.role === "landlord" && (
             <div className="flex justify-between items-center mt-3">
-              {/* EDIT */}
+              {/* EDIT BUTTON */}
               <button
                 onClick={() => navigate(`/edit-property/${property._id}`)}
-                className="px-4 py-1.5 bg-green-50 text-green-700 rounded-lg font-medium border border-green-200 hover:bg-green-100 transition"
+                className="px-4 py-1.5 flex items-center gap-1.5 text-xs font-medium rounded-full 
+                 bg-green-50 text-green-700 border border-green-300 
+                 hover:bg-green-100 transition-transform duration-150 ease-out hover:scale-105"
               >
+                {/* pencil icon */}
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M15 3l6 6-12 12H3v-6L15 3z"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
                 Edit
               </button>
 
-              {/* DELETE */}
+              {/* DELETE BUTTON */}
               <button
                 onClick={openDeleteModal}
-                className="px-4 py-1.5 bg-red-50 text-red-600 rounded-lg font-medium border border-red-200 hover:bg-red-100 transition"
+                className="px-4 py-1.5 flex items-center gap-1.5 text-xs font-medium rounded-full 
+                 bg-red-50 text-red-600 border border-red-300 
+                 hover:bg-red-100 transition-transform duration-150 ease-out hover:scale-105"
               >
+                {/* trash icon */}
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    d="M3 6h18"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M8 6V4h8v2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M19 6l-1 14H6L5 6"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
                 Delete
               </button>
             </div>
