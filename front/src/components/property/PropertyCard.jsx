@@ -73,9 +73,7 @@ export default function PropertyCard({ property, index }) {
             {/* VIEW PAGE BUTTON */}
             <button
               onClick={() => navigate(`/${user.role}/property/${property._id}`)}
-              className="px-4 py-1 flex items-center gap-1.5 text-xs font-medium rounded-full 
-               bg-blue-50 text-blue-700 border border-blue-300 
-               hover:bg-blue-100 transition-transform duration-150 ease-out hover:scale-105"
+              className="px-4 py-1 flex items-center gap-1.5 text-xs font-medium rounded-full glass-btn-blue"
             >
               <svg
                 className="w-4 h-4"
@@ -96,14 +94,15 @@ export default function PropertyCard({ property, index }) {
             <div className="flex justify-between items-center mt-3">
               <button
                 onClick={() => navigate(`/edit-property/${property._id}`)}
-                className="px-4 py-1.5 text-xs rounded-full bg-green-50 text-green-700 border border-green-300"
+                className="px-4 py-1.5 text-xs font-medium rounded-full flex items-center gap-1.5 glass-btn-green"
               >
                 Edit
               </button>
 
               <button
                 onClick={() => setShowDeleteModal(true)}
-                className="px-4 py-1.5 text-xs rounded-full bg-red-50 text-red-600 border border-red-300"
+                // className="px-4 py-1.5 text-xs rounded-full bg-red-50 text-red-600 border border-red-300"
+                className="px-4 py-1.5 text-xs font-medium rounded-full flex items-center gap-1.5 glass-btn-red"
               >
                 Delete
               </button>
