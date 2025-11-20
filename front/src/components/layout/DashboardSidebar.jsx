@@ -15,6 +15,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/userSlice";
 import ConfirmModal from "../../components/common/ConfirmModal";
+import { landlordNav, tenantNav } from "../../config/navConfig";
 
 export default function DashboardSidebar({ collapsed, setCollapsed }) {
   const location = useLocation();
@@ -29,25 +30,6 @@ export default function DashboardSidebar({ collapsed, setCollapsed }) {
   //   const role = user?.role; // "tenant" or "landlord"
   const { user } = useSelector((state) => state.auth) || {};
   const role = user?.role;
-
-  // 🟩 LANDLORD MENU
-  const landlordNav = [
-    { name: "Dashboard", to: "/landlord/dashboard", icon: Home },
-    { name: "My Properties", to: "/my-properties", icon: Building2 },
-    { name: "Tenants", to: "/landlord/tenants", icon: Users },
-    { name: "Payments", to: "/landlord/payments", icon: CreditCard },
-    { name: "Requests", to: "/landlord/requests", icon: Wrench },
-    { name: "Documents", to: "/landlord/documents", icon: FileText },
-  ];
-
-  // 🟦 TENANT MENU
-  const tenantNav = [
-    { name: "Dashboard", to: "/tenant/dashboard", icon: Home },
-    { name: "Properties", to: "/tenant/properties", icon: Building2 },
-    { name: "Payments", to: "/tenant/payments", icon: CreditCard },
-    { name: "Requests", to: "/tenant/maintenance", icon: Wrench },
-    { name: "Documents", to: "/tenant/documents", icon: FileText },
-  ];
 
   // 🟠 CHOOSE MENU BASED ON ROLE
   const nav = role === "landlord" ? landlordNav : tenantNav;
