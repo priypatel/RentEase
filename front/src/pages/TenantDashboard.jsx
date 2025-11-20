@@ -7,7 +7,7 @@ import { getAllProperties } from "../redux/slices/propertySlice";
 import { logoutUser } from "../redux/slices/userSlice";
 
 import PropertyCard from "../components/property/PropertyCard";
-import SkeletonCard from "../components/common/SkeletonCardMini";
+import SkeletonCard from "../components/common/SkeletonCard";
 import ConfirmModal from "../components/common/ConfirmModal";
 import useCountUp from "../hooks/useCountUp";
 

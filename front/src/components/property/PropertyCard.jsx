@@ -62,34 +62,54 @@ export default function PropertyCard({ property, index }) {
           </p>
 
           {/* ACTION BUTTONS */}
-          <div className="flex justify-between mt-5">
-            {/* VIEW BUTTON → shown for everyone */}
+          {/* FIRST ROW → STATUS (LEFT) + VIEW (RIGHT) */}
+          <div className="flex justify-between items-center mt-4">
+            {/* STATUS */}
+            <span
+              className={`px-4 py-1 font-medium text-xs rounded-full border 
+      ${
+        property.status === "available"
+          ? "bg-green-50 text-green-700 border-green-300"
+          : property.status === "rented"
+          ? "bg-red-50 text-red-700 border-red-300"
+          : "bg-yellow-50 text-yellow-700 border-yellow-300"
+      }
+    `}
+            >
+              {property.status?.toUpperCase()}
+            </span>
+
+            {/* VIEW (same style as status) */}
             <button
               onClick={() => setShowDetailModal(true)}
-              className="px-4 py-1.5 bg-blue-50 text-blue-700 rounded-lg font-medium border border-blue-200 hover:bg-blue-100 transition"
+              className="px-4 py-1 text-xs font-medium rounded-full 
+               bg-blue-50 text-blue-700 border border-blue-300 
+               hover:bg-blue-100 transition"
             >
-              View
+              VIEW
             </button>
-
-            {/* LANDLORD ONLY → EDIT + DELETE */}
-            {user?.role === "landlord" && (
-              <>
-                <button
-                  onClick={() => navigate(`/edit-property/${property._id}`)}
-                  className="px-4 py-1.5 bg-green-50 text-green-700 rounded-lg font-medium border border-green-200 hover:bg-green-100 transition"
-                >
-                  Edit
-                </button>
-
-                <button
-                  onClick={openDeleteModal}
-                  className="px-4 py-1.5 bg-red-50 text-red-600 rounded-lg font-medium border border-red-200 hover:bg-red-100 transition"
-                >
-                  Delete
-                </button>
-              </>
-            )}
           </div>
+
+          {/* SECOND ROW → EDIT + DELETE (LANDLORD ONLY) */}
+          {user?.role === "landlord" && (
+            <div className="flex justify-between items-center mt-3">
+              {/* EDIT */}
+              <button
+                onClick={() => navigate(`/edit-property/${property._id}`)}
+                className="px-4 py-1.5 bg-green-50 text-green-700 rounded-lg font-medium border border-green-200 hover:bg-green-100 transition"
+              >
+                Edit
+              </button>
+
+              {/* DELETE */}
+              <button
+                onClick={openDeleteModal}
+                className="px-4 py-1.5 bg-red-50 text-red-600 rounded-lg font-medium border border-red-200 hover:bg-red-100 transition"
+              >
+                Delete
+              </button>
+            </div>
+          )}
         </div>
       </motion.div>
 
