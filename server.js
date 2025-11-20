@@ -11,6 +11,8 @@ import testRoutes from "./routes/api/test.js";
 import authRoutes from "./routes/api/authRoutes.js";
 import propertyRoutes from "./routes/api/propertyRoutes.js";
 import userRoutes from "./routes/api/userRoutes.js";
+import rentalRequestRoutes from "./routes/api/rentalRequestRoutes.js";
+import rentPaymentRoutes from "./routes/api/rentPaymentRoutes.js";
 
 // connect database
 connectDB();
@@ -32,6 +34,8 @@ app.use("/api/test", testRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/api/properties", propertyRoutes);
 app.use("/api/users", userRoutes);
+app.use("/api/rental-request", rentalRequestRoutes);
+app.use("/api/rent-payment", rentPaymentRoutes);
 
 // global error handler
 app.use((err, req, res, next) => {
