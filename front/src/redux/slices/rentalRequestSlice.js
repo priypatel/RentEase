@@ -75,6 +75,21 @@ export const payDeposit = createAsyncThunk(
 );
 
 // ----------------------
+// 4) FETCH BY PROPERTY
+// ----------------------
+export const fetchRentalRequest = createAsyncThunk(
+  "rentalRequest/fetchOne",
+  async (requestId, { rejectWithValue }) => {
+    try {
+      const res = await axios.get(`/rental-request/${requestId}`);
+      return res.data.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed to fetch");
+    }
+  }
+);
+
+// ----------------------
 // SLICE
 // ----------------------
 const rentalRequestSlice = createSlice({
@@ -82,7 +97,8 @@ const rentalRequestSlice = createSlice({
   initialState: {
     loading: false,
     error: null,
-    requestData: null, // store the created request
+    requestData: null,
+    singleRequest: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -117,6 +133,20 @@ const rentalRequestSlice = createSlice({
         state.requestData = action.payload.request; // updated request
       })
       .addCase(payDeposit.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    // FETCH BY PROPERTY
+    builder
+      .addCase(fetchRentalRequest.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchRentalRequest.fulfilled, (state, action) => {
+        state.loading = false;
+        state.singleRequest = action.payload;
+      })
+      .addCase(fetchRentalRequest.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
