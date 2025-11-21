@@ -23,6 +23,7 @@ import RentalStatusPage from "./pages/tenant/RentalStatusPage";
 import TenantPropertiesPage from "./pages/tenant/TenantPropertiesPage";
 import Requests from "./pages/landlord/Requests";
 import Deposits from "./pages/landlord/Deposits";
+import TenantDepositPage from "./pages/tenant/TenantDepositPage";
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
             path="tenant/my-properties"
             element={<TenantPropertiesPage />}
           />
+          <Route path="tenant/deposit/:id" element={<TenantDepositPage />} />
 
           {/* Landlord Routes */}
           <Route
