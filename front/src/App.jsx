@@ -22,6 +22,7 @@ import ScrollToTop from "./components/ScrollToTop";
 import RentalStatusPage from "./pages/tenant/RentalStatusPage";
 import TenantPropertiesPage from "./pages/tenant/TenantPropertiesPage";
 import Requests from "./pages/landlord/Requests";
+import Deposits from "./pages/landlord/Deposits";
 
 function App() {
   return (
@@ -67,6 +68,7 @@ function App() {
             element={<PropertyDetailsPage />}
           />
           <Route path="/landlord/requests" element={<Requests />} />
+          <Route path="/landlord/deposits" element={<Deposits />} />
 
           {/* Common / Shared Routes */}
           <Route path="my-properties" element={<MyProperties />} />
