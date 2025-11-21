@@ -1,31 +1,28 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllProperties } from "../redux/slices/propertySlice";
 import { createRentalRequest } from "../redux/slices/rentalRequestSlice";
 import { toast } from "react-toastify";
 import ImagePreviewModal from "../components/common/ImagePreviewModal";
-import ConfirmModal from "../components/common/ConfirmModal"; // ⭐ ADD THIS
+import ConfirmModal from "../components/common/ConfirmModal";
 
 export default function PropertyDetailsPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { items, loading } = useSelector((state) => state.properties);
   const user = useSelector((state) => state.auth.user);
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showPreview, setShowPreview] = useState(false);
-
-  // ⭐ NEW STATE FOR CONFIRM POPUP
   const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
-    if (!items.length) {
-      dispatch(getAllProperties());
-    }
-  }, [dispatch]);
+    if (!items.length) dispatch(getAllProperties());
+  }, [dispatch, items.length]);
 
   const property = items.find((p) => p._id === id);
   const [localStatus, setLocalStatus] = useState(property?.rentalStatus);
@@ -33,22 +30,12 @@ export default function PropertyDetailsPage() {
   if (loading) return <p className="p-6">Loading...</p>;
   if (!property) return <p className="p-6 text-red-600">Property not found</p>;
 
-  const next = () =>
-    setCurrentIndex((prev) =>
-      prev === property.images.length - 1 ? 0 : prev + 1
-    );
-
-  const prev = () =>
-    setCurrentIndex((prev) =>
-      prev === 0 ? property.images.length - 1 : prev - 1
-    );
-
-  // ⭐ FINAL API CALL (AFTER CONFIRM)
+  // ⬇️ API + redirect after confirmation
   const handleRequestConfirm = async () => {
     try {
       const depositAmount = property.rent * 2;
 
-      await dispatch(
+      const request = await dispatch(
         createRentalRequest({
           propertyId: property._id,
           tenantId: user.id,
@@ -57,12 +44,13 @@ export default function PropertyDetailsPage() {
         })
       ).unwrap();
 
-      setLocalStatus("requested");
-      toast.success("Request sent to landlord");
+      toast.success("Request sent successfully!");
+
+      navigate(`/tenant/rental-status/${request._id}`);
     } catch (err) {
       toast.error(err || "Failed to send request");
     } finally {
-      setShowConfirm(false); // close modal
+      setShowConfirm(false);
     }
   };
 
@@ -93,14 +81,22 @@ export default function PropertyDetailsPage() {
           {property.images?.length > 1 && (
             <>
               <button
-                onClick={prev}
+                onClick={() =>
+                  setCurrentIndex((prev) =>
+                    prev === 0 ? property.images.length - 1 : prev - 1
+                  )
+                }
                 className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 p-2 rounded-full shadow"
               >
                 ‹
               </button>
 
               <button
-                onClick={next}
+                onClick={() =>
+                  setCurrentIndex((prev) =>
+                    prev === property.images.length - 1 ? 0 : prev + 1
+                  )
+                }
                 className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 p-2 rounded-full shadow"
               >
                 ›
@@ -109,7 +105,7 @@ export default function PropertyDetailsPage() {
           )}
         </div>
 
-        {/* CONTENT */}
+        {/* DETAILS */}
         <h1 className="text-3xl font-bold">{property.title}</h1>
         <p className="text-gray-600 mt-1 text-lg">📍 {property.location}</p>
         <p className="text-green-700 font-bold text-xl mt-3">
@@ -122,127 +118,53 @@ export default function PropertyDetailsPage() {
           {property.description}
         </p>
 
-        {/* LANDLORD DETAILS + REQUEST + DEPOSIT INFO */}
+        {/* LANDLORD DETAILS + REQUEST CARD */}
         {user?.role === "tenant" && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
             className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6"
           >
-            {/* LANDLORD DETAILS */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1, duration: 0.4 }}
-              className="glass-card p-6 rounded-2xl border border-white/30 shadow-lg"
-            >
+            {/* ⬅️ LEFT CARD: LANDLORD DETAILS */}
+            <div className="glass-card p-6 rounded-2xl border border-white/30 shadow-lg">
               <h3 className="text-xl font-semibold text-green-900 flex items-center gap-2">
-                <svg
-                  className="w-6 h-6 text-green-700"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M5.121 17.804A9 9 0 1119 12v1.5"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
                 Landlord Details
               </h3>
 
               <p className="mt-2 text-gray-700">
                 <strong>Name:</strong> {property.ownerId?.name}
               </p>
+
               <p className="mt-1 text-gray-700">
                 <strong>Email:</strong> {property.ownerId?.email}
               </p>
+
               <p className="mt-1 text-gray-700">
                 <strong>Phone:</strong> {property.ownerId?.phone}
               </p>
 
-              {/* ⭐ Deposit highlight box */}
+              {/* Deposit highlight box */}
               <div className="mt-5 p-3 rounded-xl bg-green-100 border border-green-300 flex items-start gap-3">
-                <svg
-                  className="w-6 h-6 text-green-700 flex-shrink-0 mt-0.5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M12 8V4m0 0L8 8m4-4l4 4M6 12h12"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M6 16h12"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
                 <p className="text-green-900 font-medium">
                   Deposit Amount: <strong>₹{property.rent * 2}</strong> (2×
                   monthly rent)
                 </p>
               </div>
-            </motion.div>
+            </div>
 
-            {/* REQUEST TO RENT */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.4 }}
-              className="glass-card p-6 rounded-2xl border border-white/30 shadow-lg bg-green-50/50"
-            >
-              <h3 className="text-lg font-semibold text-green-800 flex items-center gap-2">
-                <svg
-                  className="w-6 h-6 text-green-700"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    d="M12 6v6l4 2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <circle cx="12" cy="12" r="10" />
-                </svg>
+            {/* ➡️ RIGHT CARD: REQUEST SECTION */}
+            <div className="glass-card p-6 rounded-2xl border border-white/30 shadow-lg bg-green-50/50">
+              <h3 className="text-lg font-semibold text-green-800">
                 Rent this Property
               </h3>
 
-              {localStatus === "requested" ? (
-                <p className="text-yellow-700 font-medium mt-3">
-                  Request already sent
-                </p>
-              ) : (
-                <button
-                  onClick={() => setShowConfirm(true)}
-                  className="w-full mt-4 px-5 py-2.5 rounded-full text-sm flex items-center justify-center gap-2 glass-btn-blue"
-                >
-                  <svg
-                    className="w-4 h-4 text-blue-900"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M5 13l4 4L19 7"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                  Request to Rent
-                </button>
-              )}
-            </motion.div>
+              <button
+                onClick={() => setShowConfirm(true)}
+                className="w-full mt-4 px-5 py-2.5 rounded-full text-sm glass-btn-blue flex items-center justify-center gap-2"
+              >
+                Request to Rent
+              </button>
+            </div>
           </motion.div>
         )}
       </div>
@@ -256,7 +178,7 @@ export default function PropertyDetailsPage() {
         setIndex={setCurrentIndex}
       />
 
-      {/* ⭐ CONFIRM POPUP BEFORE API CALL */}
+      {/* Confirm Popup */}
       <ConfirmModal
         show={showConfirm}
         onClose={() => setShowConfirm(false)}
