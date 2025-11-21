@@ -56,7 +56,9 @@ export default function RentalStatusPage() {
         {/* Back to property */}
         <button
           onClick={() =>
-            navigate(`/tenant/property/${singleRequest.propertyId._id}`)
+            navigate(`/tenant/property/${singleRequest.propertyId._id}`, {
+              replace: true,
+            })
           }
           className="mt-6 mb-4 px-4 py-2 rounded-full text-sm glass-btn-blue flex items-center gap-2"
         >
