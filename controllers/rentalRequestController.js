@@ -88,6 +88,36 @@ export const getRequestsForLandlord = async (req, res) => {
   }
 };
 
+// ⭐ Get rental request for a tenant
+export const getRentalRequestById = async (req, res) => {
+  try {
+    const { requestId } = req.params;
+
+    const request = await RentalRequest.findById(requestId)
+      .populate("propertyId")
+      .populate("tenantId")
+      .populate("landlordId");
+
+    if (!request) {
+      return res.status(404).json({
+        success: false,
+        message: "Rental request not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: request,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch rental request",
+      error: error.message,
+    });
+  }
+};
+
 export const payDeposit = async (req, res) => {
   try {
     const { requestId } = req.params;
