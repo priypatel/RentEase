@@ -119,6 +119,22 @@ export const fetchTenantRequests = createAsyncThunk(
     }
   }
 );
+// ----------------------
+// 7) FETCH REQUESTS FOR LANDLORD (incoming requests)
+// ----------------------
+export const getRequestsForLandlord = createAsyncThunk(
+  "rentalRequest/getRequestsForLandlord",
+  async (landlordId, { rejectWithValue }) => {
+    try {
+      const res = await axios.get(`/rental-request/landlord/${landlordId}`);
+      return res.data.data; // array of requests
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to fetch"
+      );
+    }
+  }
+);
 
 // ----------------------
 // SLICE
@@ -198,6 +214,20 @@ const rentalRequestSlice = createSlice({
         state.tenantRequests = action.payload;
       })
       .addCase(fetchTenantRequests.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    // FETCH REQUESTS FOR LANDLORD
+    builder
+      .addCase(getRequestsForLandlord.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getRequestsForLandlord.fulfilled, (state, action) => {
+        state.loading = false;
+        state.landlordRequests = action.payload; // save list here
+      })
+      .addCase(getRequestsForLandlord.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

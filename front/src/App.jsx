@@ -21,6 +21,7 @@ import PropertyDetailsPage from "./pages/PropertyDetailsPage";
 import ScrollToTop from "./components/ScrollToTop";
 import RentalStatusPage from "./pages/tenant/RentalStatusPage";
 import TenantPropertiesPage from "./pages/tenant/TenantPropertiesPage";
+import Requests from "./pages/landlord/Requests";
 
 function App() {
   return (
@@ -50,7 +51,10 @@ function App() {
             path="tenant/rental-status/:id"
             element={<RentalStatusPage />}
           />
-          <Route path="tenant/my-properties" element={<TenantPropertiesPage />} />
+          <Route
+            path="tenant/my-properties"
+            element={<TenantPropertiesPage />}
+          />
 
           {/* Landlord Routes */}
           <Route
@@ -62,6 +66,7 @@ function App() {
             path="landlord/property/:id"
             element={<PropertyDetailsPage />}
           />
+          <Route path="/landlord/requests" element={<Requests />} />
 
           {/* Common / Shared Routes */}
           <Route path="my-properties" element={<MyProperties />} />
