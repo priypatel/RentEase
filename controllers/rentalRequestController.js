@@ -251,3 +251,59 @@ export const payDeposit = async (req, res) => {
     });
   }
 };
+
+// ⭐ Check if rental request already exists for this tenant + property
+export const checkExistingRequest = async (req, res) => {
+  try {
+    const { propertyId } = req.params;
+    const tenantId = req.user.id; // from token
+
+    const existing = await RentalRequest.findOne({
+      propertyId,
+      tenantId,
+    });
+
+    if (!existing) {
+      return res.status(200).json({
+        success: true,
+        exists: false,
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      exists: true,
+      data: existing,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Something went wrong",
+      error: error.message,
+    });
+  }
+};
+
+// GET /api/rental-request/tenant/all
+// use for showing tendent request to tenant
+export const getTenantRequests = async (req, res) => {
+  try {
+    const tenantId = req.user.id;
+
+    const requests = await RentalRequest.find({ tenantId })
+      .populate("propertyId")
+      .populate("landlordId", "name email phone")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      data: requests,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch tenant rental requests",
+      error: err.message,
+    });
+  }
+};
