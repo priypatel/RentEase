@@ -20,6 +20,7 @@ import ProfilePage from "./pages/ProfilePage";
 import PropertyDetailsPage from "./pages/PropertyDetailsPage";
 import ScrollToTop from "./components/ScrollToTop";
 import RentalStatusPage from "./pages/tenant/RentalStatusPage";
+import TenantPropertiesPage from "./pages/tenant/TenantPropertiesPage";
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
             path="tenant/rental-status/:id"
             element={<RentalStatusPage />}
           />
+          <Route path="tenant/my-properties" element={<TenantPropertiesPage />} />
 
           {/* Landlord Routes */}
           <Route
