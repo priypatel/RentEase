@@ -1,9 +1,10 @@
 export const landlordNav = [
   { name: "Dashboard", to: "/landlord/dashboard", icon: "Home" },
   { name: "My Properties", to: "/my-properties", icon: "Building2" },
+  { name: "Requests", to: "/landlord/requests", icon: "Wrench" },
+  { name: "Deposits", to: "/landlord/deposits", icon: "CreditCard" },
   { name: "Tenants", to: "/landlord/tenants", icon: "Users" },
   { name: "Payments", to: "/landlord/payments", icon: "CreditCard" },
-  { name: "Requests", to: "/landlord/requests", icon: "Wrench" },
   { name: "Documents", to: "/landlord/documents", icon: "FileText" },
 ];
 
