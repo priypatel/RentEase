@@ -90,6 +90,37 @@ export const fetchRentalRequest = createAsyncThunk(
 );
 
 // ----------------------
+// 5) CHECK IF RENTAL REQUEST EXISTS
+// ----------------------
+export const checkRentalRequest = createAsyncThunk(
+  "rentalRequest/checkExisting",
+  async (propertyId, { rejectWithValue }) => {
+    try {
+      const res = await axios.get(`/rental-request/check/${propertyId}`);
+
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || "Failed");
+    }
+  }
+);
+
+// ----------------------
+// 6) FETCH ALL RENTAL REQUESTS (TENANT SIDE)
+// ----------------------
+export const fetchTenantRequests = createAsyncThunk(
+  "rentalRequest/fetchTenantRequests",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axios.get("/rental-request/tenant/all");
+      return res.data.data;
+    } catch (e) {
+      return rejectWithValue(e.response?.data?.message);
+    }
+  }
+);
+
+// ----------------------
 // SLICE
 // ----------------------
 const rentalRequestSlice = createSlice({
@@ -147,6 +178,26 @@ const rentalRequestSlice = createSlice({
         state.singleRequest = action.payload;
       })
       .addCase(fetchRentalRequest.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    // CHECK IF RENTAL REQUEST EXISTS
+    builder
+      .addCase(checkRentalRequest.fulfilled, (state, action) => {
+        state.check = action.payload; // exists + data
+      })
+      .addCase(checkRentalRequest.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    // FETCH ALL RENTAL REQUESTS (TENANT SIDE)
+    builder
+      .addCase(fetchTenantRequests.fulfilled, (state, action) => {
+        state.tenantRequests = action.payload;
+      })
+      .addCase(fetchTenantRequests.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
