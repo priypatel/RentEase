@@ -1,9 +1,49 @@
 import RentalRequest from "../models/RentalRequest.js";
 import RentPayment from "../models/RentPayment.js";
+// export const createRentalRequest = async (req, res) => {
+//   try {
+//     const { propertyId, tenantId, landlordId, depositAmount } = req.body;
+
+//     const request = await RentalRequest.create({
+//       propertyId,
+//       tenantId,
+//       landlordId,
+//       depositAmount,
+//     });
+
+//     return res.status(201).json({
+//       success: true,
+//       message: "Rental request created successfully",
+//       data: request,
+//     });
+//   } catch (error) {
+//     return res.status(500).json({
+//       success: false,
+//       message: "Failed to create rental request",
+//       error: error.message,
+//     });
+//   }
+// };
+
 export const createRentalRequest = async (req, res) => {
   try {
     const { propertyId, tenantId, landlordId, depositAmount } = req.body;
 
+    // 🔥 Prevent duplicate request
+    const existing = await RentalRequest.findOne({
+      propertyId,
+      tenantId,
+    });
+
+    if (existing) {
+      return res.status(400).json({
+        success: false,
+        message: "You have already requested this property.",
+        data: existing, // return existing request so frontend can continue
+      });
+    }
+
+    // 🔥 Create new request only if no previous one
     const request = await RentalRequest.create({
       propertyId,
       tenantId,
@@ -24,6 +64,7 @@ export const createRentalRequest = async (req, res) => {
     });
   }
 };
+
 export const updateRequestStatus = async (req, res) => {
   try {
     const { requestId } = req.params;
