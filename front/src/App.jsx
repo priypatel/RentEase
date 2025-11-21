@@ -19,7 +19,6 @@ import MyProperties from "./pages/MyProperties";
 import ProfilePage from "./pages/ProfilePage";
 import PropertyDetailsPage from "./pages/PropertyDetailsPage";
 import ScrollToTop from "./components/ScrollToTop";
-import RentRequestPage from "./pages/tenant/RentRequestPage";
 import RentalStatusPage from "./pages/tenant/RentalStatusPage";
 
 function App() {
@@ -46,10 +45,6 @@ function App() {
           <Route path="tenant/dashboard" element={<TenantDashboardContent />} />
           <Route path="tenant/profile" element={<ProfilePage />} />
           <Route path="tenant/property/:id" element={<PropertyDetailsPage />} />
-          <Route
-            path="/tenant/rent-request/:id"
-            element={<RentRequestPage />}
-          />
           <Route
             path="tenant/rental-status/:id"
             element={<RentalStatusPage />}
