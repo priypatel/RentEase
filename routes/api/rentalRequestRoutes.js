@@ -2,7 +2,8 @@ import express from "express";
 import {
   createRentalRequest,
   updateRequestStatus,
-  payDeposit
+  payDeposit,
+  getRequestsForLandlord,
 } from "../../controllers/rentalRequestController.js";
 
 const router = express.Router();
@@ -11,5 +12,5 @@ const router = express.Router();
 router.post("/create", createRentalRequest);
 router.put("/status/:requestId", updateRequestStatus);
 router.put("/deposit/:requestId",payDeposit);
-
+router.get("/landlord/:landlordId", getRequestsForLandlord);
 export default router;

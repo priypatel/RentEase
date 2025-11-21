@@ -64,6 +64,30 @@ export const updateRequestStatus = async (req, res) => {
   }
 };
 
+// ⭐ Get all rental requests for a landlord
+export const getRequestsForLandlord = async (req, res) => {
+  try {
+    const { landlordId } = req.params;
+
+    const requests = await RentalRequest.find({ landlordId })
+      .populate("tenantId", "name email phone") // tenant info
+      .populate("propertyId", "title location rent images") // property info
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      message: "Rental requests fetched successfully",
+      data: requests,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch rental requests",
+      error: error.message,
+    });
+  }
+};
+
 export const payDeposit = async (req, res) => {
   try {
     const { requestId } = req.params;
