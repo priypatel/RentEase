@@ -1,11 +1,14 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRentPayments, payRent } from "../../redux/slices/rentSlice";
+import PaymentSuccessModal from "../../components/modals/PaymentSuccessModal";
 
 export default function PaymentHistory() {
   const { id: requestId } = useParams();
   const dispatch = useDispatch();
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successData, setSuccessData] = useState(null);
 
   const rentState =
     useSelector((state) => state.rent.byRequest[requestId]) || {};
@@ -22,15 +25,28 @@ export default function PaymentHistory() {
   }, [dispatch, requestId]);
 
   const handlePay = async () => {
-    await dispatch(
-      payRent({
-        rentId: currentRent._id,
-        amountPaid: currentRent.amount,
-      })
-    ).unwrap();
+    try {
+      const response = await dispatch(
+        payRent({
+          rentId: currentRent._id,
+          amountPaid: currentRent.amount,
+        })
+      ).unwrap();
 
-    alert("Payment successful");
-    dispatch(fetchRentPayments(requestId));
+      const { currentRent: updatedRent, nextRent } = response;
+
+      setSuccessData({
+        amount: updatedRent.amount,
+        month: updatedRent.month,
+        nextMonth: nextRent.month,
+      });
+
+      setShowSuccess(true);
+
+      dispatch(fetchRentPayments(requestId));
+    } catch (err) {
+      alert(err.message || "Payment failed");
+    }
   };
 
   if (loading) return <div className="p-6">Loading...</div>;
@@ -87,6 +103,14 @@ export default function PaymentHistory() {
           </div>
         ))}
       </div>
+      <PaymentSuccessModal
+        show={showSuccess}
+        onClose={() => setShowSuccess(false)}
+        amount={successData?.amount}
+        month={successData?.month}
+        nextMonth={successData?.nextMonth}
+        onPrint={() => window.print()}
+      />
     </div>
   );
 }
