@@ -41,11 +41,50 @@ export const payRent = createAsyncThunk(
   }
 );
 
+// ==========================
+// ★ GET PAYMENTS FOR LANDLORD
+// ==========================
+export const getPaymentsForLandlord = createAsyncThunk(
+  "rent/landlordPayments",
+  async (landlordId, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get(
+        `/rent-payment/landlord/${landlordId}`
+      );
+      return res.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+// ==========================
+// ★ GET LANDLORD SUMMARY
+// ==========================
+export const getPaymentsSummary = createAsyncThunk(
+  "rent/landlordSummary",
+  async (landlordId, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get(
+        `/rent-payment/landlord/${landlordId}/summary`
+      );
+      return res.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
 const rentSlice = createSlice({
   name: "rent",
   initialState: {
+    loading: false,
+    error: null,
     byRequest: {},
+    landlordPayments: [],
+    landlordSummary: {},
   },
+
   reducers: {
     clearRentForRequest: (state, action) => {
       delete state.byRequest[action.payload];
@@ -95,6 +134,22 @@ const rentSlice = createSlice({
           state.byRequest[requestId].records.push(nextRent);
         }
       });
+    builder
+      .addCase(getPaymentsForLandlord.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getPaymentsForLandlord.fulfilled, (state, action) => {
+        state.loading = false;
+        state.landlordPayments = action.payload;
+      })
+      .addCase(getPaymentsForLandlord.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    builder.addCase(getPaymentsSummary.fulfilled, (state, action) => {
+      state.landlordSummary = action.payload;
+    });
   },
 });
 

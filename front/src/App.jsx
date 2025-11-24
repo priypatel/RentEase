@@ -26,6 +26,7 @@ import Deposits from "./pages/landlord/Deposits";
 import TenantDepositPage from "./pages/tenant/TenantDepositPage";
 import RentPayment from "./pages/tenant/RentPayment";
 import Payments from "./pages/tenant/Payments";
+import Payment from "./pages/landlord/Payments";
 import PaymentHistory from "./pages/tenant/PaymentHistory";
 function App() {
   return (
@@ -76,6 +77,7 @@ function App() {
           />
           <Route path="/landlord/requests" element={<Requests />} />
           <Route path="/landlord/deposits" element={<Deposits />} />
+          <Route path="landlord/payments" element={<Payment />} />
 
           {/* Common / Shared Routes */}
           <Route path="my-properties" element={<MyProperties />} />
