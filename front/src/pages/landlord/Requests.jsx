@@ -56,17 +56,21 @@ export default function Requests() {
             {/* PROPERTY */}
             <div className="flex gap-4">
               <img
-                src={req.propertyId.images?.[0]?.url}
-                alt="property"
-                className="w-28 h-24 rounded-xl object-cover"
+                src={req?.propertyId?.images?.[0]?.url || "/placeholder.png"}
+                className="w-full h-40 object-cover rounded-lg"
               />
+
               <div>
                 <h2 className="text-lg font-semibold text-green-900">
-                  {req.propertyId.title}
+                  {req?.propertyId?.title || "No Title"}
                 </h2>
-                <p className="text-gray-700">{req.propertyId.location}</p>
+
+                <p className="text-gray-700">
+                  {req?.propertyId?.location || "No Location"}
+                </p>
+
                 <p className="text-green-700 font-bold mt-1">
-                  ₹{req.propertyId.rent}/month
+                  ₹{req?.propertyId?.rent}/month
                 </p>
               </div>
             </div>
