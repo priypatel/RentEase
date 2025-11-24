@@ -62,18 +62,19 @@ export default function Payments() {
                 </p>
 
                 {/* Status Badges */}
+                {/* Status Badges */}
                 <div className="mt-3">
                   <span
                     className={`px-4 py-1.5 rounded-full text-sm font-medium shadow-md 
-                      ${
-                        req.status === "requested"
-                          ? "bg-yellow-200/80 text-yellow-800"
-                          : req.status === "approved"
-                          ? "bg-blue-200/80 text-blue-800"
-                          : req.status === "rejected"
-                          ? "bg-red-200/80 text-red-800"
-                          : "bg-green-200/80 text-green-800"
-                      }`}
+      ${
+        req.status === "requested"
+          ? "bg-yellow-200/80 text-yellow-800"
+          : req.status === "approved"
+          ? "bg-blue-200/80 text-blue-800"
+          : req.status === "rejected"
+          ? "bg-red-200/80 text-red-800"
+          : "bg-green-200/80 text-green-800"
+      }`}
                   >
                     {req.status.toUpperCase()}
                   </span>
@@ -82,15 +83,22 @@ export default function Payments() {
                   {req.status === "approved" && (
                     <span
                       className={`ml-3 px-3 py-1 rounded-full text-xs font-medium shadow 
-                        ${
-                          req.depositStatus === "paid"
-                            ? "bg-green-200/80 text-green-800"
-                            : "bg-orange-200/80 text-orange-800"
-                        }`}
+        ${
+          req.depositStatus === "paid"
+            ? "bg-green-200/80 text-green-800"
+            : "bg-orange-200/80 text-orange-800"
+        }`}
                     >
                       {req.depositStatus === "paid"
                         ? "Deposit Paid"
                         : "Deposit Pending"}
+                    </span>
+                  )}
+
+                  {/* ⭐ Pending Rent Badge */}
+                  {req.depositStatus === "paid" && (
+                    <span className="ml-3 px-3 py-1 rounded-full text-xs font-medium shadow bg-yellow-200/80 text-yellow-800">
+                      Pending 1
                     </span>
                   )}
                 </div>
