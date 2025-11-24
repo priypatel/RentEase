@@ -1,40 +1,66 @@
 import React from "react";
 
-export default function PaymentHistorySkeleton() {
+export default function PaymentHistoryFullSkeleton() {
   return (
-    <div
-      className="
-        p-5 rounded-2xl shadow-lg backdrop-blur-xl bg-white/50 
-        border border-gray-200 animate-pulse
-      "
-    >
-      <div className="flex justify-between items-start">
+    <div className="px-6 py-10 max-w-6xl mx-auto space-y-10 animate-pulse">
+
+      {/* ===================== SUMMARY SKELETON ===================== */}
+      <div className="p-6 rounded-3xl bg-white/50 backdrop-blur-xl shadow-xl border border-green-100">
         
-        {/* LEFT SECTION */}
-        <div className="space-y-3 w-2/3">
-          {/* Month */}
-          <div className="h-6 w-32 bg-gray-200/70 rounded-md"></div>
+        {/* Summary Header */}
+        <div className="h-7 w-48 bg-gray-200/70 rounded-md mb-6"></div>
 
-          {/* Amount */}
-          <div className="h-5 w-24 bg-gray-200/60 rounded-md"></div>
+        {/* 3 Summary Boxes */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-          {/* Paid on */}
-          <div className="h-4 w-40 bg-gray-200/60 rounded-md mt-1"></div>
+          {/* Box 1 */}
+          <div className="p-4 rounded-xl bg-gray-100 border border-gray-200 shadow">
+            <div className="h-4 w-32 bg-gray-200/70 rounded-md mb-3"></div>
+            <div className="h-7 w-10 bg-gray-200/70 rounded-md"></div>
+          </div>
 
-          {/* Tenant */}
-          <div className="h-4 w-32 bg-gray-200/60 rounded-md"></div>
-        </div>
+          {/* Box 2 */}
+          <div className="p-4 rounded-xl bg-gray-100 border border-gray-200 shadow">
+            <div className="h-4 w-40 bg-gray-200/70 rounded-md mb-3"></div>
+            <div className="h-7 w-24 bg-gray-200/70 rounded-md"></div>
+          </div>
 
-        {/* RIGHT – STATUS BADGE */}
-        <div>
-          <div
-            className="
-              h-7 w-20 rounded-full 
-              bg-gray-200/70 
-            "
-          ></div>
+          {/* Box 3 */}
+          <div className="p-4 rounded-xl bg-gray-100 border border-gray-200 shadow">
+            <div className="h-4 w-36 bg-gray-200/70 rounded-md mb-3"></div>
+            <div className="h-7 w-20 bg-gray-200/70 rounded-md mb-2"></div>
+            <div className="h-4 w-28 bg-gray-200/70 rounded-md"></div>
+          </div>
         </div>
       </div>
+
+      {/* ===================== HISTORY CARD SKELETONS ===================== */}
+      <div className="space-y-6">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <div
+            key={i}
+            className="
+              p-5 rounded-2xl shadow-lg backdrop-blur-xl bg-white/60 
+              border border-gray-200
+            "
+          >
+            <div className="flex justify-between items-start">
+
+              {/* Left Section */}
+              <div className="space-y-3 w-2/3">
+                <div className="h-6 w-32 bg-gray-200/70 rounded-md"></div>
+                <div className="h-5 w-28 bg-gray-200/60 rounded-md"></div>
+                <div className="h-4 w-40 bg-gray-200/60 rounded-md"></div>
+                <div className="h-4 w-28 bg-gray-200/60 rounded-md"></div>
+              </div>
+
+              {/* Status Badge */}
+              <div className="h-7 w-20 bg-gray-200/70 rounded-full"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+
     </div>
   );
 }
