@@ -13,7 +13,7 @@ import propertyRoutes from "./routes/api/propertyRoutes.js";
 import userRoutes from "./routes/api/userRoutes.js";
 import rentalRequestRoutes from "./routes/api/rentalRequestRoutes.js";
 import rentPaymentRoutes from "./routes/api/rentPaymentRoutes.js";
-
+import paymentRoutes from "./routes/api/paymentRoutes.js";
 // connect database
 connectDB();
 
@@ -36,7 +36,7 @@ app.use("/api/properties", propertyRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/rental-request", rentalRequestRoutes);
 app.use("/api/rent-payment", rentPaymentRoutes);
-
+app.use("/api/payment", paymentRoutes);
 // global error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
