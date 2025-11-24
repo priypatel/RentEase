@@ -4,7 +4,7 @@ import authReducer from "./slices/authSlice";
 import propertyReducer from "./slices/propertySlice";
 import userReducer from "./slices/userSlice";
 import rentalRequestReducer from "./slices/rentalRequestSlice";
-
+import rentReducer from "./slices/rentSlice";
 export const store = configureStore({
   reducer: {
     auth: authReducer,
@@ -12,6 +12,7 @@ export const store = configureStore({
     properties: propertyReducer,
     user: userReducer,
     rentalRequest: rentalRequestReducer,
+    rent: rentReducer,
   },
 });
 
