@@ -3,8 +3,8 @@ export const landlordNav = [
   { name: "My Properties", to: "/my-properties", icon: "Building2" },
   { name: "Requests", to: "/landlord/requests", icon: "Wrench" },
   { name: "Deposits", to: "/landlord/deposits", icon: "CreditCard" },
-  { name: "Tenants", to: "/landlord/tenants", icon: "Users" },
   { name: "Payments", to: "/landlord/payments", icon: "CreditCard" },
+  { name: "Tenants", to: "/landlord/tenants", icon: "Users" },
   { name: "Documents", to: "/landlord/documents", icon: "FileText" },
 ];
 
