@@ -1,4 +1,4 @@
-import { Routes, Route, BrowserRouter } from "react-router-dom";
+import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import "./index.css";
 
 import DashboardLayout from "./components/layout/DashboardLayout";
@@ -24,7 +24,9 @@ import TenantPropertiesPage from "./pages/tenant/TenantPropertiesPage";
 import Requests from "./pages/landlord/Requests";
 import Deposits from "./pages/landlord/Deposits";
 import TenantDepositPage from "./pages/tenant/TenantDepositPage";
-
+import RentPayment from "./pages/tenant/RentPayment";
+import Payments from "./pages/tenant/Payments";
+import PaymentHistory from "./pages/tenant/PaymentHistory";
 function App() {
   return (
     <BrowserRouter>
@@ -53,11 +55,14 @@ function App() {
             path="tenant/rental-status/:id"
             element={<RentalStatusPage />}
           />
+
           <Route
             path="tenant/my-properties"
             element={<TenantPropertiesPage />}
           />
           <Route path="tenant/deposit/:id" element={<TenantDepositPage />} />
+          <Route path="tenant/payments" element={<Payments />} />
+          <Route path="tenant/payments/:id" element={<PaymentHistory />} />
 
           {/* Landlord Routes */}
           <Route
