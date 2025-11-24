@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getRequestsForLandlord } from "../../redux/slices/rentalRequestSlice";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import PaymentSkeletonCard from "../../components/common/PaymentSkeletonCard";
 
 export default function LandlordPropertiesForPayment() {
   const dispatch = useDispatch();
@@ -19,7 +20,16 @@ export default function LandlordPropertiesForPayment() {
     if (landlordId) dispatch(getRequestsForLandlord(landlordId));
   }, [landlordId]);
 
-  if (loading) return <p className="p-5">Loading...</p>;
+  // SHOW SKELETON IF LOADING OR DATA NOT YET LOADED
+  if (loading || !landlordRequests) {
+    return (
+      <div className="px-6 py-10 max-w-6xl mx-auto space-y-6">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <PaymentSkeletonCard key={i} />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="px-6 py-10 max-w-6xl mx-auto">
