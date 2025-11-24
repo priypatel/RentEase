@@ -57,18 +57,8 @@ export default function PaymentHistory() {
 
   const nextDue = records.find((r) => r.status === "pending");
 
-  //   if (loading) return <PaymentHistorySkeleton />;
+  if (loading) return <PaymentHistorySkeleton />;
 
-  // SHOW SKELETON IF LOADING OR DATA NOT YET LOADED
-  if (loading || !records) {
-    return (
-      <div className="px-6 py-10 max-w-6xl mx-auto space-y-6">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <PaymentHistorySkeleton key={i} />
-        ))}
-      </div>
-    );
-  }
   return (
     <div className="p-6 max-w-3xl mx-auto">
       {/* HEADER */}

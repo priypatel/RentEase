@@ -25,15 +25,8 @@ export default function LandlordPaymentHistory() {
 
   const nextDue = records.find((r) => r.status === "pending");
 
-  // SHOW SKELETON IF LOADING OR DATA NOT YET LOADED
   if (loading || !records) {
-    return (
-      <div className="px-6 py-10 max-w-6xl mx-auto space-y-6">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <PaymentHistorySkeleton key={i} />
-        ))}
-      </div>
-    );
+    return <PaymentHistorySkeleton />;
   }
 
   return (
