@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRentPayments, payRent } from "../../redux/slices/rentSlice";
 import PaymentSuccessModal from "../../components/modals/PaymentSuccessModal";
+import { motion } from "framer-motion";
 
 export default function PaymentHistory() {
   const { id: requestId } = useParams();
@@ -53,56 +54,79 @@ export default function PaymentHistory() {
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <h2 className="text-3xl font-bold text-green-800 mb-4">
-        Payment History
-      </h2>
+      <motion.h2
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-3xl font-bold text-green-800 mb-6"
+      >
+        Rent Payment History
+      </motion.h2>
 
-      <div className="space-y-4">
-        {records.map((rent) => (
-          <div
+      <div className="space-y-5">
+        {records.map((rent, index) => (
+          <motion.div
             key={rent._id}
-            className="bg-white/40 backdrop-blur-md border rounded-xl p-4 shadow"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.08 }}
+            className={`
+              p-5 rounded-2xl shadow-lg backdrop-blur-xl border relative
+              transition-all duration-300 hover:shadow-2xl hover:scale-[1.01]
+              bg-white/40 flex justify-between items-center
+              ${
+                rent.status === "paid"
+                  ? "border-green-200"
+                  : "border-yellow-200"
+              }
+            `}
           >
-            <div className="flex justify-between">
-              <div>
-                <p className="text-lg font-semibold text-green-900">
-                  {rent.month}
+            {/* Left Section */}
+            <div>
+              <p className="text-xl font-semibold text-green-900">
+                {rent.month}
+              </p>
+              <p className="text-green-700 text-lg font-medium">
+                ₹{rent.amount}
+              </p>
+
+              {rent.paidAt && (
+                <p className="text-xs text-green-800 mt-1">
+                  Paid on {new Date(rent.paidAt).toLocaleDateString()}
                 </p>
-                <p className="text-green-700">₹{rent.amount}</p>
-              </div>
-
-              <div className="text-right">
-                {/* Status */}
-                <span
-                  className={`px-3 py-1 rounded-lg font-semibold ${
-                    rent.status === "paid"
-                      ? "bg-green-300/70 text-green-900"
-                      : "bg-yellow-300/70 text-yellow-900"
-                  }`}
-                >
-                  {rent.status.toUpperCase()}
-                </span>
-
-                {/* Payment button */}
-                {rent.status === "pending" && (
-                  <button
-                    className="mt-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-xl"
-                    onClick={handlePay}
-                  >
-                    Pay ₹{rent.amount}
-                  </button>
-                )}
-
-                {rent.paidAt && (
-                  <p className="text-xs text-green-800 mt-1">
-                    Paid on: {new Date(rent.paidAt).toLocaleDateString()}
-                  </p>
-                )}
-              </div>
+              )}
             </div>
-          </div>
+
+            {/* Right Section */}
+            <div className="text-right flex flex-col items-end">
+              <span
+                className={`px-4 py-1.5 rounded-full text-sm font-medium shadow-md
+                  ${
+                    rent.status === "paid"
+                      ? "bg-green-200/80 text-green-900"
+                      : "bg-yellow-200/80 text-yellow-900"
+                  }
+                `}
+              >
+                {rent.status.toUpperCase()}
+              </span>
+
+              {rent.status === "pending" && (
+                <button
+                  onClick={handlePay}
+                  className="mt-3 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-full shadow-lg transition-all"
+                >
+                  Pay ₹{rent.amount}
+                </button>
+              )}
+            </div>
+
+            {/* Soft Glow */}
+            <div className="absolute inset-0 pointer-events-none rounded-2xl bg-gradient-to-r from-white/10 to-transparent" />
+          </motion.div>
         ))}
       </div>
+
+      {/* Payment Success Modal */}
       <PaymentSuccessModal
         show={showSuccess}
         onClose={() => setShowSuccess(false)}
