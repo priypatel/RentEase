@@ -49,6 +49,12 @@ export default function PaymentHistory() {
       alert(err.message || "Payment failed");
     }
   };
+  const totalPaid = records.filter((r) => r.status === "paid").length;
+  const totalAmountPaid = records
+    .filter((r) => r.status === "paid")
+    .reduce((sum, r) => sum + r.amount, 0);
+
+  const nextDue = records.find((r) => r.status === "pending");
 
   if (loading) return <div className="p-6">Loading...</div>;
 
@@ -61,6 +67,44 @@ export default function PaymentHistory() {
       >
         Rent Payment History
       </motion.h2>
+      {/* Rent Summary Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="mb-8 p-6 rounded-3xl bg-white/40 backdrop-blur-xl shadow-xl border border-white/50"
+      >
+        <h3 className="text-2xl font-bold text-green-800 mb-4">Rent Summary</h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Total Paid */}
+          <div className="p-4 rounded-xl bg-green-50/60 border border-green-200 shadow">
+            <p className="text-sm text-green-800">Total Months Paid</p>
+            <p className="text-2xl font-bold text-green-900">{totalPaid}</p>
+          </div>
+
+          {/* Amount Paid */}
+          <div className="p-4 rounded-xl bg-blue-50/60 border border-blue-200 shadow">
+            <p className="text-sm text-blue-800">Total Amount Paid</p>
+            <p className="text-2xl font-bold text-blue-900">
+              ₹{totalAmountPaid}
+            </p>
+          </div>
+
+          {/* Next Due */}
+          <div className="p-4 rounded-xl bg-yellow-50/60 border border-yellow-200 shadow">
+            <p className="text-sm text-yellow-800">Next Due Month</p>
+            <p className="text-xl font-semibold text-yellow-900">
+              {nextDue ? nextDue.month : "No Pending Rent"}
+            </p>
+
+            {nextDue && (
+              <p className="text-sm text-yellow-900 mt-1">
+                Amount: <b>₹{nextDue.amount}</b>
+              </p>
+            )}
+          </div>
+        </div>
+      </motion.div>
 
       <div className="space-y-5">
         {records.map((rent, index) => (
