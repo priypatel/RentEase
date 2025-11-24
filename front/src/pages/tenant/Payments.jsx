@@ -4,6 +4,8 @@ import { fetchTenantRequests } from "../../redux/slices/rentalRequestSlice";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
+import PaymentSkeletonCard from "../../components/common/PaymentSkeletonCard";
+
 export default function Payments() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -16,8 +18,16 @@ export default function Payments() {
     dispatch(fetchTenantRequests());
   }, []);
 
-  if (loading || !tenantRequests)
-    return <p className="p-6 text-gray-600">Loading...</p>;
+  // SHOW SKELETON IF LOADING OR DATA NOT YET LOADED
+  if (loading || !tenantRequests) {
+    return (
+      <div className="px-6 py-10 max-w-6xl mx-auto space-y-6">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <PaymentSkeletonCard key={i} />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="px-6 py-10 max-w-6xl mx-auto">
@@ -97,7 +107,7 @@ export default function Payments() {
                     </span>
                   )}
 
-                  {/* RENT DUE AFTER DEPOSIT */}
+                  {/* RENT DUE */}
                   {req.depositStatus === "paid" && (
                     <span className="px-4 py-1.5 rounded-full text-xs font-medium border bg-yellow-50 text-yellow-700 border-yellow-300">
                       Pending 1
