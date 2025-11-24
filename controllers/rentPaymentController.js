@@ -1,5 +1,5 @@
 import RentPayment from "../models/RentPayment.js";
-
+import mongoose from "mongoose";
 export const payMonthlyRent = async (req, res) => {
   try {
     const { rentId } = req.params;
@@ -78,9 +78,10 @@ export const getRentPaymentsByRequest = async (req, res) => {
   try {
     const { requestId } = req.params;
 
-    const rents = await RentPayment.find({ rentalRequestId: requestId }).sort({
-      createdAt: 1,
-    }); // oldest first
+    const rents = await RentPayment.find({ rentalRequestId: requestId })
+      .populate("tenantId", "name email phone")
+      .populate("propertyId", "title location images rent")
+      .sort({ createdAt: 1 });
 
     if (rents.length === 0) {
       return res.status(404).json({
@@ -99,6 +100,86 @@ export const getRentPaymentsByRequest = async (req, res) => {
       success: false,
       message: "Failed to fetch rent records",
       error: error.message,
+    });
+  }
+};
+/**
+ * Get all rent payments for a landlord
+ * GET /api/rent-payment/landlord/:landlordId
+ */
+export const getPaymentsForLandlord = async (req, res) => {
+  try {
+    const { landlordId } = req.params;
+
+    // fetch payments and populate tenant and property basic info
+    const payments = await RentPayment.find({ landlordId })
+      .populate("tenantId", "name email phone")
+      .populate("propertyId", "title location rent images")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      data: payments,
+    });
+  } catch (err) {
+    console.error("getPaymentsForLandlord:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch landlord payments",
+      error: err.message,
+    });
+  }
+};
+
+/**
+ * Get landlord payments summary
+ * GET /api/rent-payment/landlord/:landlordId/summary
+ */
+export const getPaymentsSummaryForLandlord = async (req, res) => {
+  try {
+    const { landlordId } = req.params;
+
+    // fetch counts/aggregates using aggregation pipeline for performance
+    const summary = await RentPayment.aggregate([
+      {
+        $match: {
+          landlordId: { $eq: new mongoose.Types.ObjectId(landlordId) },
+        },
+      },
+      {
+        $group: {
+          _id: "$status",
+          totalAmount: { $sum: "$amount" },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    // convert aggregation result into desired shape
+    let totalIncome = 0;
+    let pendingCount = 0;
+    let totalRecords = 0;
+
+    summary.forEach((row) => {
+      totalRecords += row.count;
+      if (row._id === "paid") totalIncome = row.totalAmount || 0;
+      if (row._id === "pending") pendingCount = row.count || 0;
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        totalIncome,
+        pendingCount,
+        totalRecords,
+      },
+    });
+  } catch (err) {
+    console.error("getPaymentsSummaryForLandlord:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch landlord payments summary",
+      error: err.message,
     });
   }
 };
