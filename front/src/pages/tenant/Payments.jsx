@@ -24,7 +24,7 @@ export default function Payments() {
       <motion.h1
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-3xl font-bold text-blue-900 mb-8"
+        className="text-3xl font-bold text-gray-900 mb-8"
       >
         Payments
       </motion.h1>
@@ -36,20 +36,20 @@ export default function Payments() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.08 }}
-            className="relative rounded-3xl p-5 bg-white/30 backdrop-blur-xl border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300"
+            className="relative rounded-3xl p-5 bg-white/40 backdrop-blur-xl border border-gray-200 shadow-lg hover:shadow-2xl transition-all"
           >
             <div className="flex flex-col md:flex-row gap-6">
-              {/* Image Section */}
-              <div className="w-full md:w-40 h-32 overflow-hidden rounded-2xl shadow-md">
+              {/* IMAGE */}
+              <div className="w-full md:w-40 h-32 rounded-xl overflow-hidden shadow-md">
                 <img
                   src={req.propertyId?.images?.[0]?.url}
-                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
+                  className="w-full h-full object-cover"
                 />
               </div>
 
-              {/* Details */}
+              {/* DETAILS */}
               <div className="flex-1">
-                <h2 className="text-xl font-semibold text-blue-900">
+                <h2 className="text-xl font-semibold text-gray-900">
                   {req.propertyId?.title}
                 </h2>
 
@@ -61,33 +61,35 @@ export default function Payments() {
                   ₹{req.propertyId?.rent}/month
                 </p>
 
-                {/* Status Badges */}
-                {/* Status Badges */}
-                <div className="mt-3">
+                {/* BADGES */}
+                <div className="mt-3 flex flex-wrap gap-3">
+                  {/* MAIN STATUS */}
                   <span
-                    className={`px-4 py-1.5 rounded-full text-sm font-medium shadow-md 
-      ${
-        req.status === "requested"
-          ? "bg-yellow-200/80 text-yellow-800"
-          : req.status === "approved"
-          ? "bg-blue-200/80 text-blue-800"
-          : req.status === "rejected"
-          ? "bg-red-200/80 text-red-800"
-          : "bg-green-200/80 text-green-800"
-      }`}
+                    className={`px-4 py-1.5 rounded-full text-xs font-medium border 
+                      ${
+                        req.status === "requested"
+                          ? "bg-yellow-50 text-yellow-700 border-yellow-300"
+                          : req.status === "approved"
+                          ? "bg-blue-50 text-blue-800 border-blue-300"
+                          : req.status === "rejected"
+                          ? "bg-red-50 text-red-700 border-red-300"
+                          : "bg-green-50 text-green-700 border-green-300"
+                      }
+                    `}
                   >
                     {req.status.toUpperCase()}
                   </span>
 
-                  {/* Deposit Badge */}
+                  {/* DEPOSIT STATUS */}
                   {req.status === "approved" && (
                     <span
-                      className={`ml-3 px-3 py-1 rounded-full text-xs font-medium shadow 
-        ${
-          req.depositStatus === "paid"
-            ? "bg-green-200/80 text-green-800"
-            : "bg-orange-200/80 text-orange-800"
-        }`}
+                      className={`px-4 py-1.5 rounded-full text-xs font-medium border 
+                        ${
+                          req.depositStatus === "paid"
+                            ? "bg-green-50 text-green-700 border-green-300"
+                            : "bg-orange-50 text-orange-700 border-orange-300"
+                        }
+                      `}
                     >
                       {req.depositStatus === "paid"
                         ? "Deposit Paid"
@@ -95,28 +97,28 @@ export default function Payments() {
                     </span>
                   )}
 
-                  {/* ⭐ Pending Rent Badge */}
+                  {/* RENT DUE AFTER DEPOSIT */}
                   {req.depositStatus === "paid" && (
-                    <span className="ml-3 px-3 py-1 rounded-full text-xs font-medium shadow bg-yellow-200/80 text-yellow-800">
+                    <span className="px-4 py-1.5 rounded-full text-xs font-medium border bg-yellow-50 text-yellow-700 border-yellow-300">
                       Pending 1
                     </span>
                   )}
                 </div>
               </div>
 
-              {/* Button */}
+              {/* BUTTON */}
               <div className="flex items-center justify-center md:justify-end">
                 <button
                   onClick={() => navigate(`/tenant/payments/${req._id}`)}
-                  className="w-full mt-4 px-5 py-2.5 rounded-full text-sm glass-btn-blue flex items-center justify-center gap-2"
+                  className="mt-4 md:mt-0 px-5 py-2.5 rounded-full text-xs font-medium glass-btn-blue"
                 >
                   View Payments
                 </button>
               </div>
             </div>
 
-            {/* Glow */}
-            <div className="absolute inset-0 rounded-3xl pointer-events-none bg-gradient-to-b from-white/10 to-white/0"></div>
+            {/* GLOW */}
+            <div className="absolute inset-0 rounded-3xl pointer-events-none bg-gradient-to-b from-white/10 to-transparent"></div>
           </motion.div>
         ))}
       </div>
