@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRentPayments } from "../../redux/slices/rentSlice";
 import { motion } from "framer-motion";
+import PaymentHistorySkeleton from "../../components/common/PaymentHistorySkeleton";
 
 export default function LandlordPaymentHistory() {
   const { id: requestId } = useParams();
@@ -24,7 +25,16 @@ export default function LandlordPaymentHistory() {
 
   const nextDue = records.find((r) => r.status === "pending");
 
-  if (loading) return <div className="p-6">Loading...</div>;
+  // SHOW SKELETON IF LOADING OR DATA NOT YET LOADED
+  if (loading || !records) {
+    return (
+      <div className="px-6 py-10 max-w-6xl mx-auto space-y-6">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <PaymentHistorySkeleton key={i} />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
