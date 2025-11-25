@@ -47,72 +47,6 @@ export const createOrder = async (req, res) => {
 // ----------------------------------------------------
 // VERIFY PAYMENT
 // ----------------------------------------------------
-// export const verifyPayment = async (req, res) => {
-//   try {
-//     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-//       req.body;
-
-//     // Validate signature
-//     const body = razorpay_order_id + "|" + razorpay_payment_id;
-
-//     const expectedSignature = crypto
-//       .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-//       .update(body)
-//       .digest("hex");
-
-//     if (expectedSignature !== razorpay_signature) {
-//       return res
-//         .status(400)
-//         .json({ success: false, message: "Invalid signature" });
-//     }
-
-//     // Update payment entry
-//     const payment = await Payment.findOneAndUpdate(
-//       { razorpay_order_id },
-//       {
-//         razorpay_payment_id,
-//         razorpay_signature,
-//         status: "success",
-//       },
-//       { new: true }
-//     );
-
-//     if (!payment) {
-//       return res
-//         .status(404)
-//         .json({ success: false, message: "Payment not found" });
-//     }
-
-//     // Update rental step logic
-//     const rentalRequest = await RentalRequest.findById(payment.rentalRequestId);
-
-//     if (!rentalRequest) {
-//       return res
-//         .status(404)
-//         .json({ success: false, message: "Rental request not found" });
-//     }
-
-//     // If deposit paid → move to rent step
-//     if (payment.type === "deposit") {
-//       rentalRequest.status = "approved"; // keep approved
-//       rentalRequest.depositStatus = "paid";
-//       rentalRequest.depositPaidAt = new Date(); // REQUIRED FIX
-//       rentalRequest.currentStep = 3; // if used
-//     }
-
-//     // If rent paid → update month
-//     if (payment.type === "rent") {
-//       rentalRequest.lastRentPaidAt = new Date();
-//       rentalRequest.rentStatus = "paid";
-//     }
-
-//     await rentalRequest.save();
-
-//     res.json({ success: true, message: "Payment verified & updated", payment });
-//   } catch (err) {
-//     res.status(500).json({ success: false, error: err.message });
-//   }
-// };
 
 export const verifyPayment = async (req, res) => {
   try {
@@ -166,5 +100,134 @@ export const verifyPayment = async (req, res) => {
     });
   } catch (err) {
     return res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+// CREATE RAZORPAY ORDER FOR MONTHLY RENT
+// ----------------------------------------------------
+export const createRentOrder = async (req, res) => {
+  try {
+    const {
+      rentId,
+      amount,
+      tenantId,
+      landlordId,
+      propertyId,
+      rentalRequestId,
+    } = req.body;
+
+    const options = {
+      amount: amount * 100,
+      currency: "INR",
+      receipt: "rent_" + Date.now(),
+    };
+
+    const order = await razorpayInstance.orders.create(options);
+
+    // Store payment entry
+    await Payment.create({
+      tenantId,
+      landlordId,
+      propertyId,
+      rentalRequestId,
+      rentId,
+      type: "rent",
+      amount,
+      razorpay_order_id: order.id,
+      status: "pending",
+    });
+
+    return res.json({
+      success: true,
+      orderId: order.id,
+      amount,
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+// VERIFY RENT PAYMENT
+// ----------------------------------------------------
+export const verifyRentPayment = async (req, res) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
+
+    // Signature validation
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSign = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(sign)
+      .digest("hex");
+
+    if (expectedSign !== razorpay_signature) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid signature" });
+    }
+
+    // Find payment entry
+    const payment = await Payment.findOneAndUpdate(
+      { razorpay_order_id },
+      {
+        razorpay_payment_id,
+        razorpay_signature,
+        status: "success",
+      },
+      { new: true }
+    );
+
+    if (!payment || !payment.rentId) {
+      return res.status(400).json({
+        success: false,
+        message: "Payment.rentId missing",
+      });
+    }
+
+    // Get the rent record (your original logic)
+    // Fetch current rent entry using stored rentId
+    const rent = await RentPayment.findById(payment.rentId);
+
+    if (!rent) {
+      return res.status(400).json({
+        success: false,
+        message: "Rent record not found (rentId missing in Payment)",
+      });
+    }
+
+    // ---- COPY OF YOUR WORKING LOGIC ----
+    rent.status = "paid";
+    rent.paidAt = new Date();
+    await rent.save();
+
+    const [year, month] = rent.month.split("-").map(Number);
+    const nextMonth = month === 12 ? 1 : month + 1;
+    const nextYear = month === 12 ? year + 1 : year;
+
+    const nextMonthString = `${nextYear}-${String(nextMonth).padStart(2, "0")}`;
+
+    const nextRent = await RentPayment.create({
+      rentalRequestId: rent.rentalRequestId,
+      tenantId: rent.tenantId,
+      landlordId: rent.landlordId,
+      propertyId: rent.propertyId,
+      month: nextMonthString,
+      amount: rent.amount,
+      status: "pending",
+    });
+
+    return res.json({
+      success: true,
+      message: "Rent paid & next month's rent generated",
+      currentRent: rent,
+      nextRent,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Rent payment verification failed",
+      error: error.message,
+    });
   }
 };

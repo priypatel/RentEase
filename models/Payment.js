@@ -2,10 +2,27 @@ import mongoose from "mongoose";
 
 const paymentSchema = new mongoose.Schema(
   {
-    tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    landlordId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    propertyId: { type: mongoose.Schema.Types.ObjectId, ref: "Property", required: true },
-    rentalRequestId: { type: mongoose.Schema.Types.ObjectId, ref: "RentalRequest", required: true },
+    tenantId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    landlordId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    propertyId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Property",
+      required: true,
+    },
+    rentalRequestId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "RentalRequest",
+      required: true,
+    },
+    rentId: { type: mongoose.Schema.Types.ObjectId, ref: "RentPayment" },
 
     type: { type: String, enum: ["deposit", "rent"], required: true },
 
@@ -15,7 +32,11 @@ const paymentSchema = new mongoose.Schema(
     razorpay_payment_id: String,
     razorpay_signature: String,
 
-    status: { type: String, enum: ["pending", "success", "failed"], default: "pending" },
+    status: {
+      type: String,
+      enum: ["pending", "success", "failed"],
+      default: "pending",
+    },
   },
   { timestamps: true }
 );
