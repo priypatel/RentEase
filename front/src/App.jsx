@@ -30,12 +30,15 @@ import LandlordPropertyPayments from "./pages/landlord/LandlordPropertyPayments"
 import LandlordPaymentHistory from "./pages/landlord/LandlordPaymentHistory";
 import TenantsPage from "./pages/landlord/TenantsPage";
 import AvailableProperties from "./pages/tenant/AvailableProperties";
+import Home from "./pages/Home";
 
 function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
+        <Route path="/" element={<Home />} />
+
         {/* Public */}
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
