@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getRequestsForLandlord } from "../../redux/slices/rentalRequestSlice";
 import { motion } from "framer-motion";
+import { cardAnim } from "../../components/common/cardAnim";
+import PageTitle from "../../components/common/PageTitle";
 
 export default function Deposits() {
   const dispatch = useDispatch();
@@ -27,9 +29,7 @@ export default function Deposits() {
   return (
     <div className="py-0 px-0 sm:py-10 sm:px-6">
       {/* PAGE TITLE */}
-      <h1 className="text-3xl font-bold text-green-900 mb-6">
-        Deposit Requests
-      </h1>
+      <PageTitle>Deposit Requests</PageTitle>
 
       {/* LOADING */}
       {loading && <p className="text-gray-600">Loading deposits...</p>}
@@ -44,11 +44,8 @@ export default function Deposits() {
         {approvedRequests?.map((req, index) => (
           <motion.div
             key={req._id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-            whileHover={{ scale: 1.02 }}
-            className="glass-card p-6 rounded-2xl border border-white/30 shadow-lg bg-green-50/40"
+            {...cardAnim(index)}
+            className="fade-card p-5"
           >
             {/* PROPERTY */}
             <div className="flex gap-4">

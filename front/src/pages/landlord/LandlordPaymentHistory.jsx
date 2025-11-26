@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchRentPayments } from "../../redux/slices/rentSlice";
 import { motion } from "framer-motion";
 import PaymentHistorySkeleton from "../../components/common/PaymentHistorySkeleton";
+import { cardAnim } from "../../components/common/cardAnim";
+import PageTitle from "../../components/common/PageTitle";
 
 export default function LandlordPaymentHistory() {
   const { id: requestId } = useParams();
@@ -32,13 +34,7 @@ export default function LandlordPaymentHistory() {
   return (
     <div className="page-container">
       {/* HEADER */}
-      <motion.h2
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-3xl font-bold text-gray-900 mb-6"
-      >
-        Rent Payment History
-      </motion.h2>
+      <PageTitle>Rent Payment History</PageTitle>
 
       {/* SUMMARY */}
       <motion.div
@@ -84,9 +80,7 @@ export default function LandlordPaymentHistory() {
         {records.map((rent, index) => (
           <motion.div
             key={rent._id}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.06 }}
+            {...cardAnim(index)}
             className={`p-5 rounded-2xl shadow-lg backdrop-blur-xl bg-white/60 border transition-all hover:shadow-2xl
               ${
                 rent.status === "paid"

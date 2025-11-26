@@ -70,6 +70,9 @@
   .page-container {
     @apply px-0 py-0 sm:px-6 sm:py-10;
   }
+  .fade-card {
+    @apply rounded-3xl bg-white/40 backdrop-blur-xl border border-white/40 shadow-lg hover:shadow-2xl transition-all;
+  }
 }
 @keyframes fadeIn {
   from {
@@ -117,8 +120,8 @@
   color: #7c2d12 !important;
 }
 
-.glass-card {
+/* .glass-card {
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-}
+} */

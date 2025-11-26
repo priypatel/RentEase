@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchTenantRequests } from "../../redux/slices/rentalRequestSlice";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { cardAnim } from "../../components/common/cardAnim";
+import PageTitle from "../../components/common/PageTitle";
 
 export default function TenantPropertiesPage() {
   const dispatch = useDispatch();
@@ -21,22 +23,14 @@ export default function TenantPropertiesPage() {
 
   return (
     <div className="page-container max-w-6xl mx-auto">
-      <motion.h1
-        initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-3xl font-bold text-blue-900 mb-8"
-      >
-        My Rental Properties
-      </motion.h1>
+      <PageTitle>My Rental Properties</PageTitle>
 
       <div className="grid gap-7">
         {tenantRequests.map((req, i) => (
           <motion.div
             key={req._id}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.08 }}
-            className="relative rounded-3xl p-5 bg-white/30 backdrop-blur-xl border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-300"
+            {...cardAnim(i)}
+            className="fade-card p-5 relative"
           >
             <div className="flex flex-col md:flex-row gap-6">
               {/* Image Section */}

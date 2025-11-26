@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import PropertyCard from "../components/property/PropertyCard";
 import SkeletonCard from "../components/common/SkeletonCard";
-
+import { cardAnim } from "../components/common/cardAnim";
+import PageTitle from "../components/common/PageTitle";
 export default function MyProperties() {
   const dispatch = useDispatch();
 
@@ -22,7 +23,7 @@ export default function MyProperties() {
       <div className="max-w-6xl mx-auto">
         {/* HEADER */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">My Properties</h1>
+          <PageTitle>My Properties</PageTitle>
 
           <Link
             to="/add-property"
@@ -75,7 +76,9 @@ export default function MyProperties() {
         {!loading && properties.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-5">
             {properties.map((p, index) => (
-              <PropertyCard key={p._id} property={p} index={index} />
+              <motion.div {...cardAnim(index)} className="fade-card">
+                <PropertyCard key={p._id} property={p} index={index} />
+              </motion.div>
             ))}
           </div>
         )}
