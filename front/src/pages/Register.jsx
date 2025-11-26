@@ -40,7 +40,7 @@ export default function Register() {
       const res = await axiosInstance.post("/auth/register", values);
       toast.success("Registration successful!");
       resetForm();
-      navigate("/login");
+      navigate("/");
       console.log(res.data);
     } catch (err) {
       toast.error(err.response?.data?.message || "Registration failed");
@@ -177,7 +177,7 @@ export default function Register() {
         <p className="text-center text-xs sm:text-sm text-white/70 mt-6">
           Already have an account?{" "}
           <Link
-            to="/login"
+            to="/"
             className="text-yellow-300 hover:text-yellow-400 font-semibold underline"
           >
             Login here

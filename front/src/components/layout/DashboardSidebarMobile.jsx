@@ -1,10 +1,6 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import {
-  User,
-  LogOut,
-  X,
-} from "lucide-react";
+import { User, LogOut, X } from "lucide-react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/userSlice";
@@ -34,7 +30,7 @@ export default function DashboardSidebarMobile({
     location.pathname === to || location.pathname.startsWith(to + "/");
 
   const handleLogout = () => {
-    dispatch(logoutUser()).then(() => navigate("/login"));
+    dispatch(logoutUser()).then(() => navigate("/"));
   };
 
   return (
