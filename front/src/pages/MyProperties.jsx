@@ -26,7 +26,14 @@ export default function MyProperties() {
 
           <Link
             to="/add-property"
-            className="px-5 py-2.5 rounded-xl bg-green-600 text-white font-semibold shadow-md hover:bg-green-700 transition transform hover:scale-[1.02]"
+            className="
+                flex items-center gap-2 
+                px-5 py-2.5 rounded-xl 
+                glass-btn-green
+                text-green-900 font-medium
+                shadow-md hover:shadow-lg 
+                transition-all active:scale-95
+              "
           >
             + Add Property
           </Link>
