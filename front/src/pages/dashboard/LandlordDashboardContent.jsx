@@ -84,9 +84,16 @@ export default function LandlordDashboardContent() {
           <div className="flex items-center gap-3 mt-4 sm:mt-0">
             <Link
               to="/add-property"
-              className="flex items-center gap-2 bg-green-600 text-white px-5 py-2.5 rounded-xl shadow-lg hover:bg-green-700 transition-all hover:shadow-xl active:scale-95"
+              className="
+                flex items-center gap-2 
+                px-5 py-2.5 rounded-xl 
+                glass-btn-green
+                text-green-900 font-medium
+                shadow-md hover:shadow-lg 
+                transition-all active:scale-95
+              "
             >
-              <PlusCircle className="w-5 h-5" />
+              <PlusCircle className="w-5 h-5 text-green-700" />
               Add Property
             </Link>
 

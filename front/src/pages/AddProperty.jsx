@@ -381,7 +381,14 @@ export default function AddProperty() {
           <button
             type="submit"
             disabled={creating || updating}
-            className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl shadow-md transition-all active:scale-95"
+            className="
+              glass-btn-green 
+              w-full py-3 rounded-xl 
+              text-sm font-semibold text-green-900
+              shadow-md hover:shadow-lg 
+              transition-all active:scale-95
+              disabled:opacity-50 disabled:cursor-not-allowed
+            "
           >
             {id
               ? updating
