@@ -125,29 +125,16 @@ export default function TenantDashboardContent() {
                 key={idx}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                whileHover={{ y: -6, scale: 1.03 }}
                 transition={{ delay: idx * 0.1, duration: 0.4 }}
-                className="
-                  rounded-2xl p-6 
-                  shadow-lg hover:shadow-2xl 
-                  transition-all cursor-pointer
-                  backdrop-blur-xl 
-                  bg-gradient-to-br from-white/50 to-[#e0f6ea]/40 
-                  border border-white/30
-                "
+                whileHover={{ y: -4, scale: 1.02 }}
+                className={`rounded-2xl p-5 shadow-lg border border-gray-200 ${stat.color}`}
               >
-                <div className="flex items-center gap-5">
-                  <div
-                    className="
-                      p-3 rounded-xl bg-gradient-to-br from-white/60 to-[#f1faf5]
-                      border border-white/40 shadow-md
-                    "
-                  >
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-xl bg-white shadow-md">
                     {stat.icon}
                   </div>
-
                   <div>
-                    <p className="text-gray-600 text-sm">{stat.title}</p>
+                    <p className="text-gray-500 text-sm">{stat.title}</p>
                     <h2 className="text-3xl font-semibold text-gray-900">
                       {stat.isCurrency ? `₹${animatedValue}` : animatedValue}
                     </h2>
