@@ -9,6 +9,7 @@ import {
 import PaymentSuccessModal from "../../components/modals/PaymentSuccessModal";
 import { motion } from "framer-motion";
 import PaymentHistorySkeleton from "../../components/common/PaymentHistorySkeleton";
+import PageTitle from "../../components/common/PageTitle";
 
 export default function PaymentHistory() {
   const { id: requestId } = useParams();
@@ -112,13 +113,7 @@ export default function PaymentHistory() {
   return (
     <div className="page-container">
       {/* HEADER */}
-      <motion.h2
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-3xl font-bold text-gray-900 mb-6"
-      >
-        Rent Payment History
-      </motion.h2>
+      <PageTitle>Rent Payment History</PageTitle>
 
       {/* SUMMARY CARD */}
       <motion.div
