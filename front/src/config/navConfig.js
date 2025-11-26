@@ -5,7 +5,7 @@ export const landlordNav = [
   { name: "Deposits", to: "/landlord/deposits", icon: "CreditCard" },
   { name: "Payments", to: "/landlord/payments", icon: "CreditCard" },
   { name: "Tenants", to: "/landlord/tenants", icon: "Users" },
-  { name: "Documents", to: "/landlord/documents", icon: "FileText" },
+  // { name: "Documents", to: "/landlord/documents", icon: "FileText" },
 ];
 
 export const tenantNav = [
@@ -17,6 +17,6 @@ export const tenantNav = [
   },
   { name: "Properties", to: "/tenant/my-properties", icon: "Building2" },
   { name: "Payments", to: "/tenant/payments", icon: "CreditCard" },
-  { name: "Requests", to: "/tenant/maintenance", icon: "Wrench" },
-  { name: "Documents", to: "/tenant/documents", icon: "FileText" },
+  // { name: "Requests", to: "/tenant/maintenance", icon: "Wrench" },
+  // { name: "Documents", to: "/tenant/documents", icon: "FileText" },
 ];

@@ -189,7 +189,7 @@ export default function AddProperty() {
   // UI (Option C Theme)
   // -------------------------------
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-green-100 py-10 px-6">
+    <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-green-100 py-0 px-0 sm:py-10 sm:px-6">
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}

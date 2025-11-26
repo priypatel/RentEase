@@ -25,7 +25,7 @@ export default function Deposits() {
   );
 
   return (
-    <div className="px-6 py-8">
+    <div className="py-0 px-0 sm:py-10 sm:px-6">
       {/* PAGE TITLE */}
       <h1 className="text-3xl font-bold text-green-900 mb-6">
         Deposit Requests

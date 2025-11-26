@@ -63,7 +63,7 @@ export default function LandlordDashboardContent() {
   ];
 
   return (
-    <div className="min-h-screen py-10 px-6">
+    <div className="min-h-screen py-0 px-0 sm:py-10 sm:px-6">
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
