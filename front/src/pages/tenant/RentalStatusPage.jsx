@@ -92,7 +92,7 @@ export default function RentalStatusPage() {
   ];
 
   return (
-    <div className="px-6 py-10 min-h-screen">
+    <div className="px-0 py-0 sm:px-6 sm:py-10 min-h-screen">
       <div className="max-w-4xl mx-auto">
         {/* BACK TO PROPERTY */}
         {/* <button

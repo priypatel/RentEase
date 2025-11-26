@@ -61,7 +61,7 @@ export default function TenantsPage() {
     req.depositStatus === "paid" ? "Deposit Paid" : "Deposit Pending";
 
   return (
-    <div className="px-6 py-10 max-w-6xl mx-auto">
+    <div className="px-0 py-0 sm:px-6 sm:py-10 max-w-6xl mx-auto">
       <motion.h1
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -98,9 +98,9 @@ export default function TenantsPage() {
                 transition={{ delay: i * 0.04 }}
                 className="p-5 bg-white/40 rounded-3xl backdrop-blur-xl border border-white/50 shadow-lg hover:shadow-2xl transition-all"
               >
-                <div className="flex gap-6">
+                <div className="flex flex-col sm:flex-row gap-6">
                   {/* Image */}
-                  <div className="w-36 h-28 rounded-xl overflow-hidden">
+                  <div className="w-full h-40 sm:w-36 sm:h-28 rounded-xl overflow-hidden">
                     <img
                       src={req.propertyId?.images?.[0]?.url}
                       alt={req.propertyId?.title}
@@ -184,7 +184,7 @@ export default function TenantsPage() {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex flex-col items-end justify-between">
+                  <div className="flex flex-col sm:items-end sm:justify-between mt-4 sm:mt-0">
                     <div className="space-y-2">
                       {/* <button
                         onClick={() =>
@@ -194,7 +194,6 @@ export default function TenantsPage() {
                       >
                         View Payments
                       </button> */}
-
                     </div>
 
                     <div className="text-sm text-gray-500">

@@ -97,7 +97,7 @@ export default function TenantDepositPage() {
   // --------------------------
 
   return (
-    <div className="px-6 py-10 min-h-screen">
+    <div className="px-0 py-0 sm:px-6 sm:py-10 min-h-screen">
       <div className="max-w-3xl mx-auto glass-card p-6 rounded-2xl shadow-lg">
         <h1 className="text-3xl font-bold text-green-900 text-center mb-6">
           Deposit Payment

@@ -32,7 +32,7 @@ export default function LandlordPropertiesForPayment() {
   }
 
   return (
-    <div className="px-6 py-10 max-w-6xl mx-auto">
+    <div className="px-0 py-0 sm:px-6 sm:py-10 max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">
         Properties Rent Status
       </h1>
@@ -46,9 +46,9 @@ export default function LandlordPropertiesForPayment() {
             transition={{ delay: i * 0.05 }}
             className="bg-white/70 rounded-3xl shadow-lg border border-gray-200 overflow-hidden backdrop-blur-xl hover:shadow-2xl transition"
           >
-            <div className="flex gap-6 p-5">
+            <div className="flex flex-col sm:flex-row gap-6 p-5">
               {/* Image */}
-              <div className="w-40 h-32 rounded-xl overflow-hidden">
+              <div className="w-full h-40 sm:w-40 sm:h-32 rounded-xl overflow-hidden">
                 <img
                   src={req.propertyId?.images?.[0]?.url}
                   className="w-full h-full object-cover"
@@ -109,10 +109,14 @@ export default function LandlordPropertiesForPayment() {
               </div>
 
               {/* Right Button */}
-              <div className="flex items-center">
+              <div className="flex sm:items-center mt-4 sm:mt-0">
                 <button
                   onClick={() => navigate(`/landlord/payments/${req._id}`)}
-                  className="px-5 py-2.5 text-sm font-medium rounded-full glass-btn-blue shadow-md hover:shadow-lg transition"
+                  className="
+                    w-full sm:w-auto
+                    px-5 py-2.5 text-sm font-medium rounded-full 
+                    glass-btn-blue shadow-md hover:shadow-lg transition
+                  "
                 >
                   View Payments
                 </button>
