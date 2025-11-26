@@ -28,48 +28,35 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-green-50 px-4">
-      {/* Glass Card */}
-      <div
-        className="
-        bg-white/20 backdrop-blur-md
-        border border-white/40
-        shadow-[0_8px_25px_rgba(0,0,0,0.12)]
-        p-8 rounded-2xl w-full max-w-md
-      "
-      >
-        {/* Title */}
-        <h1 className="text-3xl font-bold text-green-700 text-center mb-2">
+    <div className="flex items-center justify-center min-h-screen px-4 sm:px-0 bg-gradient-to-br from-blue-500 via-indigo-500 to-purple-600">
+      <div className="bg-white/20 backdrop-blur-md p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-md text-white">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">
           Forgot Password 🔐
         </h1>
 
-        <p className="text-center text-gray-700 text-sm mb-6">
-          Enter your registered email to receive a reset link.
+        <p className="text-white/80 text-center text-sm mb-4">
+          Enter your registered email to receive a password reset link.
         </p>
 
         {/* Form */}
-        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-5">
-          {/* Email */}
+        <form
+          onSubmit={formik.handleSubmit}
+          className="flex flex-col gap-4 sm:gap-5"
+        >
           <div>
-            <label className="text-sm font-semibold text-gray-800">
-              Email Address
-            </label>
+            <label className="text-sm font-semibold">Email Address</label>
             <input
               type="email"
               name="email"
               {...formik.getFieldProps("email")}
-              className={`w-full p-3 mt-1 rounded-xl border border-gray-300
-              bg-white text-gray-800
-              focus:ring-2 focus:ring-green-400 focus:border-green-400
-              ${
+              className={`input-primary ${
                 formik.touched.email && formik.errors.email
                   ? "border-red-400"
                   : ""
-              }
-            `}
+              }`}
             />
             {formik.touched.email && formik.errors.email && (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.email}</p>
+              <p className="text-red-300 text-sm mt-1">{formik.errors.email}</p>
             )}
           </div>
 
@@ -77,19 +64,18 @@ export default function ForgotPassword() {
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className="
-            w-full py-3 mt-1 rounded-xl btn-green-clean
-            disabled:opacity-50 active:scale-95 transition-all
-          "
+            className="btn-primary w-full mt-2 disabled:opacity-50"
           >
             {formik.isSubmitting ? "Sending..." : "Send Reset Link"}
           </button>
         </form>
 
-        {/* Footer */}
-        <p className="text-center text-sm text-gray-700 mt-6">
+        <p className="text-center text-xs sm:text-sm text-white/70 mt-6">
           Back to{" "}
-          <Link to="/" className="text-green-700 font-semibold hover:underline">
+          <Link
+            to="/"
+            className="text-yellow-300 hover:text-yellow-400 font-semibold underline"
+          >
             Login
           </Link>
         </p>

@@ -12,44 +12,64 @@ export default function RoleSelect({ formik }) {
 
   return (
     <div className="relative mt-1">
-      <label className="text-sm font-semibold text-white">Role</label>
+      <label className="text-sm font-semibold text-gray-800">Role</label>
 
       {/* Selected Field */}
       <div
         onClick={() => setOpen(!open)}
-        className={`mt-1 p-3 rounded-md border cursor-pointer flex justify-between items-center
-    ${
-      formik.touched.role && formik.errors.role
-        ? "border-red-400"
-        : "border-white/60"
-    }
-    bg-white/30 backdrop-blur-lg hover:bg-white/40
-    text-white font-medium focus:outline-none 
-    focus:ring-2 focus:ring-purple-400 transition-all duration-300
-    shadow-[0_2px_8px_rgba(255,255,255,0.2)]`}
+        className={`
+          mt-1 p-3 rounded-xl border flex justify-between items-center cursor-pointer
+          bg-white
+          text-gray-800 font-medium
+          shadow-sm
+          transition-all duration-200
+          hover:bg-green-50
+          ${
+            formik.touched.role && formik.errors.role
+              ? "border-red-400"
+              : "border-gray-300 focus:border-green-400 focus:ring-green-400"
+          }
+        `}
       >
         <span className="capitalize">
           {formik.values.role || "Select Role"}
         </span>
+
         <FaChevronDown
-          className={`transition-transform duration-300 text-purple-700 ${
+          className={`text-green-700 transition-transform duration-300 ${
             open ? "rotate-180" : ""
           }`}
         />
       </div>
 
-      {/* Dropdown List */}
+      {/* Dropdown */}
       {open && (
-        <div className="absolute z-50 mt-2 w-full bg-white/90 text-gray-800 rounded-md border border-purple-300 shadow-lg overflow-hidden animate-fadeIn">
+        <div
+          className="
+          absolute z-50 mt-2 w-full 
+          bg-white 
+          text-gray-800 
+          rounded-xl 
+          border border-green-200 
+          shadow-[0_4px_16px_rgba(0,0,0,0.15)]
+          overflow-hidden
+          animate-fadeIn
+        "
+        >
           {options.map((opt) => (
             <div
               key={opt}
               onClick={() => handleSelect(opt)}
-              className={`px-4 py-2 cursor-pointer capitalize hover:bg-purple-100 transition-all ${
-                formik.values.role === opt
-                  ? "bg-purple-200 text-purple-800"
-                  : ""
-              }`}
+              className={`
+                px-4 py-2 cursor-pointer capitalize 
+                transition-all
+                hover:bg-green-100
+                ${
+                  formik.values.role === opt
+                    ? "bg-green-200 text-green-800"
+                    : ""
+                }
+              `}
             >
               {opt}
             </div>
@@ -57,9 +77,9 @@ export default function RoleSelect({ formik }) {
         </div>
       )}
 
-      {/* Validation Error */}
+      {/* Validation */}
       {formik.touched.role && formik.errors.role && (
-        <p className="text-red-300 text-sm mt-1">{formik.errors.role}</p>
+        <p className="text-red-500 text-sm mt-1">{formik.errors.role}</p>
       )}
     </div>
   );

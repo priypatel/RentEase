@@ -50,130 +50,136 @@ export default function Register() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-green-50 px-4">
-      {/* Glass Card */}
-      <div
-        className="
-        bg-white/20 backdrop-blur-md
-        border border-white/40
-        shadow-[0_8px_25px_rgba(0,0,0,0.12)]
-        p-8 rounded-2xl w-full max-w-md
-      "
-      >
-        {/* Title */}
-        <h1 className="text-3xl font-bold text-green-700 text-center mb-2">
+    <div className="flex items-center justify-center min-h-screen px-4 sm:px-0 bg-gradient-to-br from-purple-600 via-indigo-500 to-blue-500">
+      <div className="bg-white/20 backdrop-blur-md p-6 sm:p-8 rounded-2xl sm:rounded-3xl shadow-2xl w-full max-w-md text-white relative">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">
           Create Account 🏠
         </h1>
-        <p className="text-center text-gray-700 mb-6">
-          Join the RentEase community
-        </p>
 
-        {/* Register Form */}
-        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-5">
+        <form
+          onSubmit={formik.handleSubmit}
+          className="flex flex-col gap-4 sm:gap-5"
+        >
           {/* Full Name */}
           <div>
-            <label className="text-sm font-semibold text-gray-800">
-              Full Name
-            </label>
+            <label className="text-sm font-semibold">Full Name</label>
             <input
               type="text"
               name="name"
               {...formik.getFieldProps("name")}
-              className={`w-full p-3 mt-1 rounded-xl border border-gray-300
-              bg-white text-gray-800
-              focus:ring-2 focus:ring-green-400 focus:border-green-400
-              ${
+              className={`input-primary ${
                 formik.touched.name && formik.errors.name
                   ? "border-red-400"
                   : ""
-              }
-            `}
+              }`}
             />
             {formik.touched.name && formik.errors.name && (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.name}</p>
+              <p className="text-red-300 text-sm mt-1">{formik.errors.name}</p>
             )}
           </div>
 
           {/* Email */}
           <div>
-            <label className="text-sm font-semibold text-gray-800">Email</label>
+            <label className="text-sm font-semibold">Email</label>
             <input
               type="email"
               name="email"
               {...formik.getFieldProps("email")}
-              className={`w-full p-3 mt-1 rounded-xl border border-gray-300
-              bg-white text-gray-800
-              focus:ring-2 focus:ring-green-400 focus:border-green-400
-              ${
+              className={`input-primary ${
                 formik.touched.email && formik.errors.email
                   ? "border-red-400"
                   : ""
-              }
-            `}
+              }`}
             />
             {formik.touched.email && formik.errors.email && (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.email}</p>
+              <p className="text-red-300 text-sm mt-1">{formik.errors.email}</p>
             )}
           </div>
 
-          {/* Password */}
-          <div>
-            <label className="text-sm font-semibold text-gray-800">
-              Password
-            </label>
-            <div className="relative mt-1">
+          {/* Password with Toggle */}
+          <div className="relative">
+            <label className="text-sm font-semibold">Password</label>
+            <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
                 {...formik.getFieldProps("password")}
-                className={`w-full p-3 rounded-xl border border-gray-300 
-                bg-white text-gray-800
-                focus:ring-2 focus:ring-green-400 focus:border-green-400
-                ${
+                className={`input-primary ${
                   formik.touched.password && formik.errors.password
                     ? "border-red-400"
                     : ""
-                }
-              `}
+                }`}
               />
 
-              {/* Eye Toggle */}
+              {/* 👁️ Toggle button */}
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+                className="absolute inset-y-0 right-3 flex items-center text-white/70 hover:text-white transition"
+                tabIndex={-1}
               >
-                {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                {showPassword ? <FaEyeSlash size={18} /> : <FaEye size={18} />}
               </button>
             </div>
 
             {formik.touched.password && formik.errors.password && (
-              <p className="text-red-500 text-sm mt-1">
+              <p className="text-red-300 text-sm mt-1">
                 {formik.errors.password}
               </p>
             )}
           </div>
 
-          {/* Role Selection */}
-          <RoleSelect formik={formik} />
+          {/* Role Select */}
+          <div className="relative z-40">
+            {/* <label className="text-sm font-semibold">Role</label> */}
+            {/* <select
+              name="role"
+              {...formik.getFieldProps("role")}
+              className={`w-full mt-1 p-3 rounded-md border ${
+                formik.touched.role && formik.errors.role
+                  ? "border-red-400"
+                  : "border-purple-300"
+              } bg-white text-gray-700 font-medium focus:outline-none focus:ring-2 focus:ring-purple-400 transition-all duration-200`}
+            >
+              <option value="tenant">Tenant</option>
+              <option value="landlord">Landlord</option>
+            </select> */}
+            {/* <select
+              name="role"
+              {...formik.getFieldProps("role")}
+              className={`w-full mt-1 p-3 rounded-md border ${
+                formik.touched.role && formik.errors.role
+                  ? "border-red-400"
+                  : "border-purple-300"
+              } bg-white/10 backdrop-blur-md text-white font-medium focus:outline-none focus:ring-2 focus:ring-purple-300 appearance-none transition-all duration-300`}
+            >
+              <option value="tenant" className="text-gray-800">
+                Tenant
+              </option>
+              <option value="landlord" className="text-gray-800">
+                Landlord
+              </option>
+            </select> */}
+            <RoleSelect formik={formik} />
+          </div>
 
           {/* Submit Button */}
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className="
-            w-full py-3 mt-1 rounded-xl btn-green-clean
-            disabled:opacity-50 active:scale-95 transition-all
-          "
+            className="btn-primary w-full mt-3 disabled:opacity-50"
           >
             {formik.isSubmitting ? "Registering..." : "Register"}
           </button>
         </form>
 
         {/* Footer */}
-        <p className="text-center text-sm text-gray-700 mt-6">
+        <p className="text-center text-xs sm:text-sm text-white/70 mt-6">
           Already have an account?{" "}
-          <Link to="/" className="text-green-700 font-semibold hover:underline">
+          <Link
+            to="/"
+            className="text-yellow-300 hover:text-yellow-400 font-semibold underline"
+          >
             Login here
           </Link>
         </p>
