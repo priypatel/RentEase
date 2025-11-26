@@ -170,7 +170,34 @@ export default function PropertyDetailsPage() {
               </h3>
 
               {/* CONDITIONAL BUTTONS */}
-              {check?.exists ? (
+              {/* {check?.exists ? (
+                <button
+                  onClick={() =>
+                    navigate(`/tenant/rental-status/${check.data._id}`, {
+                      replace: true,
+                    })
+                  }
+                  className="w-full mt-4 px-5 py-2.5 rounded-full text-sm glass-btn-blue flex items-center justify-center gap-2"
+                >
+                  View Request Status
+                </button>
+              ) : (
+                <button
+                  onClick={() => setShowConfirm(true)}
+                  className="w-full mt-4 px-5 py-2.5 rounded-full text-sm glass-btn-blue flex items-center justify-center gap-2"
+                >
+                  Request to Rent
+                </button>
+              )} */}
+              {/* CONDITIONAL BUTTONS */}
+              {property.status === "rented" ? (
+                <button
+                  disabled
+                  className="w-full mt-4 px-5 py-2.5 rounded-full text-sm bg-gray-300 text-gray-600 cursor-not-allowed"
+                >
+                  Already Rented
+                </button>
+              ) : check?.exists ? (
                 <button
                   onClick={() =>
                     navigate(`/tenant/rental-status/${check.data._id}`, {
