@@ -89,7 +89,10 @@ export default function ForgotPassword() {
         {/* Footer */}
         <p className="text-center text-sm text-gray-700 mt-6">
           Back to{" "}
-          <Link to="/" className="text-green-700 font-semibold hover:underline">
+          <Link
+            to="/login"
+            className="text-green-700 font-semibold hover:underline"
+          >
             Login
           </Link>
         </p>

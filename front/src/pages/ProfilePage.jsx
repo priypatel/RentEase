@@ -20,7 +20,7 @@ export default function ProfilePage() {
   const [phone, setPhone] = useState(user?.phone || "");
 
   const handleLogoutConfirm = () => {
-    dispatch(logoutUser()).then(() => navigate("/"));
+    dispatch(logoutUser()).then(() => navigate("/login"));
   };
 
   const handleSaveConfirm = () => {

@@ -1,11 +1,6 @@
 import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import {
-  UserRound,
-  LogOut,
-  ChevronsLeft,
-  ChevronsRight,
-} from "lucide-react";
+import { UserRound, LogOut, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/slices/userSlice";
 import ConfirmModal from "../../components/common/ConfirmModal";
@@ -30,7 +25,7 @@ export default function DashboardSidebar({ collapsed, setCollapsed }) {
     location.pathname === to || location.pathname.startsWith(to + "/");
 
   const handleLogout = () => {
-    dispatch(logoutUser()).then(() => navigate("/"));
+    dispatch(logoutUser()).then(() => navigate("/login"));
   };
 
   return (
