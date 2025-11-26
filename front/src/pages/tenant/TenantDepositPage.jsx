@@ -191,7 +191,7 @@ export default function TenantDepositPage() {
 
         {/* Property Preview */}
         <img
-          src={singleRequest.propertyId.images?.[0]?.url}
+          src={singleRequest.propertyId.images?.[0]?.url || ""}
           className="w-full h-56 object-cover rounded-xl"
         />
 
