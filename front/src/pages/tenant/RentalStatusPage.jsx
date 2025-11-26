@@ -95,14 +95,14 @@ export default function RentalStatusPage() {
     <div className="px-6 py-10 min-h-screen">
       <div className="max-w-4xl mx-auto">
         {/* BACK TO PROPERTY */}
-        <button
+        {/* <button
           onClick={() =>
             navigate(`/tenant/property/${singleRequest.propertyId._id}`)
           }
           className="mb-3 px-4 py-2 rounded-full text-sm glass-btn-blue flex items-center gap-2 w-fit"
         >
           ← Back to Property
-        </button>
+        </button> */}
 
         {/* TITLE */}
         <motion.h1
@@ -114,7 +114,7 @@ export default function RentalStatusPage() {
         </motion.h1>
 
         {/* PREVIOUS + NEXT BUTTONS */}
-        <div className="flex justify-center gap-4 mb-10">
+        <div className="flex justify-between gap-4 mb-10">
           <button
             onClick={goPrevious}
             disabled={step === 1}
