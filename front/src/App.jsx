@@ -38,8 +38,10 @@ function App() {
       <Routes>
         {/* Public */}
         <Route path="/register" element={<Register />} />
-        <Route path="/" element={<Login />} />
-
+        <Route path="/login" element={<Login />} />
+        {/* Password */}
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         {/* ============================================
            UNIFIED LAYOUT FOR BOTH ROLES
         ============================================ */}
@@ -99,10 +101,6 @@ function App() {
           <Route path="add-property" element={<AddProperty />} />
           <Route path="edit-property/:id" element={<AddProperty />} />
         </Route>
-
-        {/* Password */}
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </BrowserRouter>
   );

@@ -169,7 +169,7 @@ export default function TenantDashboardContent() {
         <ConfirmModal
           show={showLogoutConfirm}
           onClose={() => setShowLogoutConfirm(false)}
-          onConfirm={() => navigate("/")}
+          onConfirm={() => navigate("/login")}
           message="Are you sure you want to logout?"
           confirmText="Yes, Logout"
         />

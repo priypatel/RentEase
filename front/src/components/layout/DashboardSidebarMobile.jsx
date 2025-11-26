@@ -30,7 +30,7 @@ export default function DashboardSidebarMobile({
     location.pathname === to || location.pathname.startsWith(to + "/");
 
   const handleLogout = () => {
-    dispatch(logoutUser()).then(() => navigate("/"));
+    dispatch(logoutUser()).then(() => navigate("/login"));
   };
 
   return (
