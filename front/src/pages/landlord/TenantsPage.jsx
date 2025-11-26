@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { getRequestsForLandlord } from "../../redux/slices/rentalRequestSlice";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-
+import { cardAnim } from "../../components/common/cardAnim";
+import PageTitle from "../../components/common/PageTitle";
 /**
  * TenantsPage
  *
@@ -62,13 +63,7 @@ export default function TenantsPage() {
 
   return (
     <div className="page-container max-w-6xl mx-auto">
-      <motion.h1
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-3xl font-bold text-green-800 mb-8"
-      >
-        Tenants
-      </motion.h1>
+      <PageTitle>Tenants</PageTitle>
 
       {/* Loading skeletons */}
       {loading && (
@@ -93,10 +88,8 @@ export default function TenantsPage() {
             {landlordRequests.map((req, i) => (
               <motion.div
                 key={req._id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.04 }}
-                className="p-5 bg-white/40 rounded-3xl backdrop-blur-xl border border-white/50 shadow-lg hover:shadow-2xl transition-all"
+                {...cardAnim(i)}
+                className="fade-card p-5"
               >
                 <div className="flex flex-col sm:flex-row gap-6">
                   {/* Image */}

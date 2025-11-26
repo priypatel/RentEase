@@ -4,6 +4,8 @@ import { getRequestsForLandlord } from "../../redux/slices/rentalRequestSlice";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import PaymentSkeletonCard from "../../components/common/PaymentSkeletonCard";
+import { cardAnim } from "../../components/common/cardAnim";
+import PageTitle from "../../components/common/PageTitle";
 
 export default function LandlordPropertiesForPayment() {
   const dispatch = useDispatch();
@@ -33,19 +35,11 @@ export default function LandlordPropertiesForPayment() {
 
   return (
     <div className="page-container max-w-6xl mx-auto">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8">
-        Properties Rent Status
-      </h1>
+      <PageTitle>Properties Rent Status</PageTitle>
 
       <div className="grid gap-7">
         {landlordRequests.map((req, i) => (
-          <motion.div
-            key={req._id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.05 }}
-            className="bg-white/70 rounded-3xl shadow-lg border border-gray-200 overflow-hidden backdrop-blur-xl hover:shadow-2xl transition"
-          >
+          <motion.div key={req._id} {...cardAnim(i)} className="fade-card">
             <div className="flex flex-col sm:flex-row gap-6 p-5">
               {/* Image */}
               <div className="w-full h-40 sm:w-40 sm:h-32 rounded-xl overflow-hidden">

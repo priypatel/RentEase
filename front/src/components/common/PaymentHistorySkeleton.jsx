@@ -2,17 +2,14 @@ import React from "react";
 
 export default function PaymentHistoryFullSkeleton() {
   return (
-    <div className="px-6 py-10 max-w-6xl mx-auto space-y-10 animate-pulse">
-
+    <div className="page-container max-w-6xl mx-auto space-y-10 animate-pulse">
       {/* ===================== SUMMARY SKELETON ===================== */}
       <div className="p-6 rounded-3xl bg-white/50 backdrop-blur-xl shadow-xl border border-green-100">
-        
         {/* Summary Header */}
         <div className="h-7 w-48 bg-gray-200/70 rounded-md mb-6"></div>
 
         {/* 3 Summary Boxes */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-
           {/* Box 1 */}
           <div className="p-4 rounded-xl bg-gray-100 border border-gray-200 shadow">
             <div className="h-4 w-32 bg-gray-200/70 rounded-md mb-3"></div>
@@ -45,7 +42,6 @@ export default function PaymentHistoryFullSkeleton() {
             "
           >
             <div className="flex justify-between items-start">
-
               {/* Left Section */}
               <div className="space-y-3 w-2/3">
                 <div className="h-6 w-32 bg-gray-200/70 rounded-md"></div>
@@ -60,7 +56,6 @@ export default function PaymentHistoryFullSkeleton() {
           </div>
         ))}
       </div>
-
     </div>
   );
 }

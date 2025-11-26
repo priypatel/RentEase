@@ -6,6 +6,8 @@ import {
 } from "../../redux/slices/rentalRequestSlice";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import { cardAnim } from "../../components/common/cardAnim";
+import PageTitle from "../../components/common/PageTitle";
 
 export default function Requests() {
   const dispatch = useDispatch();
@@ -33,9 +35,7 @@ export default function Requests() {
 
   return (
     <div className="page-container">
-      <h1 className="text-3xl font-bold text-green-900 mb-6">
-        Rental Requests
-      </h1>
+      <PageTitle>Rental Requests</PageTitle>
 
       {loading && <p className="text-gray-600">Loading requests...</p>}
 
@@ -47,11 +47,8 @@ export default function Requests() {
         {landlordRequests?.map((req, index) => (
           <motion.div
             key={req._id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-            whileHover={{ scale: 1.02 }}
-            className="glass-card p-6 rounded-2xl border border-white/30 shadow-lg bg-green-50/40"
+            {...cardAnim(index)}
+            className="fade-card p-5"
           >
             {/* PROPERTY */}
             <div className="flex flex-col sm:flex-row gap-4">
