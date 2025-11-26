@@ -187,7 +187,7 @@ export default function LandlordDashboardContent() {
         <ConfirmModal
           show={showLogoutConfirm}
           onClose={() => setShowLogoutConfirm(false)}
-          onConfirm={() => navigate("/login")}
+          onConfirm={() => navigate("/")}
           message="Are you sure you want to logout?"
           confirmText="Yes, Logout"
         />

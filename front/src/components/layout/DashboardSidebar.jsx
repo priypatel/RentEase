@@ -30,7 +30,7 @@ export default function DashboardSidebar({ collapsed, setCollapsed }) {
     location.pathname === to || location.pathname.startsWith(to + "/");
 
   const handleLogout = () => {
-    dispatch(logoutUser()).then(() => navigate("/login"));
+    dispatch(logoutUser()).then(() => navigate("/"));
   };
 
   return (
