@@ -32,7 +32,7 @@ export default function Requests() {
   };
 
   return (
-    <div className="py-0 px-0 sm:py-10 sm:px-6">
+    <div className="page-container">
       <h1 className="text-3xl font-bold text-green-900 mb-6">
         Rental Requests
       </h1>

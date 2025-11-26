@@ -18,7 +18,7 @@ export default function MyProperties() {
   }, [dispatch]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-green-100 py-0 px-0 sm:py-10 sm:px-6">
+    <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-green-100 page-container">
       <div className="max-w-6xl mx-auto">
         {/* HEADER */}
         <div className="flex justify-between items-center mb-8">

@@ -30,7 +30,7 @@ export default function LandlordPaymentHistory() {
   }
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
+    <div className="page-container">
       {/* HEADER */}
       <motion.h2
         initial={{ opacity: 0, y: 10 }}

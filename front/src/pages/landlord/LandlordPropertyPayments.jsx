@@ -32,7 +32,7 @@ export default function LandlordPropertiesForPayment() {
   }
 
   return (
-    <div className="px-0 py-0 sm:px-6 sm:py-10 max-w-6xl mx-auto">
+    <div className="page-container max-w-6xl mx-auto">
       <h1 className="text-3xl font-bold text-gray-900 mb-8">
         Properties Rent Status
       </h1>

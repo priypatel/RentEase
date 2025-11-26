@@ -80,7 +80,7 @@ export default function AvailableProperties() {
   });
 
   return (
-    <div className="min-h-screen py-0 px-0 sm:py-10 sm:px-6">
+    <div className="min-h-screen page-container">
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}

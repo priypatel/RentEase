@@ -110,7 +110,7 @@ export default function PaymentHistory() {
   const nextDue = records.find((r) => r.status === "pending");
 
   return (
-    <div className="px-0 py-0 sm:px-6 sm:py-10 ">
+    <div className="page-container">
       {/* HEADER */}
       <motion.h2
         initial={{ opacity: 0, y: 10 }}

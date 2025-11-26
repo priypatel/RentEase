@@ -61,7 +61,7 @@ export default function TenantsPage() {
     req.depositStatus === "paid" ? "Deposit Paid" : "Deposit Pending";
 
   return (
-    <div className="px-0 py-0 sm:px-6 sm:py-10 max-w-6xl mx-auto">
+    <div className="page-container max-w-6xl mx-auto">
       <motion.h1
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}

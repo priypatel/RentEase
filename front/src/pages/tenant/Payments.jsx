@@ -21,7 +21,7 @@ export default function Payments() {
   // SHOW SKELETON IF LOADING OR DATA NOT YET LOADED
   if (loading || !tenantRequests) {
     return (
-      <div className="px-0 py-0 sm:px-6 sm:py-10 max-w-6xl mx-auto space-y-6">
+      <div className="page-container max-w-6xl mx-auto space-y-6">
         {Array.from({ length: 4 }).map((_, i) => (
           <PaymentSkeletonCard key={i} />
         ))}
