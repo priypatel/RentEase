@@ -20,7 +20,7 @@ export default function TenantPropertiesPage() {
     return <p className="p-6 text-gray-600">Loading...</p>;
 
   return (
-    <div className="px-0 py-0 sm:px-6 sm:py-10 max-w-6xl mx-auto">
+    <div className="page-container max-w-6xl mx-auto">
       <motion.h1
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}

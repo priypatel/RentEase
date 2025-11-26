@@ -69,7 +69,7 @@ export default function PropertyDetailsPage() {
   };
 
   return (
-    <div className="min-h-screen px-0 py-0 sm:px-6 sm:py-8">
+    <div className="min-h-screen page-container">
       <div className="max-w-5xl mx-auto">
         {/* IMAGE SLIDER */}
         <div className="relative h-72 overflow-hidden rounded-xl mb-6">
