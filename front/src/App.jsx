@@ -29,6 +29,8 @@ import PaymentHistory from "./pages/tenant/PaymentHistory";
 import LandlordPropertyPayments from "./pages/landlord/LandlordPropertyPayments";
 import LandlordPaymentHistory from "./pages/landlord/LandlordPaymentHistory";
 import TenantsPage from "./pages/landlord/TenantsPage";
+import AvailableProperties from "./pages/tenant/AvailableProperties";
+
 function App() {
   return (
     <BrowserRouter>
@@ -56,6 +58,10 @@ function App() {
           <Route
             path="tenant/rental-status/:id"
             element={<RentalStatusPage />}
+          />
+          <Route
+            path="tenant/available-properties"
+            element={<AvailableProperties />}
           />
           <Route
             path="tenant/my-properties"
