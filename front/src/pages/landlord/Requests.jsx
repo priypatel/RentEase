@@ -54,10 +54,10 @@ export default function Requests() {
             className="glass-card p-6 rounded-2xl border border-white/30 shadow-lg bg-green-50/40"
           >
             {/* PROPERTY */}
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <img
                 src={req?.propertyId?.images?.[0]?.url || "/placeholder.png"}
-                className="w-full h-40 object-cover rounded-lg"
+                className="w-full h-40 sm:w-40 sm:h-32 object-cover rounded-lg"
               />
 
               <div>
