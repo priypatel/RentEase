@@ -57,7 +57,7 @@ export default function Home() {
           px-6 lg:px-20 py-24 mt-10
           rounded-[40px]
           mx-4 md:mx-10
-          bg-gradient-to-br from-[#E7FFF3] via-[#F6FFF9] to-[#DFFFEA]
+          bg-app
         "
       >
         {/* Floating shapes */}

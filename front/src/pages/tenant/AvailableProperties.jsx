@@ -39,7 +39,7 @@ export default function AvailableProperties() {
       <Header />
 
       {/* MAIN CONTENT — PUBLIC LAYOUT */}
-      <section className="px-6 md:px-12 lg:px-20 py-12 bg-[#F7FFF9] min-h-screen">
+      <section className="px-6 md:px-12 lg:px-20 py-12 min-h-screen">
         {/* Title + Filter Button */}
         <div className="flex items-center justify-between mb-6">
           <PageTitle>Available Properties</PageTitle>
