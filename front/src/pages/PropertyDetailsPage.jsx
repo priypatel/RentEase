@@ -72,52 +72,56 @@ export default function PropertyDetailsPage() {
     <div className="min-h-screen page-container">
       <div className="max-w-5xl mx-auto">
         {/* IMAGE SLIDER */}
-        <div className="relative h-72 overflow-hidden rounded-xl mb-6">
-          <motion.div
-            className="flex h-full"
-            animate={{ x: `-${currentIndex * 100}%` }}
-            transition={{ duration: 0.4 }}
-          >
-            {property.images?.map((img, i) => (
-              <div key={i} className="min-w-full h-72 flex-shrink-0">
-                <img
-                  src={img.url}
-                  className="w-full h-72 object-cover rounded-xl cursor-pointer"
-                  onClick={() => {
-                    setShowPreview(true);
-                    setCurrentIndex(i);
-                  }}
-                />
-              </div>
-            ))}
-          </motion.div>
+        <div className="w-full overflow-hidden rounded-xl mb-6">
+          <div className="relative w-full">
+            <motion.div
+              className="flex w-full"
+              animate={{ x: `-${currentIndex * 100}%` }}
+              transition={{ duration: 0.4 }}
+            >
+              {property.images.map((img, i) => (
+                <div key={i} className="w-full flex-shrink-0">
+                  <div className="w-full aspect-[16/9] overflow-hidden rounded-xl">
+                    <img
+                      src={img.url}
+                      className="w-full h-full object-cover cursor-pointer"
+                      onClick={() => {
+                        setShowPreview(true);
+                        setCurrentIndex(i);
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </motion.div>
 
-          {/* Slider buttons */}
-          {property.images?.length > 1 && (
-            <>
-              <button
-                onClick={() =>
-                  setCurrentIndex((prev) =>
-                    prev === 0 ? property.images.length - 1 : prev - 1
-                  )
-                }
-                className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/90 p-2 rounded-full shadow"
-              >
-                ‹
-              </button>
+            {/* Arrows */}
+            {property.images?.length > 1 && (
+              <>
+                <button
+                  onClick={() =>
+                    setCurrentIndex((prev) =>
+                      prev === 0 ? property.images.length - 1 : prev - 1
+                    )
+                  }
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 p-3 rounded-full shadow hover:scale-110 transition"
+                >
+                  ‹
+                </button>
 
-              <button
-                onClick={() =>
-                  setCurrentIndex((prev) =>
-                    prev === property.images.length - 1 ? 0 : prev + 1
-                  )
-                }
-                className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/90 p-2 rounded-full shadow"
-              >
-                ›
-              </button>
-            </>
-          )}
+                <button
+                  onClick={() =>
+                    setCurrentIndex((prev) =>
+                      prev === property.images.length - 1 ? 0 : prev + 1
+                    )
+                  }
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 p-3 rounded-full shadow hover:scale-110 transition"
+                >
+                  ›
+                </button>
+              </>
+            )}
+          </div>
         </div>
 
         {/* DETAILS */}
