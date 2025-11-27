@@ -28,22 +28,15 @@ export default function ForgotPassword() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-green-50 px-4">
-      {/* Glass Card */}
-      <div
-        className="
-        bg-white/20 backdrop-blur-md
-        border border-white/40
-        shadow-[0_8px_25px_rgba(0,0,0,0.12)]
-        p-8 rounded-2xl w-full max-w-md
-      "
-      >
+    <div className="flex items-center justify-center min-h-screen bg-app px-4">
+      {/* Card */}
+      <div className="card-light w-full max-w-md p-8">
         {/* Title */}
-        <h1 className="text-3xl font-bold text-green-700 text-center mb-2">
+        <h1 className="text-3xl font-bold text-primary text-center mb-2">
           Forgot Password 🔐
         </h1>
 
-        <p className="text-center text-gray-700 text-sm mb-6">
+        <p className="text-center text-grayText text-sm mb-6">
           Enter your registered email to receive a reset link.
         </p>
 
@@ -51,47 +44,38 @@ export default function ForgotPassword() {
         <form onSubmit={formik.handleSubmit} className="flex flex-col gap-5">
           {/* Email */}
           <div>
-            <label className="text-sm font-semibold text-gray-800">
-              Email Address
-            </label>
+            <label className="label">Email Address</label>
             <input
               type="email"
               name="email"
               {...formik.getFieldProps("email")}
-              className={`w-full p-3 mt-1 rounded-xl border border-gray-300
-              bg-white text-gray-800
-              focus:ring-2 focus:ring-green-400 focus:border-green-400
-              ${
+              className={`input mt-1 ${
                 formik.touched.email && formik.errors.email
-                  ? "border-red-400"
+                  ? "border-danger"
                   : ""
-              }
-            `}
+              }`}
             />
             {formik.touched.email && formik.errors.email && (
-              <p className="text-red-500 text-sm mt-1">{formik.errors.email}</p>
+              <p className="text-danger text-sm mt-1">{formik.errors.email}</p>
             )}
           </div>
 
-          {/* Submit Button */}
+          {/* Button */}
           <button
             type="submit"
             disabled={formik.isSubmitting}
-            className="
-            w-full py-3 mt-1 rounded-xl btn-green-clean
-            disabled:opacity-50 active:scale-95 transition-all
-          "
+            className="btn-primary w-full mt-1 disabled:opacity-50"
           >
             {formik.isSubmitting ? "Sending..." : "Send Reset Link"}
           </button>
         </form>
 
         {/* Footer */}
-        <p className="text-center text-sm text-gray-700 mt-6">
+        <p className="text-center text-sm text-grayText mt-6">
           Back to{" "}
           <Link
             to="/login"
-            className="text-green-700 font-semibold hover:underline"
+            className="text-primary font-medium hover:underline"
           >
             Login
           </Link>

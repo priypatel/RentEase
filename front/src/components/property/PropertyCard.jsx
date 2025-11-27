@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 import ConfirmModal from "../common/ConfirmModal";
 import { deleteProperty } from "../../redux/slices/propertySlice";
 import { toast } from "react-toastify";
+import { IndianRupee, Home, MapPin } from "lucide-react";
 
 export default function PropertyCard({ property, index }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const user = useSelector((state) => state.auth.user);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -43,16 +43,25 @@ export default function PropertyCard({ property, index }) {
 
         {/* CONTENT */}
         <div className="card-body">
-          {/* Title */}
-          <h2 className="card-title">{property.title}</h2>
-          <p className="card-subtitle">{property.location}</p>
+          {/* TITLE */}
+          <div className="flex items-center gap-2 card-title">
+            <Home className="w-6 h-6 text-primary" />
+            <span>{property.title}</span>
+          </div>
 
-          {/* Rent */}
-          <p className="text-[#2ECC71] font-semibold text-lg mt-2">
-            ₹{property.rent}/month
-          </p>
+          {/* LOCATION */}
+          <div className="flex items-center gap-2 card-subtitle mt-1">
+            <MapPin className="w-4 h-4 text-primary" />
+            <span>{property.location}</span>
+          </div>
 
-          {/* Status + View Button */}
+          {/* RENT */}
+          <div className="flex items-center gap-1 text-primary font-semibold text-lg mt-2">
+            <IndianRupee className="w-4 h-4" />
+            <span>{property.rent}/month</span>
+          </div>
+
+          {/* STATUS + VIEW BUTTON */}
           <div className="flex justify-between items-center mt-4">
             <span
               className={`badge ${
@@ -68,35 +77,25 @@ export default function PropertyCard({ property, index }) {
 
             <button
               onClick={() => navigate(`/${user.role}/property/${property._id}`)}
-              className="btn-neutral"
+              className="btn-secondary px-4 py-1.5 text-sm"
             >
-              <svg
-                fill="none"
-                className="w-4 h-4"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-              >
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                <circle cx="12" cy="12" r="3" />
-              </svg>
               View
             </button>
           </div>
 
-          {/* Landlord Buttons */}
+          {/* LANDLORD ONLY ACTIONS */}
           {user?.role === "landlord" && (
             <div className="flex justify-between items-center mt-4">
               <button
                 onClick={() => navigate(`/edit-property/${property._id}`)}
-                className="btn-secondary"
+                className="btn-secondary px-4 py-1.5 text-sm"
               >
                 Edit
               </button>
 
               <button
                 onClick={() => setShowDeleteModal(true)}
-                className="btn-danger"
+                className="btn-danger px-4 py-1.5 text-sm"
               >
                 Delete
               </button>
@@ -105,7 +104,7 @@ export default function PropertyCard({ property, index }) {
         </div>
       </motion.div>
 
-      {/* Delete Confirmation */}
+      {/* DELETE CONFIRMATION */}
       <ConfirmModal
         show={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}

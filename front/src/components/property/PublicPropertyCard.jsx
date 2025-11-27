@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Home, MapPin, IndianRupee } from "lucide-react";
 
 export default function PublicPropertyCard({ property, index }) {
   const navigate = useNavigate();
@@ -31,16 +32,25 @@ export default function PublicPropertyCard({ property, index }) {
 
       {/* CONTENT */}
       <div className="card-body">
-        {/* Title */}
-        <h2 className="card-title">{property.title}</h2>
-        <p className="card-subtitle">{property.location}</p>
+        {/* TITLE */}
+        <div className="flex items-center gap-2 card-title">
+          <Home className="w-6 h-6 text-primary" />
+          <span>{property.title}</span>
+        </div>
 
-        {/* Rent */}
-        <p className="text-[#2ECC71] font-semibold text-lg mt-2">
-          ₹{property.rent}/month
-        </p>
+        {/* LOCATION */}
+        <div className="flex items-center gap-2 card-subtitle mt-1">
+          <MapPin className="w-4 h-4 text-primary" />
+          <span>{property.location}</span>
+        </div>
 
-        {/* Status + View Button */}
+        {/* RENT */}
+        <div className="flex items-center gap-1 text-primary font-semibold text-lg mt-2">
+          <IndianRupee className="w-4 h-4" />
+          {property.rent}/month
+        </div>
+
+        {/* STATUS + VIEW BUTTON */}
         <div className="flex justify-between items-center mt-4">
           <span
             className={`badge ${
@@ -54,17 +64,10 @@ export default function PublicPropertyCard({ property, index }) {
             {property.status.toUpperCase()}
           </span>
 
-          <button onClick={handleView} className="btn-neutral">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-            >
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-              <circle cx="12" cy="12" r="3" />
-            </svg>
+          <button
+            onClick={handleView}
+            className="btn-secondary px-4 py-1.5 text-sm"
+          >
             View
           </button>
         </div>
