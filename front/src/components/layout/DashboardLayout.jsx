@@ -10,7 +10,7 @@ export default function DashboardLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-white via-green-50 to-green-100 relative">
+    <div className="flex min-h-screen bg-app relative">
       {/* Desktop Sidebar */}
       <DashboardSidebar collapsed={collapsed} setCollapsed={setCollapsed} />
 
@@ -45,7 +45,7 @@ export default function DashboardLayout() {
         </button>
 
         {/* Content */}
-        <main className="py-8 px-6 md:px-10">
+        <main className="py-8 px-6 md:px-10 ">
           <Outlet />
         </main>
       </div>

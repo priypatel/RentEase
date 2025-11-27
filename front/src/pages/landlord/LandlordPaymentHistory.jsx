@@ -1,8 +1,149 @@
+// import React, { useEffect } from "react";
+// import { useParams } from "react-router-dom";
+// import { useDispatch, useSelector } from "react-redux";
+// import { fetchRentPayments } from "../../redux/slices/rentSlice";
+// import { motion } from "framer-motion";
+// import PaymentHistorySkeleton from "../../components/common/PaymentHistorySkeleton";
+// import { cardAnim } from "../../components/common/cardAnim";
+// import PageTitle from "../../components/common/PageTitle";
+
+// export default function LandlordPaymentHistory() {
+//   const { id: requestId } = useParams();
+//   const dispatch = useDispatch();
+
+//   const rentState =
+//     useSelector((state) => state.rent.byRequest[requestId]) || {};
+
+//   const { loading, records = [] } = rentState;
+
+//   useEffect(() => {
+//     if (requestId) dispatch(fetchRentPayments(requestId));
+//   }, [requestId]);
+
+//   const totalPaid = records.filter((r) => r.status === "paid").length;
+//   const totalAmountPaid = records
+//     .filter((r) => r.status === "paid")
+//     .reduce((sum, r) => sum + r.amount, 0);
+
+//   const nextDue = records.find((r) => r.status === "pending");
+
+//   if (loading || !records) {
+//     return <PaymentHistorySkeleton />;
+//   }
+
+//   return (
+//     <div className="page-container">
+//       {/* HEADER */}
+//       <PageTitle>Rent Payment History</PageTitle>
+
+//       {/* SUMMARY */}
+//       <motion.div
+//         initial={{ opacity: 0, y: 10 }}
+//         animate={{ opacity: 1, y: 0 }}
+//         className="mb-8 p-6 rounded-3xl bg-white/50 backdrop-blur-xl shadow-xl border border-green-100"
+//       >
+//         <h3 className="text-2xl font-bold text-green-800 mb-4">Summary</h3>
+
+//         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+//           {/* Total Paid */}
+//           <div className="p-4 rounded-xl bg-green-50 border border-green-200 shadow">
+//             <p className="text-sm text-green-700">Total Months Paid</p>
+//             <p className="text-2xl font-bold text-green-900">{totalPaid}</p>
+//           </div>
+
+//           {/* Total Amount */}
+//           <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 shadow">
+//             <p className="text-sm text-blue-700">Total Amount Received</p>
+//             <p className="text-2xl font-bold text-blue-900">
+//               ₹{totalAmountPaid}
+//             </p>
+//           </div>
+
+//           {/* Next Due */}
+//           <div className="p-4 rounded-xl bg-yellow-50 border border-yellow-200 shadow">
+//             <p className="text-sm text-yellow-700">Next Expected Rent</p>
+//             <p className="text-xl font-semibold text-yellow-900">
+//               {nextDue ? nextDue.month : "No Pending Rent"}
+//             </p>
+
+//             {nextDue && (
+//               <p className="text-sm text-yellow-900 mt-1">
+//                 Amount: <b>₹{nextDue.amount}</b>
+//               </p>
+//             )}
+//           </div>
+//         </div>
+//       </motion.div>
+
+//       {/* RECORD LIST */}
+//       <div className="space-y-5">
+//         {records.map((rent, index) => (
+//           <motion.div
+//             key={rent._id}
+//             {...cardAnim(index)}
+//             className={`p-5 rounded-2xl shadow-lg backdrop-blur-xl bg-white/60 border transition-all hover:shadow-2xl
+//               ${
+//                 rent.status === "paid"
+//                   ? "border-green-300"
+//                   : "border-yellow-300"
+//               }
+//             `}
+//           >
+//             <div className="flex justify-between items-center">
+//               {/* LEFT */}
+//               <div>
+//                 <p className="text-xl font-semibold text-green-900">
+//                   {rent.month}
+//                 </p>
+//                 <p className="text-green-700 text-lg font-medium">
+//                   ₹{rent.amount}
+//                 </p>
+
+//                 {rent.paidAt && (
+//                   <p className="text-xs text-green-800 mt-1">
+//                     Paid on {new Date(rent.paidAt).toLocaleDateString()}
+//                   </p>
+//                 )}
+
+//                 <p className="text-xs text-gray-600 mt-1">
+//                   Tenant:{" "}
+//                   <span className="font-semibold text-green-900">
+//                     {rent.tenantId?.name}
+//                   </span>
+//                 </p>
+//               </div>
+
+//               {/* RIGHT — STATUS BADGE */}
+//               <span
+//                 className={`px-4 py-1 flex items-center gap-1.5 font-medium text-xs rounded-full border
+//                 ${
+//                   rent.status === "paid"
+//                     ? "bg-green-50 text-green-700 border-green-300"
+//                     : "bg-yellow-50 text-yellow-700 border-yellow-300"
+//                 }`}
+//               >
+//                 {rent.status.toUpperCase()}
+//               </span>
+//             </div>
+//           </motion.div>
+//         ))}
+//       </div>
+
+//       {records.length === 0 && (
+//         <p className="mt-10 text-center text-gray-600">
+//           No payment records available.
+//         </p>
+//       )}
+//     </div>
+//   );
+// }
+
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchRentPayments } from "../../redux/slices/rentSlice";
 import { motion } from "framer-motion";
+
 import PaymentHistorySkeleton from "../../components/common/PaymentHistorySkeleton";
 import { cardAnim } from "../../components/common/cardAnim";
 import PageTitle from "../../components/common/PageTitle";
@@ -28,31 +169,39 @@ export default function LandlordPaymentHistory() {
   const nextDue = records.find((r) => r.status === "pending");
 
   if (loading || !records) {
-    return <PaymentHistorySkeleton />;
+    return (
+      <div className="page-container">
+        <PaymentHistorySkeleton />
+      </div>
+    );
   }
 
   return (
-    <div className="page-container">
-      {/* HEADER */}
+    <div className="page-container bg-app min-h-screen">
+      {/* PAGE TITLE */}
       <PageTitle>Rent Payment History</PageTitle>
 
-      {/* SUMMARY */}
+      {/* SUMMARY CARD */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="mb-8 p-6 rounded-3xl bg-white/50 backdrop-blur-xl shadow-xl border border-green-100"
+        className="
+          mb-8 p-6 rounded-3xl
+          bg-white/80 backdrop-blur-xl
+          shadow-md border border-gray-200
+        "
       >
-        <h3 className="text-2xl font-bold text-green-800 mb-4">Summary</h3>
+        <h3 className="text-2xl font-bold text-primaryDark mb-4">Summary</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Total Paid */}
-          <div className="p-4 rounded-xl bg-green-50 border border-green-200 shadow">
-            <p className="text-sm text-green-700">Total Months Paid</p>
-            <p className="text-2xl font-bold text-green-900">{totalPaid}</p>
+          {/* Total Months Paid */}
+          <div className="p-4 rounded-xl bg-primaryLight border border-primary/30 shadow-sm">
+            <p className="text-sm text-primaryDark">Total Months Paid</p>
+            <p className="text-2xl font-bold text-primaryDark">{totalPaid}</p>
           </div>
 
-          {/* Total Amount */}
-          <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 shadow">
+          {/* Total Amount Received */}
+          <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 shadow-sm">
             <p className="text-sm text-blue-700">Total Amount Received</p>
             <p className="text-2xl font-bold text-blue-900">
               ₹{totalAmountPaid}
@@ -60,7 +209,7 @@ export default function LandlordPaymentHistory() {
           </div>
 
           {/* Next Due */}
-          <div className="p-4 rounded-xl bg-yellow-50 border border-yellow-200 shadow">
+          <div className="p-4 rounded-xl bg-yellow-50 border border-yellow-200 shadow-sm">
             <p className="text-sm text-yellow-700">Next Expected Rent</p>
             <p className="text-xl font-semibold text-yellow-900">
               {nextDue ? nextDue.month : "No Pending Rent"}
@@ -75,51 +224,46 @@ export default function LandlordPaymentHistory() {
         </div>
       </motion.div>
 
-      {/* RECORD LIST */}
-      <div className="space-y-5">
+      {/* PAYMENT RECORDS LIST */}
+      <div className="space-y-6">
         {records.map((rent, index) => (
           <motion.div
             key={rent._id}
             {...cardAnim(index)}
-            className={`p-5 rounded-2xl shadow-lg backdrop-blur-xl bg-white/60 border transition-all hover:shadow-2xl
-              ${
-                rent.status === "paid"
-                  ? "border-green-300"
-                  : "border-yellow-300"
-              }
-            `}
+            className="
+              p-5 rounded-2xl
+              bg-white/80 backdrop-blur-xl
+              shadow-md hover:shadow-lg
+              border border-gray-200 transition
+            "
           >
             <div className="flex justify-between items-center">
-              {/* LEFT */}
+              {/* LEFT DETAILS */}
               <div>
-                <p className="text-xl font-semibold text-green-900">
+                <p className="text-xl font-semibold text-primaryDark">
                   {rent.month}
                 </p>
-                <p className="text-green-700 text-lg font-medium">
-                  ₹{rent.amount}
-                </p>
+
+                <p className="text-primary text-lg font-bold">₹{rent.amount}</p>
 
                 {rent.paidAt && (
-                  <p className="text-xs text-green-800 mt-1">
+                  <p className="text-xs text-grayText mt-1">
                     Paid on {new Date(rent.paidAt).toLocaleDateString()}
                   </p>
                 )}
 
-                <p className="text-xs text-gray-600 mt-1">
+                <p className="text-xs text-grayText mt-1">
                   Tenant:{" "}
-                  <span className="font-semibold text-green-900">
+                  <span className="font-semibold text-primaryDark">
                     {rent.tenantId?.name}
                   </span>
                 </p>
               </div>
 
-              {/* RIGHT — STATUS BADGE */}
+              {/* RIGHT STATUS BADGE */}
               <span
-                className={`px-4 py-1 flex items-center gap-1.5 font-medium text-xs rounded-full border 
-                ${
-                  rent.status === "paid"
-                    ? "bg-green-50 text-green-700 border-green-300"
-                    : "bg-yellow-50 text-yellow-700 border-yellow-300"
+                className={`badge ${
+                  rent.status === "paid" ? "badge-success" : "badge-warning"
                 }`}
               >
                 {rent.status.toUpperCase()}
@@ -129,8 +273,9 @@ export default function LandlordPaymentHistory() {
         ))}
       </div>
 
+      {/* EMPTY STATE */}
       {records.length === 0 && (
-        <p className="mt-10 text-center text-gray-600">
+        <p className="mt-10 text-center text-grayText">
           No payment records available.
         </p>
       )}
