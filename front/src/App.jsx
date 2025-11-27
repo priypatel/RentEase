@@ -18,6 +18,7 @@ import AddProperty from "./pages/AddProperty";
 import MyProperties from "./pages/MyProperties";
 import ProfilePage from "./pages/ProfilePage";
 import PropertyDetailsPage from "./pages/PropertyDetailsPage";
+import TenantPropertyDetails from "./pages/tenant/TenantPropertyDetails";
 import ScrollToTop from "./components/ScrollToTop";
 import RentalStatusPage from "./pages/tenant/RentalStatusPage";
 import TenantPropertiesPage from "./pages/tenant/TenantPropertiesPage";
@@ -57,8 +58,8 @@ function App() {
           }
         >
           {/* Tenant Routes */}
-          <Route path="tenant/dashboard" element={<TenantDashboardContent />} />
-          <Route path="tenant/profile" element={<ProfilePage />} />
+          {/* <Route path="tenant/dashboard" element={<TenantDashboardContent />} /> */}
+          {/* <Route path="tenant/profile" element={<ProfilePage />} />
           <Route path="tenant/property/:id" element={<PropertyDetailsPage />} />
           <Route
             path="tenant/rental-status/:id"
@@ -74,7 +75,7 @@ function App() {
           />
           <Route path="tenant/deposit/:id" element={<TenantDepositPage />} />
           <Route path="tenant/payments" element={<Payments />} />
-          <Route path="tenant/payments/:id" element={<PaymentHistory />} />
+          <Route path="tenant/payments/:id" element={<PaymentHistory />} /> */}
 
           {/* Landlord Routes */}
           <Route
@@ -104,6 +105,88 @@ function App() {
           <Route path="add-property" element={<AddProperty />} />
           <Route path="edit-property/:id" element={<AddProperty />} />
         </Route>
+
+        {/* Tenant Routes (NO DASHBOARD LAYOUT) */}
+        {/* <Route
+          path="/tenant/dashboard"
+          element={
+            <ProtectedRoute>
+              <TenantDashboardContent />
+            </ProtectedRoute>
+          }
+        /> */}
+
+        <Route
+          path="/tenant/available-properties"
+          element={
+            <ProtectedRoute>
+              <AvailableProperties />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tenant/property/:id"
+          element={
+            <ProtectedRoute>
+              <TenantPropertyDetails />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tenant/my-properties"
+          element={
+            <ProtectedRoute>
+              <TenantPropertiesPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tenant/rental-status/:id"
+          element={
+            <ProtectedRoute>
+              <RentalStatusPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tenant/payments"
+          element={
+            <ProtectedRoute>
+              <Payments />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tenant/payments/:id"
+          element={
+            <ProtectedRoute>
+              <PaymentHistory />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tenant/deposit/:id"
+          element={
+            <ProtectedRoute>
+              <TenantDepositPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/tenant/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

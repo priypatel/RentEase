@@ -24,7 +24,8 @@ export default function DashboardSidebarMobile({
   const { user } = useSelector((state) => state.auth) || {};
   const role = user?.role;
 
-  const nav = role === "landlord" ? landlordNav : tenantNav;
+  const nav = role === "landlord" ? landlordNav : [];
+  if (role === "tenant") return null;
 
   const isActive = (to) =>
     location.pathname === to || location.pathname.startsWith(to + "/");
