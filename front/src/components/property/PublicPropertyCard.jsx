@@ -5,17 +5,12 @@ import { useSelector } from "react-redux";
 
 export default function PublicPropertyCard({ property, index }) {
   const navigate = useNavigate();
-
-  // GET USER (if logged in)
   const user = useSelector((state) => state.auth.user);
 
-  // HANDLE VIEW CLICK
   const handleView = () => {
     if (!user) {
       return navigate(`/login?redirect=/property/${property._id}`);
     }
-
-    // If user logged in → redirect based on role
     navigate(`/${user.role}/property/${property._id}`);
   };
 
@@ -25,46 +20,41 @@ export default function PublicPropertyCard({ property, index }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
       whileHover={{ scale: 1.02 }}
-      className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
+      className="card overflow-hidden"
     >
       {/* IMAGE */}
       <img
         src={property.images?.[0]?.url}
         alt={property.title}
-        className="w-full h-44 object-cover rounded-t-2xl"
+        className="card-image"
       />
 
       {/* CONTENT */}
-      <div className="p-5">
-        <h2 className="text-xl font-semibold text-gray-900">
-          {property.title}
-        </h2>
+      <div className="card-body">
+        {/* Title */}
+        <h2 className="card-title">{property.title}</h2>
+        <p className="card-subtitle">{property.location}</p>
 
-        <p className="text-gray-600 mt-1">{property.location}</p>
-
-        <p className="text-green-700 font-bold mt-2 text-lg">
+        {/* Rent */}
+        <p className="text-[#2ECC71] font-semibold text-lg mt-2">
           ₹{property.rent}/month
         </p>
 
-        {/* STATUS + VIEW BUTTON */}
+        {/* Status + View Button */}
         <div className="flex justify-between items-center mt-4">
           <span
-            className={`px-4 py-1 text-xs font-medium rounded-full border 
-            ${
+            className={`badge ${
               property.status === "available"
-                ? "bg-green-50 text-green-700 border-green-300"
+                ? "badge-success"
                 : property.status === "rented"
-                ? "bg-red-50 text-red-700 border-red-300"
-                : "bg-yellow-50 text-yellow-700 border-yellow-300"
+                ? "badge-danger"
+                : "badge-warning"
             }`}
           >
-            {property.status?.toUpperCase()}
+            {property.status.toUpperCase()}
           </span>
 
-          <button
-            onClick={handleView}
-            className="px-4 py-1 text-xs font-medium rounded-full glass-btn-blue flex items-center gap-1.5"
-          >
+          <button onClick={handleView} className="btn-neutral">
             <svg
               className="w-4 h-4"
               fill="none"
