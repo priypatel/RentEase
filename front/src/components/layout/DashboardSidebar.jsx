@@ -19,7 +19,8 @@ export default function DashboardSidebar({ collapsed, setCollapsed }) {
   const role = user?.role;
 
   // 🟠 CHOOSE MENU BASED ON ROLE
-  const nav = role === "landlord" ? landlordNav : tenantNav;
+  const nav = role === "landlord" ? landlordNav : [];
+  if (role === "tenant") return null;
 
   const isActive = (to) =>
     location.pathname === to || location.pathname.startsWith(to + "/");

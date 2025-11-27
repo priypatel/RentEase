@@ -64,7 +64,7 @@ export default function Login() {
       }
 
       // ⭐ DEFAULT REDIRECT TO DASHBOARD
-      if (user.role === "tenant") navigate("/tenant/dashboard");
+      if (user.role === "tenant") navigate("/");
       else if (user.role === "landlord") navigate("/landlord/dashboard");
 
       resetForm();
