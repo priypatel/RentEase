@@ -57,26 +57,6 @@ function App() {
             </ProtectedRoute>
           }
         >
-          {/* Tenant Routes */}
-          {/* <Route path="tenant/dashboard" element={<TenantDashboardContent />} /> */}
-          {/* <Route path="tenant/profile" element={<ProfilePage />} />
-          <Route path="tenant/property/:id" element={<PropertyDetailsPage />} />
-          <Route
-            path="tenant/rental-status/:id"
-            element={<RentalStatusPage />}
-          />
-          <Route
-            path="tenant/available-properties"
-            element={<AvailableProperties />}
-          />
-          <Route
-            path="tenant/my-properties"
-            element={<TenantPropertiesPage />}
-          />
-          <Route path="tenant/deposit/:id" element={<TenantDepositPage />} />
-          <Route path="tenant/payments" element={<Payments />} />
-          <Route path="tenant/payments/:id" element={<PaymentHistory />} /> */}
-
           {/* Landlord Routes */}
           <Route
             path="landlord/dashboard"
@@ -107,14 +87,6 @@ function App() {
         </Route>
 
         {/* Tenant Routes (NO DASHBOARD LAYOUT) */}
-        {/* <Route
-          path="/tenant/dashboard"
-          element={
-            <ProtectedRoute>
-              <TenantDashboardContent />
-            </ProtectedRoute>
-          }
-        /> */}
 
         <Route
           path="/tenant/available-properties"
