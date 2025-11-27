@@ -35,9 +35,9 @@ import Home from "./pages/Home";
 
 function App() {
   return (
-    <div className="bg-app">
-      <BrowserRouter>
-        <ScrollToTop />
+    <BrowserRouter>
+      <ScrollToTop />
+      <div className="bg-app min-h-screen">
         <Routes>
           <Route path="/" element={<Home />} />
 
@@ -161,8 +161,8 @@ function App() {
             }
           />
         </Routes>
-      </BrowserRouter>
-    </div>
+      </div>
+    </BrowserRouter>
   );
 }
 
