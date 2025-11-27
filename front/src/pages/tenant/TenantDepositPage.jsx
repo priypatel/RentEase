@@ -8,7 +8,8 @@ import {
 } from "../../services/paymentService";
 import { toast } from "react-toastify";
 
-// ⭐ SAME header/footer you use everywhere
+import { Home, MapPin, IndianRupee } from "lucide-react";
+
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
@@ -29,6 +30,8 @@ export default function TenantDepositPage() {
 
   const depositAmount =
     singleRequest.depositAmount || singleRequest.propertyId.rent * 2;
+
+  const property = singleRequest.propertyId;
   const tenant = singleRequest.tenantId;
 
   const handleDepositPayment = async () => {
@@ -38,13 +41,10 @@ export default function TenantDepositPage() {
         singleRequest._id,
         tenant._id,
         singleRequest.landlordId,
-        singleRequest.propertyId._id
+        property._id
       );
 
-      if (!data.success) {
-        toast.error("Unable to initiate payment");
-        return;
-      }
+      if (!data.success) return toast.error("Unable to initiate payment");
 
       openRazorpayPopup(data.orderId, depositAmount);
     } catch (error) {
@@ -60,20 +60,15 @@ export default function TenantDepositPage() {
       currency: "INR",
       name: "RentEase",
       description: "Deposit Payment",
-      theme: { color: "#00b894" },
+      theme: { color: "#2ECC71" },
 
       handler: async function (response) {
         const res = await verifyPayment(response);
-
         if (res.data.success) {
           toast.success("Deposit Paid Successfully!");
-
           dispatch(fetchRentalRequest(id));
-
           navigate(`/tenant/rental-status/${id}`);
-        } else {
-          toast.error("Payment verification failed");
-        }
+        } else toast.error("Payment verification failed");
       },
 
       prefill: {
@@ -88,44 +83,53 @@ export default function TenantDepositPage() {
 
   return (
     <>
-      {/* ⭐ SAME TENANT HEADER */}
       <Header />
 
-      <div className="page-container min-h-screen">
-        <div className="max-w-3xl mx-auto glass-card p-6 rounded-2xl shadow-lg">
-          <h1 className="text-3xl font-bold text-green-900 text-center mb-6">
-            Deposit Payment
-          </h1>
+      <div className="page-container min-h-screen bg-app">
+        {/* Main Card (Matches Property Details UI) */}
+        <div className="max-w-3xl mx-auto bg-white/80 backdrop-blur-xl p-8 rounded-2xl border border-gray-200 shadow-md hover:shadow-lg transition">
+          {/* Title Row With Icon */}
+          <div className="flex items-center gap-3 text-primary mb-6">
+            <Home className="w-7 h-7" />
+            <h1 className="text-3xl font-bold">Deposit Payment</h1>
+          </div>
 
           {/* Property Preview */}
           <img
-            src={singleRequest.propertyId.images?.[0]?.url || ""}
+            src={property.images?.[0]?.url || ""}
             className="w-full h-56 object-cover rounded-xl"
           />
 
-          <div className="mt-5">
-            <h2 className="text-xl font-semibold text-green-900">
-              {singleRequest.propertyId.title}
+          {/* Property Details Section */}
+          <div className="mt-5 space-y-2">
+            <h2 className="text-xl font-semibold text-primaryDark flex items-center gap-2">
+              <Home className="w-5 h-5" />
+              {property.title}
             </h2>
-            <p className="text-gray-700">{singleRequest.propertyId.location}</p>
 
-            <p className="text-green-700 font-bold mt-2">
-              Deposit Amount: ₹{depositAmount}
+            <p className="text-grayText flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-primary" />
+              {property.location}
+            </p>
+
+            <p className="text-primary font-bold text-xl flex items-center gap-1">
+              <IndianRupee className="w-5 h-5" />
+              {depositAmount}
             </p>
           </div>
 
-          {/* Payment + Back Buttons */}
+          {/* Payment Buttons */}
           <div className="flex justify-between gap-4 mt-6">
             <button
               onClick={handleDepositPayment}
-              className="flex-1 py-3 rounded-full glass-btn-blue text-sm font-medium"
+              className="flex-1 py-3 rounded-xl btn-primary text-sm font-medium"
             >
               Pay Deposit
             </button>
 
             <button
               onClick={() => navigate(`/tenant/rental-status/${id}`)}
-              className="flex-1 py-3 rounded-full glass-btn-green text-sm font-medium"
+              className="flex-1 py-3 rounded-xl btn-neutral text-sm font-medium"
             >
               Back to Status
             </button>
@@ -133,7 +137,6 @@ export default function TenantDepositPage() {
         </div>
       </div>
 
-      {/* ⭐ SAME TENANT FOOTER */}
       <Footer />
     </>
   );

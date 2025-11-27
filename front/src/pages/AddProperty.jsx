@@ -189,7 +189,7 @@ export default function AddProperty() {
   // UI (Option C Theme)
   // -------------------------------
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-green-50 to-green-100 page-container">
+    <div className="min-h-screen bg-app page-container">
       <motion.div
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
@@ -382,13 +382,13 @@ export default function AddProperty() {
             type="submit"
             disabled={creating || updating}
             className="
-              glass-btn-green 
-              w-full py-3 rounded-xl 
-              text-sm font-semibold text-green-900
-              shadow-md hover:shadow-lg 
-              transition-all active:scale-95
-              disabled:opacity-50 disabled:cursor-not-allowed
-            "
+    btn-primary
+    w-full py-3 rounded-xl 
+    text-sm font-semibold
+    shadow-md hover:shadow-lg 
+    transition-all active:scale-95
+    disabled:opacity-50 disabled:cursor-not-allowed
+  "
           >
             {id
               ? updating
