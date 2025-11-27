@@ -54,9 +54,11 @@ export default function Header() {
       "
     >
       {/* Logo */}
-      <h1 className="text-2xl font-semibold tracking-tight">
-        Rent<span className="text-[#2ECC71]">Ease</span>
-      </h1>
+      <Link to="/">
+        <h1 className="text-2xl font-semibold tracking-tight">
+          Rent<span className="text-[#2ECC71]">Ease</span>
+        </h1>
+      </Link>
 
       {/* NAVIGATION (Tenant Only) */}
       {user?.role === "tenant" && (
