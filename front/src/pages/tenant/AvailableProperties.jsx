@@ -10,6 +10,7 @@ import PropertyCard from "../../components/property/PropertyCard";
 import SkeletonCard from "../../components/common/SkeletonCard";
 import { cardAnim } from "../../components/common/cardAnim";
 import PageTitle from "../../components/common/PageTitle";
+import { SlidersHorizontal } from "lucide-react";
 
 export default function AvailableProperties() {
   const dispatch = useDispatch();
@@ -46,14 +47,16 @@ export default function AvailableProperties() {
 
           <button
             onClick={() => setShowFilter(true)}
-            className="flex items-center gap-2 
-              px-5 py-2.5 rounded-xl 
-              glass-btn-green
-              text-green-900 font-medium
-              shadow-md hover:shadow-lg 
-              transition-all active:scale-95
-            "
+            className="
+    flex items-center gap-2 
+    px-5 py-2.5 rounded-xl
+    btn-primary
+    text-sm font-semibold
+    shadow-md hover:shadow-lg 
+    transition-all active:scale-95
+  "
           >
+            <SlidersHorizontal className="w-4 h-4" />
             Filters
           </button>
         </div>
