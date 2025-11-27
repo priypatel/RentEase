@@ -110,32 +110,32 @@ export default function Header() {
   return (
     <>
       {/* HEADER */}
-      <header
-        className="
-          w-[92%] mx-auto mt-6
+      <div className="w-[92%] mx-auto pt-6">
+        <header
+          className="
           backdrop-blur-md bg-white/70
           border border-white/40 shadow-sm
           rounded-2xl px-6 py-4
           flex justify-between items-center
         "
-      >
-        {/* Logo */}
-        <Link to="/" onClick={() => setOpen(false)}>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            Rent<span className="text-[#2ECC71]">Ease</span>
-          </h1>
-        </Link>
+        >
+          {/* Logo */}
+          <Link to="/" onClick={() => setOpen(false)}>
+            <h1 className="text-2xl font-semibold tracking-tight">
+              Rent<span className="text-[#2ECC71]">Ease</span>
+            </h1>
+          </Link>
 
-        {/* --- Desktop Navigation (Tenant Only) --- */}
-        {user?.role === "tenant" && (
-          <nav className="hidden md:flex gap-2">
-            {tenantNav
-              .filter((item) => item.name !== "Dashboard")
-              .map((item) => (
-                <Link
-                  key={item.to}
-                  to={item.to}
-                  className={`
+          {/* --- Desktop Navigation (Tenant Only) --- */}
+          {user?.role === "tenant" && (
+            <nav className="hidden md:flex gap-2">
+              {tenantNav
+                .filter((item) => item.name !== "Dashboard")
+                .map((item) => (
+                  <Link
+                    key={item.to}
+                    to={item.to}
+                    className={`
                     px-4 py-2 rounded-xl font-medium transition
                     ${
                       isActive(item.to)
@@ -143,58 +143,59 @@ export default function Header() {
                         : "text-[#1A3C34] hover:bg-[#e9fff2] hover:text-[#27ae60]"
                     }
                   `}
-                >
-                  {item.name}
-                </Link>
-              ))}
-          </nav>
-        )}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+            </nav>
+          )}
 
-        {/* Desktop Buttons */}
-        <div className="hidden md:flex gap-4">
-          {!user ? (
-            <>
-              <Link
-                to="/login"
-                className="
+          {/* Desktop Buttons */}
+          <div className="hidden md:flex gap-4">
+            {!user ? (
+              <>
+                <Link
+                  to="/login"
+                  className="
                   px-5 py-2 rounded-xl bg-[#2ECC71] text-white
                   hover:bg-[#27ae60] transition
                 "
-              >
-                Login
-              </Link>
+                >
+                  Login
+                </Link>
 
-              <Link
-                to="/register"
-                className="
+                <Link
+                  to="/register"
+                  className="
                   px-5 py-2 rounded-xl border border-[#2ECC71] text-[#2ECC71]
                   hover:bg-[#e9fff2] transition
                 "
-              >
-                Register
-              </Link>
-            </>
-          ) : (
-            <Link
-              to={`/${user.role}/profile`}
-              className="
+                >
+                  Register
+                </Link>
+              </>
+            ) : (
+              <Link
+                to={`/${user.role}/profile`}
+                className="
                 px-5 py-2 rounded-xl bg-[#2ECC71] text-white
                 hover:bg-[#27ae60] transition
               "
-            >
-              Profile
-            </Link>
-          )}
-        </div>
+              >
+                Profile
+              </Link>
+            )}
+          </div>
 
-        {/* --- Mobile Hamburger Button --- */}
-        <button
-          className="md:hidden text-3xl text-[#1A3C34]"
-          onClick={() => setOpen(!open)}
-        >
-          {open ? <HiX /> : <HiMenu />}
-        </button>
-      </header>
+          {/* --- Mobile Hamburger Button --- */}
+          <button
+            className="md:hidden text-3xl text-[#1A3C34]"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <HiX /> : <HiMenu />}
+          </button>
+        </header>
+      </div>
 
       {/* --- MOBILE MENU (Dropdown) --- */}
       {open && (
