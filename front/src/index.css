@@ -73,6 +73,10 @@
   .fade-card {
     @apply rounded-3xl bg-white/40 backdrop-blur-xl border border-white/40 shadow-lg hover:shadow-2xl transition-all;
   }
+  /* 🌿 Global soft-mint background for all pages */
+  .bg-app {
+    @apply bg-gradient-to-br from-[#E7FFF3] via-[#F6FFF9] to-[#DFFFEA];
+  }
 }
 @keyframes fadeIn {
   from {

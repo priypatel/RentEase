@@ -28,7 +28,7 @@ export default function Payments() {
     return (
       <>
         <Header />
-        <section className="px-6 md:px-12 lg:px-20 py-12 bg-[#F7FFF9] min-h-screen">
+        <section className="px-6 md:px-12 lg:px-20 py-12 min-h-screen">
           <div className="space-y-6">
             {Array.from({ length: 4 }).map((_, i) => (
               <PaymentSkeletonCard key={i} />
@@ -45,7 +45,7 @@ export default function Payments() {
       <Header />
 
       {/* MAIN SECTION */}
-      <section className="px-6 md:px-12 lg:px-20 py-12 bg-[#F7FFF9] min-h-screen">
+      <section className="px-6 md:px-12 lg:px-20 py-12 min-h-screen">
         <PageTitle>Payments</PageTitle>
 
         <div className="grid gap-7">

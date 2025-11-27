@@ -105,7 +105,7 @@ export default function PaymentHistory() {
     return (
       <>
         <Header />
-        <section className="px-6 md:px-12 lg:px-20 py-12 bg-[#F7FFF9] min-h-screen">
+        <section className="px-6 md:px-12 lg:px-20 py-12  min-h-screen">
           <PaymentHistorySkeleton />
         </section>
         <Footer />
@@ -125,7 +125,7 @@ export default function PaymentHistory() {
       <Header />
 
       {/* MAIN PAYMENT HISTORY SECTION */}
-      <section className="px-6 md:px-12 lg:px-20 py-12 bg-[#F7FFF9] min-h-screen">
+      <section className="px-6 md:px-12 lg:px-20 py-12 min-h-screen">
         <PageTitle>Rent Payment History</PageTitle>
 
         {/* SUMMARY CARD */}

@@ -75,7 +75,7 @@ export default function RentalStatusPage() {
     <>
       <Header />
 
-      <section className="px-6 md:px-12 lg:px-20 py-12 bg-[#F7FFF9] min-h-screen">
+      <section className="px-6 md:px-12 lg:px-20 py-12 min-h-screen">
         <div className="max-w-4xl mx-auto">
           {/* TITLE */}
           <motion.h1

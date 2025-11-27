@@ -37,7 +37,7 @@ export default function TenantPropertiesPage() {
       <Header />
 
       {/* MAIN CONTENT */}
-      <section className="px-6 md:px-12 lg:px-20 py-12 bg-[#F7FFF9] min-h-screen">
+      <section className="px-6 md:px-12 lg:px-20 py-12 min-h-screen">
         <PageTitle>My Rental Properties</PageTitle>
 
         <div className="grid gap-7">
