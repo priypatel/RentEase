@@ -1,28 +1,43 @@
 import React, { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from "react-redux";
+
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import PublicPropertyCard from "../components/property/PublicPropertyCard";
+
+import { getAllProperties } from "../redux/slices/propertySlice"; // ✔ use existing redux
 
 export default function Home() {
   const parallaxRef = useRef(null);
+  const dispatch = useDispatch();
 
-  // Parallax scroll effect
+  // properties from redux
+  const { items: properties, loading } = useSelector(
+    (state) => state.properties
+  );
+
+  // Load ALL properties (same API your dashboard uses)
+  useEffect(() => {
+    dispatch(getAllProperties());
+  }, [dispatch]);
+
+  // Parallax effect
   useEffect(() => {
     const el = parallaxRef.current;
     if (!el) return;
 
     let frame = null;
-    function onScroll() {
+    const onScroll = () => {
       if (frame) return;
       frame = requestAnimationFrame(() => {
-        const y = window.scrollY;
-        el.style.setProperty("--scroll-y", `${y}px`);
+        el.style.setProperty("--scroll-y", `${window.scrollY}px`);
         frame = null;
       });
-    }
+    };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("scroll", onScroll);
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -32,10 +47,10 @@ export default function Home() {
       ref={parallaxRef}
       className="min-h-screen flex flex-col bg-gradient-to-br from-[#E7FFF3] via-[#F6FFF9] to-[#DFFFEA] text-[#1A3C34]"
     >
-      {/* ---------------- CLEAN ORIGINAL HEADER ---------------- */}
+      {/* ---------------- HEADER ---------------- */}
       <Header />
 
-      {/* ---------------- MODERN HERO WITH WAVE + FLOATING SHAPES ---------------- */}
+      {/* ---------------- HERO SECTION ---------------- */}
       <section
         className="
           relative overflow-hidden 
@@ -45,15 +60,17 @@ export default function Home() {
           bg-gradient-to-br from-[#E7FFF3] via-[#F6FFF9] to-[#DFFFEA]
         "
       >
-        {/* Floating parallax blurred shapes */}
+        {/* Floating shapes */}
         <div
           className="absolute left-10 top-6 w-36 h-36 rounded-full blur-3xl bg-[#2ECC71]/20"
           style={{ transform: "translateY(calc(var(--scroll-y) * -0.03px))" }}
         />
+
         <div
           className="absolute right-10 bottom-10 w-44 h-44 rounded-full blur-3xl bg-[#27AE60]/20"
           style={{ transform: "translateY(calc(var(--scroll-y) * 0.04px))" }}
         />
+
         <div
           className="absolute left-1/3 top-36 w-28 h-28 rounded-full blur-2xl bg-[#A2F5C3]/30"
           style={{ transform: "translateY(calc(var(--scroll-y) * -0.02px))" }}
@@ -104,7 +121,7 @@ export default function Home() {
             transition={{ duration: 0.7 }}
             className="relative w-full md:w-1/2 flex justify-center"
           >
-            {/* Soft glow */}
+            {/* Glow */}
             <div
               className="absolute w-80 h-80 rounded-full -z-10 blur-3xl bg-[#2ECC71]/30"
               style={{
@@ -112,20 +129,18 @@ export default function Home() {
               }}
             />
 
+            {/* Glass card image */}
             <div className="rounded-3xl overflow-hidden shadow-xl border border-white/40 bg-white/80 backdrop-blur-sm max-w-md w-full">
               <img
                 src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=900&q=80"
                 alt="Property"
                 className="object-cover w-full h-64"
-                style={{
-                  transform: "translateY(calc(var(--scroll-y) * -0.1px))",
-                }}
               />
             </div>
           </motion.div>
         </div>
 
-        {/* -------- WAVE SVG -------- */}
+        {/* Wave */}
         <div className="mt-16">
           <svg
             viewBox="0 0 1440 120"
@@ -138,6 +153,33 @@ export default function Home() {
             />
           </svg>
         </div>
+      </section>
+
+      {/* ---------------- PROPERTY LIST USING REDUX ---------------- */}
+      <section className="py-16 bg-white px-6 lg:px-20">
+        <h3 className="text-3xl font-semibold text-center mb-12">
+          Explore Latest Properties
+        </h3>
+
+        {loading ? (
+          <p className="text-center text-gray-500">Loading properties…</p>
+        ) : (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+            {properties.map((property, i) => (
+              <PublicPropertyCard
+                key={property._id}
+                property={property}
+                index={i}
+              />
+            ))}
+
+            {properties.length === 0 && (
+              <p className="col-span-full text-center text-gray-500">
+                No properties available.
+              </p>
+            )}
+          </div>
+        )}
       </section>
 
       {/* ---------------- FEATURES SECTION ---------------- */}
@@ -176,7 +218,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------------- FOOTER ---------------- */}
       <Footer />
     </div>
   );
