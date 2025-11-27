@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { AlertTriangle } from "lucide-react"; // header icon
+import { AlertTriangle } from "lucide-react";
 
 export default function ConfirmModal({
   show,
@@ -12,52 +12,32 @@ export default function ConfirmModal({
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50">
+    <div className="modal">
       <motion.div
-        initial={{ opacity: 0, y: -30, scale: 0.95 }}
+        initial={{ opacity: 0, y: -20, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: -20, scale: 0.95 }}
         transition={{ duration: 0.25, ease: "easeOut" }}
-        className="
-          bg-green-50 
-          rounded-2xl 
-          shadow-[0_6px_20px_rgba(0,0,0,0.12)]
-          p-6 
-          w-full max-w-sm 
-          border border-green-200
-        "
+        className="modal-content"
       >
-        {/* Header with Icon */}
-        <div className="flex items-center gap-3">
-          <AlertTriangle className="w-6 h-6 text-green-700" />
-          <h2 className="text-xl font-semibold text-gray-900">
-            Confirm Action
-          </h2>
+        {/* Header */}
+        <div className="flex items-center gap-3 mb-2">
+          <AlertTriangle className="w-6 h-6 text-danger" />
+          <h2 className="modal-title m-0">Confirm Action</h2>
         </div>
 
-        <p className="text-gray-700 mt-2">{message}</p>
+        {/* Message */}
+        <p className="text-gray-700">{message}</p>
 
-        {/* Buttons */}
-        <div className="flex justify-end gap-3 mt-6">
-          {/* Cancel Button */}
-          <button
-            onClick={onClose}
-            className="
-              px-5 py-2.5 text-sm font-medium rounded-full
-              glass-btn-green
-            "
-          >
+        {/* Actions */}
+        <div className="modal-actions">
+          {/* Cancel */}
+          <button onClick={onClose} className="btn-neutral">
             Cancel
           </button>
 
-          {/* Confirm Button */}
-          <button
-            onClick={onConfirm}
-            className="
-              px-5 py-2.5 text-sm font-medium rounded-full
-              glass-btn-red
-            "
-          >
+          {/* Confirm */}
+          <button onClick={onConfirm} className="btn-danger">
             {confirmText}
           </button>
         </div>

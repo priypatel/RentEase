@@ -14,7 +14,6 @@ export default function PropertyCard({ property, index }) {
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  // DELETE PROPERTY
   const confirmDelete = async () => {
     try {
       await dispatch(deleteProperty(property._id)).unwrap();
@@ -33,51 +32,47 @@ export default function PropertyCard({ property, index }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.05 }}
         whileHover={{ scale: 1.02 }}
-        className="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden"
+        className="card overflow-hidden"
       >
         {/* IMAGE */}
         <img
           src={property.images?.[0]?.url}
           alt={property.title}
-          className="w-full h-44 object-cover rounded-t-2xl"
+          className="card-image"
         />
 
         {/* CONTENT */}
-        <div className="p-5">
-          <h2 className="text-xl font-semibold text-gray-900">
-            {property.title}
-          </h2>
+        <div className="card-body">
+          {/* Title */}
+          <h2 className="card-title">{property.title}</h2>
+          <p className="card-subtitle">{property.location}</p>
 
-          <p className="text-gray-600 mt-1">{property.location}</p>
-
-          <p className="text-green-700 font-bold mt-2 text-lg">
+          {/* Rent */}
+          <p className="text-[#2ECC71] font-semibold text-lg mt-2">
             ₹{property.rent}/month
           </p>
 
-          {/* ACTION BUTTONS */}
+          {/* Status + View Button */}
           <div className="flex justify-between items-center mt-4">
-            {/* STATUS TAG */}
             <span
-              className={`px-4 py-1 flex items-center gap-1.5 font-medium text-xs rounded-full border 
-      ${
-        property.status === "available"
-          ? "bg-green-50 text-green-700 border-green-300"
-          : property.status === "rented"
-          ? "bg-red-50 text-red-700 border-red-300"
-          : "bg-yellow-50 text-yellow-700 border-yellow-300"
-      }`}
+              className={`badge ${
+                property.status === "available"
+                  ? "badge-success"
+                  : property.status === "rented"
+                  ? "badge-danger"
+                  : "badge-warning"
+              }`}
             >
-              {property.status?.toUpperCase()}
+              {property.status.toUpperCase()}
             </span>
 
-            {/* VIEW PAGE BUTTON */}
             <button
               onClick={() => navigate(`/${user.role}/property/${property._id}`)}
-              className="px-4 py-1 flex items-center gap-1.5 text-xs font-medium rounded-full glass-btn-blue"
+              className="btn-neutral"
             >
               <svg
-                className="w-4 h-4"
                 fill="none"
+                className="w-4 h-4"
                 stroke="currentColor"
                 strokeWidth="2"
                 viewBox="0 0 24 24"
@@ -89,20 +84,19 @@ export default function PropertyCard({ property, index }) {
             </button>
           </div>
 
-          {/* LANDLORD CONTROLS */}
+          {/* Landlord Buttons */}
           {user?.role === "landlord" && (
-            <div className="flex justify-between items-center mt-3">
+            <div className="flex justify-between items-center mt-4">
               <button
                 onClick={() => navigate(`/edit-property/${property._id}`)}
-                className="px-4 py-1.5 text-xs font-medium rounded-full flex items-center gap-1.5 glass-btn-green"
+                className="btn-secondary"
               >
                 Edit
               </button>
 
               <button
                 onClick={() => setShowDeleteModal(true)}
-                // className="px-4 py-1.5 text-xs rounded-full bg-red-50 text-red-600 border border-red-300"
-                className="px-4 py-1.5 text-xs font-medium rounded-full flex items-center gap-1.5 glass-btn-red"
+                className="btn-danger"
               >
                 Delete
               </button>
@@ -111,7 +105,7 @@ export default function PropertyCard({ property, index }) {
         </div>
       </motion.div>
 
-      {/* CONFIRM DELETE POPUP */}
+      {/* Delete Confirmation */}
       <ConfirmModal
         show={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}

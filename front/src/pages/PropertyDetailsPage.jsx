@@ -2,22 +2,26 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+
 import { getAllProperties } from "../redux/slices/propertySlice";
 import {
   createRentalRequest,
-  checkRentalRequest, // ✅ NEW API
+  checkRentalRequest,
 } from "../redux/slices/rentalRequestSlice";
+
 import { toast } from "react-toastify";
 import ImagePreviewModal from "../components/common/ImagePreviewModal";
 import ConfirmModal from "../components/common/ConfirmModal";
 
+import { MapPin, IndianRupee, Home } from "lucide-react";
+
 export default function PropertyDetailsPage() {
-  const { id } = useParams(); // propertyId
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { items, loading } = useSelector((state) => state.properties);
-  const { check } = useSelector((state) => state.rentalRequest); // ✅ existing request check
+  const { check } = useSelector((state) => state.rentalRequest);
   const user = useSelector((state) => state.auth.user);
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -28,22 +32,19 @@ export default function PropertyDetailsPage() {
     window.scrollTo(0, 0);
   }, [id]);
 
-  // Load all properties on first mount
   useEffect(() => {
     if (!items.length) dispatch(getAllProperties());
   }, [dispatch, items.length]);
 
-  // NEW: Check if this tenant already sent a request
   useEffect(() => {
     if (user?.role === "tenant") {
-      dispatch(checkRentalRequest(id)); // propertyId
+      dispatch(checkRentalRequest(id));
     }
   }, [dispatch, id, user]);
 
   const property = items.find((p) => p._id === id);
   if (loading || !property) return <p className="p-6">Loading...</p>;
 
-  // ◼️ Handle confirm API call
   const handleRequestConfirm = async () => {
     try {
       const depositAmount = property.rent * 2;
@@ -58,8 +59,6 @@ export default function PropertyDetailsPage() {
       ).unwrap();
 
       toast.success("Request sent successfully!");
-
-      // Redirect to timeline page
       navigate(`/tenant/rental-status/${request._id}`);
     } catch (err) {
       toast.error(err || "Failed to send request");
@@ -70,9 +69,9 @@ export default function PropertyDetailsPage() {
 
   return (
     <div className="min-h-screen page-container">
-      <div className="max-w-5xl mx-auto">
-        {/* IMAGE SLIDER */}
-        <div className="w-full overflow-hidden rounded-xl mb-6">
+      <div className="max-w-5xl mx-auto space-y-10">
+        {/* ---------------------- IMAGE SLIDER ---------------------- */}
+        <div className="w-full overflow-hidden rounded-2xl shadow-lg">
           <div className="relative w-full">
             <motion.div
               className="flex w-full"
@@ -81,7 +80,7 @@ export default function PropertyDetailsPage() {
             >
               {property.images.map((img, i) => (
                 <div key={i} className="w-full flex-shrink-0">
-                  <div className="w-full aspect-[16/9] overflow-hidden rounded-xl">
+                  <div className="w-full aspect-[16/9] overflow-hidden rounded-2xl">
                     <img
                       src={img.url}
                       className="w-full h-full object-cover cursor-pointer"
@@ -96,7 +95,7 @@ export default function PropertyDetailsPage() {
             </motion.div>
 
             {/* Arrows */}
-            {property.images?.length > 1 && (
+            {property.images.length > 1 && (
               <>
                 <button
                   onClick={() =>
@@ -104,7 +103,7 @@ export default function PropertyDetailsPage() {
                       prev === 0 ? property.images.length - 1 : prev - 1
                     )
                   }
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 p-3 rounded-full shadow hover:scale-110 transition"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md p-3 rounded-full shadow hover:scale-110 transition"
                 >
                   ‹
                 </button>
@@ -115,7 +114,7 @@ export default function PropertyDetailsPage() {
                       prev === property.images.length - 1 ? 0 : prev + 1
                     )
                   }
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 p-3 rounded-full shadow hover:scale-110 transition"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md p-3 rounded-full shadow hover:scale-110 transition"
                 >
                   ›
                 </button>
@@ -124,108 +123,65 @@ export default function PropertyDetailsPage() {
           </div>
         </div>
 
-        {/* DETAILS */}
-        <h1 className="text-3xl font-bold">{property.title}</h1>
-        <p className="text-gray-600 mt-1 text-lg">📍 {property.location}</p>
-        <p className="text-green-700 font-bold text-xl mt-3">
-          ₹{property.rent}/month
-        </p>
+        {/* ---------------------- FULL DETAILS CARD ---------------------- */}
+        <div className="bg-white/80 backdrop-blur-xl p-8 rounded-2xl border border-gray-200 shadow-md hover:shadow-lg transition space-y-5">
+          <div className="flex items-center gap-3 text-primary">
+            <Home className="w-7 h-7" />
+            <h1 className="text-3xl font-bold">{property.title}</h1>
+          </div>
 
-        {/* Description */}
-        <h3 className="text-2xl font-semibold mt-8">Description</h3>
-        <p className="text-gray-700 mt-2 whitespace-pre-line">
-          {property.description}
-        </p>
+          <div className="flex items-center text-gray-700 text-lg gap-2">
+            <MapPin className="w-5 h-5 text-primary" />
+            {property.location}
+          </div>
 
-        {/* 🧩 RENT SECTION (Tenant Only) */}
-        {user?.role === "tenant" && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6"
+          <div className="flex items-center gap-2 text-primary font-bold text-2xl">
+            <IndianRupee className="w-5 h-5" />
+            {property.rent}/month
+          </div>
+
+          <span
+            className={`badge ${
+              property.status === "available" ? "badge-success" : "badge-danger"
+            }`}
           >
-            {/* LEFT — Landlord card */}
-            <div className="glass-card p-6 rounded-2xl border border-white/30 shadow-lg">
-              <h3 className="text-xl font-semibold text-green-900">
-                Landlord Details
-              </h3>
+            {property.status.toUpperCase()}
+          </span>
 
-              <p className="mt-2 text-gray-700">
-                <strong>Name:</strong> {property.ownerId?.name}
-              </p>
-              <p className="mt-1 text-gray-700">
-                <strong>Email:</strong> {property.ownerId?.email}
-              </p>
-              <p className="mt-1 text-gray-700">
-                <strong>Phone:</strong> {property.ownerId?.phone}
-              </p>
-
-              <div className="mt-5 p-3 rounded-xl bg-green-100 border border-green-300">
-                <p className="text-green-900 font-medium">
-                  Deposit Amount: <strong>₹{property.rent * 2}</strong>
+          {/* Basic Property Info */}
+          {property.bedrooms || property.size ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 text-gray-700 mt-4">
+              {property.bedrooms && (
+                <p>
+                  <strong>Bedrooms:</strong> {property.bedrooms}
                 </p>
-              </div>
-            </div>
-
-            {/* RIGHT — Request section */}
-            <div className="glass-card p-6 rounded-2xl border border-white/30 shadow-lg bg-green-50/50">
-              <h3 className="text-lg font-semibold text-green-800">
-                Rent this Property
-              </h3>
-
-              {/* CONDITIONAL BUTTONS */}
-              {/* {check?.exists ? (
-                <button
-                  onClick={() =>
-                    navigate(`/tenant/rental-status/${check.data._id}`, {
-                      replace: true,
-                    })
-                  }
-                  className="w-full mt-4 px-5 py-2.5 rounded-full text-sm glass-btn-blue flex items-center justify-center gap-2"
-                >
-                  View Request Status
-                </button>
-              ) : (
-                <button
-                  onClick={() => setShowConfirm(true)}
-                  className="w-full mt-4 px-5 py-2.5 rounded-full text-sm glass-btn-blue flex items-center justify-center gap-2"
-                >
-                  Request to Rent
-                </button>
-              )} */}
-              {/* CONDITIONAL BUTTONS */}
-              {property.status === "rented" ? (
-                <button
-                  disabled
-                  className="w-full mt-4 px-5 py-2.5 rounded-full text-sm bg-gray-300 text-gray-600 cursor-not-allowed"
-                >
-                  Already Rented
-                </button>
-              ) : check?.exists ? (
-                <button
-                  onClick={() =>
-                    navigate(`/tenant/rental-status/${check.data._id}`, {
-                      replace: true,
-                    })
-                  }
-                  className="w-full mt-4 px-5 py-2.5 rounded-full text-sm glass-btn-blue flex items-center justify-center gap-2"
-                >
-                  View Request Status
-                </button>
-              ) : (
-                <button
-                  onClick={() => setShowConfirm(true)}
-                  className="w-full mt-4 px-5 py-2.5 rounded-full text-sm glass-btn-blue flex items-center justify-center gap-2"
-                >
-                  Request to Rent
-                </button>
+              )}
+              {property.bathrooms && (
+                <p>
+                  <strong>Bathrooms:</strong> {property.bathrooms}
+                </p>
+              )}
+              {property.size && (
+                <p>
+                  <strong>Size:</strong> {property.size} sq.ft
+                </p>
               )}
             </div>
-          </motion.div>
-        )}
+          ) : null}
+
+          {/* Description inside card */}
+          <div className="mt-4">
+            <h3 className="text-xl font-semibold text-primary mb-2">
+              Description
+            </h3>
+            <p className="text-gray-700 whitespace-pre-line leading-relaxed">
+              {property.description}
+            </p>
+          </div>
+        </div>
       </div>
 
-      {/* IMAGE PREVIEW MODAL */}
+      {/* MODALS */}
       <ImagePreviewModal
         show={showPreview}
         onClose={() => setShowPreview(false)}
@@ -234,7 +190,6 @@ export default function PropertyDetailsPage() {
         setIndex={setCurrentIndex}
       />
 
-      {/* CONFIRM REQUEST POPUP */}
       <ConfirmModal
         show={showConfirm}
         onClose={() => setShowConfirm(false)}
