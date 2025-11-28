@@ -11,7 +11,12 @@ export default function PropertyCard({ property, index }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.user);
-
+  const handleView = () => {
+    if (!user) {
+      return navigate(`/login?redirect=/property/${property._id}`);
+    }
+    navigate(`/${user.role}/property/${property._id}`);
+  };
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const confirmDelete = async () => {
@@ -76,7 +81,7 @@ export default function PropertyCard({ property, index }) {
             </span>
 
             <button
-              onClick={() => navigate(`/${user.role}/property/${property._id}`)}
+              onClick={handleView}
               className="btn-secondary px-4 py-1.5 text-sm"
             >
               View
