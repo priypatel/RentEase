@@ -29,8 +29,10 @@ export default function Header() {
               Rent<span className="text-[#2ECC71]">Ease</span>
             </h1>
           </Link>
-          {/* Public Navigation */}
-          <nav className="hidden md:flex gap-2 ml-6">
+
+          {/* CENTER NAV — Public + Tenant */}
+          <div className="hidden md:flex items-center gap-6 mx-auto">
+            {/* Public Link */}
             <Link
               to="/available-properties"
               className={`
@@ -38,37 +40,34 @@ export default function Header() {
       ${
         isActive("/available-properties")
           ? "bg-[#2ECC71] text-white shadow-sm"
-          : "text-[#1A3C34] hover:bg-[#e9fff2] hover:text-[#27ae60]"
+          : "text-[#2ECC71] hover:bg-[#e9fff2]"
       }
     `}
             >
               Available Properties
             </Link>
-          </nav>
 
-          {/* --- Desktop Navigation (Tenant Only) --- */}
-          {user?.role === "tenant" && (
-            <nav className="hidden md:flex gap-2">
-              {tenantNav
+            {/* Tenant Only Links */}
+            {user?.role === "tenant" &&
+              tenantNav
                 .filter((item) => item.name !== "Dashboard")
                 .map((item) => (
                   <Link
                     key={item.to}
                     to={item.to}
                     className={`
-                    px-4 py-2 rounded-xl font-medium transition
-                    ${
-                      isActive(item.to)
-                        ? "bg-[#2ECC71] text-white shadow-sm"
-                        : "text-[#1A3C34] hover:bg-[#e9fff2] hover:text-[#27ae60]"
-                    }
-                  `}
+            px-4 py-2 rounded-xl font-medium transition
+            ${
+              isActive(item.to)
+                ? "bg-[#2ECC71] text-white shadow-sm"
+                : "text-[#2ECC71] hover:bg-[#e9fff2]"
+            }
+          `}
                   >
                     {item.name}
                   </Link>
                 ))}
-            </nav>
-          )}
+          </div>
 
           {/* Desktop Buttons */}
           <div className="hidden md:flex gap-4">

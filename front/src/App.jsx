@@ -88,15 +88,19 @@ function App() {
           </Route>
 
           {/* Tenant Routes (NO DASHBOARD LAYOUT) */}
-
           <Route
+            path="/available-properties"
+            element={<AvailableProperties />}
+          />
+
+          {/* <Route
             path="/tenant/available-properties"
             element={
               <ProtectedRoute>
                 <AvailableProperties />
               </ProtectedRoute>
             }
-          />
+          /> */}
 
           <Route
             path="/tenant/property/:id"
