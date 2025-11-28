@@ -165,7 +165,7 @@ export default function Home() {
           <p className="text-center text-gray-500">Loading properties…</p>
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {properties.map((property, i) => (
+            {properties.slice(0, 6).map((property, i) => (
               <PublicPropertyCard
                 key={property._id}
                 property={property}
