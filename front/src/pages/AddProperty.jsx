@@ -26,6 +26,7 @@ export default function AddProperty() {
   // -------------------------------
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
+  const [city, setCity] = useState("");
   const [rent, setRent] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("available");
@@ -54,6 +55,7 @@ export default function AddProperty() {
 
       setTitle(p.title || "");
       setLocation(p.location || "");
+      setCity(p.city || "");
       setRent(p.rent || "");
       setDescription(p.description || "");
       setExistingImages(Array.isArray(p.images) ? p.images : []);
@@ -153,6 +155,7 @@ export default function AddProperty() {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("location", location);
+    formData.append("city", city);
     formData.append("rent", rent);
     formData.append("description", description || "");
     formData.append("status", status);
@@ -220,6 +223,16 @@ export default function AddProperty() {
               type="text"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
+              placeholder="Ahmedabad / Area"
+              className="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-300"
+            />
+          </div>
+          <div>
+            <label className="text-gray-700 font-semibold">City *</label>
+            <input
+              type="text"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
               placeholder="Ahmedabad / Area"
               className="w-full mt-1 p-3 rounded-xl border border-gray-300 bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-300"
             />

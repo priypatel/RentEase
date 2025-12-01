@@ -134,6 +134,10 @@ export default function PropertyDetailsPage() {
             <MapPin className="w-5 h-5 text-primary" />
             {property.location}
           </div>
+          <div className="flex items-center text-gray-700 text-lg gap-2">
+            <MapPin className="w-5 h-5 text-primary" />
+            {property.city}
+          </div>
 
           <div className="flex items-center gap-2 text-primary font-bold text-2xl">
             <IndianRupee className="w-5 h-5" />

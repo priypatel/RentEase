@@ -43,6 +43,10 @@ export default function PublicPropertyCard({ property, index }) {
           <MapPin className="w-4 h-4 text-primary" />
           <span>{property.location}</span>
         </div>
+        <div className="flex items-center gap-2 card-subtitle mt-1">
+          <MapPin className="w-4 h-4 text-primary" />
+          <span>{property.city}</span>
+        </div>
 
         {/* RENT */}
         <div className="flex items-center gap-1 text-primary font-semibold text-lg mt-2">

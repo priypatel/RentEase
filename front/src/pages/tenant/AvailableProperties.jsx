@@ -40,6 +40,7 @@ export default function AvailableProperties() {
       <Header />
 
       {/* MAIN CONTENT — PUBLIC LAYOUT */}
+
       <section className="px-6 md:px-12 lg:px-20 py-12">
         {/* Title + Filter Button */}
         <div className="flex items-center justify-between mb-6">
