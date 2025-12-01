@@ -6,10 +6,29 @@ import axiosInstance from "../../api/axiosInstance";
 // ==========================================
 export const getAllProperties = createAsyncThunk(
   "properties/getAllProperties",
-  async (_, { rejectWithValue }) => {
+  async ({ page = 1, limit = 6 } = {}, { rejectWithValue }) => {
     try {
-      const res = await axiosInstance.get("/properties");
-      return res.data.properties;
+      const res = await axiosInstance.get(
+        `/properties?page=${page}&limit=${limit}`
+      );
+      // return res.data.properties;
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message);
+    }
+  }
+);
+// ==========================================
+// SEARCH PROPERTIES (PUBLIC)
+// ==========================================
+export const searchProperties = createAsyncThunk(
+  "properties/searchProperties",
+  async ({ query, page, limit }, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get(
+        `/properties/search?query=${query}&page=${page}&limit=${limit}`
+      );
+      return res.data || res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message);
     }
@@ -75,20 +94,6 @@ export const deleteProperty = createAsyncThunk(
     }
   }
 );
-// ==========================================
-// SEARCH PROPERTIES (PUBLIC)
-// ==========================================
-export const searchProperties = createAsyncThunk(
-  "properties/searchProperties",
-  async (query, { rejectWithValue }) => {
-    try {
-      const res = await axiosInstance.get(`/properties/search?query=${query}`);
-      return res.data.properties || res.data.results;
-    } catch (err) {
-      return rejectWithValue(err.response?.data?.message);
-    }
-  }
-);
 
 // ==========================================
 // SLICE
@@ -97,6 +102,7 @@ const propertySlice = createSlice({
   name: "properties",
   initialState: {
     items: [],
+    pagination: null,
     loading: false,
     creating: false,
     updating: false,
@@ -117,7 +123,8 @@ const propertySlice = createSlice({
       })
       .addCase(getAllProperties.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload;
+        state.items = action.payload.properties;
+        state.pagination = action.payload.pagination;
       })
       .addCase(getAllProperties.rejected, (state) => {
         state.loading = false;
@@ -194,7 +201,8 @@ const propertySlice = createSlice({
       })
       .addCase(searchProperties.fulfilled, (state, action) => {
         state.loading = false;
-        state.items = action.payload; // override list with search results
+        state.items = action.payload.properties; // override list with search results
+        state.pagination = action.payload.pagination;
       })
       .addCase(searchProperties.rejected, (state) => {
         state.loading = false;
