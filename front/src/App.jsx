@@ -1,37 +1,41 @@
 import { Routes, Route, BrowserRouter, Navigate } from "react-router-dom";
 import "./index.css";
 
-import DashboardLayout from "./components/layout/DashboardLayout";
-
-// DASHBOARD PAGES
+// COMPONENT PAGES
 import TenantDashboardContent from "./pages/dashboard/TenantDashboardContent";
 import LandlordDashboardContent from "./pages/dashboard/LandlordDashboardContent";
+import ScrollToTop from "./components/ScrollToTop";
+import DashboardLayout from "./components/layout/DashboardLayout";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // COMMON PAGES
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
-import ProtectedRoute from "./components/ProtectedRoute";
+import Home from "./pages/Home";
 
-import AddProperty from "./pages/AddProperty";
+// LANDLORD PAGES
+
+import AddProperty from "./pages/landlord/AddProperty";
+import Requests from "./pages/landlord/Requests";
 import MyProperties from "./pages/MyProperties";
 import ProfilePage from "./pages/ProfilePage";
 import PropertyDetailsPage from "./pages/PropertyDetailsPage";
-import TenantPropertyDetails from "./pages/tenant/TenantPropertyDetails";
-import ScrollToTop from "./components/ScrollToTop";
-import RentalStatusPage from "./pages/tenant/RentalStatusPage";
-import TenantPropertiesPage from "./pages/tenant/TenantPropertiesPage";
-import Requests from "./pages/landlord/Requests";
 import Deposits from "./pages/landlord/Deposits";
-import TenantDepositPage from "./pages/tenant/TenantDepositPage";
-import Payments from "./pages/tenant/Payments";
-import PaymentHistory from "./pages/tenant/PaymentHistory";
 import LandlordPropertyPayments from "./pages/landlord/LandlordPropertyPayments";
 import LandlordPaymentHistory from "./pages/landlord/LandlordPaymentHistory";
 import TenantsPage from "./pages/landlord/TenantsPage";
+
+// TENANT PAGES
+
+import TenantPropertyDetails from "./pages/tenant/TenantPropertyDetails";
+import RentalStatusPage from "./pages/tenant/RentalStatusPage";
+import TenantPropertiesPage from "./pages/tenant/TenantPropertiesPage";
+import TenantDepositPage from "./pages/tenant/TenantDepositPage";
+import Payments from "./pages/tenant/Payments";
+import PaymentHistory from "./pages/tenant/PaymentHistory";
 import AvailableProperties from "./pages/tenant/AvailableProperties";
-import Home from "./pages/Home";
 
 function App() {
   return (
@@ -47,9 +51,7 @@ function App() {
           {/* Password */}
           <Route path="/reset-password/:token" element={<ResetPassword />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          {/* ============================================
-           UNIFIED LAYOUT FOR BOTH ROLES
-        ============================================ */}
+
           <Route
             path="/"
             element={
