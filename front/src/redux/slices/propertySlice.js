@@ -75,6 +75,20 @@ export const deleteProperty = createAsyncThunk(
     }
   }
 );
+// ==========================================
+// SEARCH PROPERTIES (PUBLIC)
+// ==========================================
+export const searchProperties = createAsyncThunk(
+  "properties/searchProperties",
+  async (query, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get(`/properties/search?query=${query}`);
+      return res.data.properties || res.data.results;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message);
+    }
+  }
+);
 
 // ==========================================
 // SLICE
@@ -170,6 +184,20 @@ const propertySlice = createSlice({
       })
       .addCase(deleteProperty.rejected, (state) => {
         state.deleting = false;
+      });
+    // ==========================================
+    // SEARCH
+    // ==========================================
+    builder
+      .addCase(searchProperties.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(searchProperties.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload; // override list with search results
+      })
+      .addCase(searchProperties.rejected, (state) => {
+        state.loading = false;
       });
   },
 });
