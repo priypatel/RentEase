@@ -133,6 +133,10 @@ export default function TenantPropertyDetailsPage() {
               <MapPin className="w-5 h-5 text-primary" />
               {property.location}
             </p>
+            <p className="text-gray-700 text-lg flex items-center gap-2">
+              <MapPin className="w-5 h-5 text-primary" />
+              {property.city}
+            </p>
 
             <p className="text-primary font-bold text-2xl flex items-center gap-1">
               <IndianRupee className="w-5 h-5" />
