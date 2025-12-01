@@ -8,7 +8,7 @@ import {
   createProperty,
   updateProperty,
   getMyProperties,
-} from "../redux/slices/propertySlice";
+} from "../../redux/slices/propertySlice";
 
 export default function AddProperty() {
   const dispatch = useDispatch();
