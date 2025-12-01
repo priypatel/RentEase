@@ -5,6 +5,7 @@ import {
   getPropertyById,
   updateProperty,
   deleteProperty,
+  searchProperties,
 } from "../../controllers/propertyController.js";
 import upload from "../../middleware/upload.js";
 import { verifyToken, verifyRole } from "../../middleware/authMiddleware.js";
@@ -17,14 +18,14 @@ router.post(
   verifyToken,
   verifyRole("landlord"),
   // upload.array("images"),
-  upload.array("images",10),
+  upload.array("images", 10),
   createProperty
 );
 router.put(
   "/:id",
   verifyToken,
   verifyRole("landlord"),
-  upload.array("images",10),
+  upload.array("images", 10),
   updateProperty
 );
 
@@ -37,6 +38,7 @@ router.get(
 );
 
 // THEN PUBLIC ROUTES
+router.get("/search", searchProperties);
 router.get("/", getProperties);
 router.get("/:id", getPropertyById);
 

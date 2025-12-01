@@ -65,6 +65,51 @@ export const getProperties = async (req, res) => {
   }
 };
 
+export const searchProperties = async (req, res) => {
+  try {
+    const { query, city, status, minRent, maxRent } = req.query;
+
+    let filter = {};
+
+    // 🔍 Text search for title & location (case-insensitive)
+    if (query) {
+      filter.$or = [
+        { title: { $regex: query, $options: "i" } },
+        { location: { $regex: query, $options: "i" } },
+        { city: { $regex: query, $options: "i" } },
+      ];
+    }
+
+    // 🏙️ Filter by city
+    if (city) {
+      filter.city = { $regex: city, $options: "i" };
+    }
+
+    // 📌 Filter by status
+    if (status) {
+      filter.status = status;
+    }
+
+    // 💰 Rent filter
+    if (minRent || maxRent) {
+      filter.rent = {};
+      if (minRent) filter.rent.$gte = Number(minRent);
+      if (maxRent) filter.rent.$lte = Number(maxRent);
+    }
+
+    const properties = await Property.find(filter)
+      .populate("ownerId", "name email phone")
+      .sort({ createdAt: -1 });
+
+    res.json({ results: properties.length, properties });
+  } catch (err) {
+    res.status(500).json({
+      message: "Failed to search properties",
+      error: err.message,
+    });
+  }
+};
+
 // Get one property
 export const getPropertyById = async (req, res) => {
   try {
