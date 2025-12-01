@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "../components/common/Header";
+import Footer from "../components/common/Footer";
 import PublicPropertyCard from "../components/property/PublicPropertyCard";
 
 import { getAllProperties } from "../redux/slices/propertySlice"; // ✔ use existing redux

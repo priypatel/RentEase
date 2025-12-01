@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { User, Phone, Mail, LogOut } from "lucide-react";
 import ConfirmModal from "../components/common/ConfirmModal";
 import { toast } from "react-toastify";
-import Header from "../components/Header";
+import Header from "../components/common/Header";
 export default function ProfilePage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
