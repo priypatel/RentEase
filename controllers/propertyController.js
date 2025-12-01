@@ -5,7 +5,8 @@ import fs from "fs";
 
 export const createProperty = async (req, res) => {
   try {
-    const { title, description, location, rent, tenants, status } = req.body;
+    const { title, description, location, city, rent, tenants, status } =
+      req.body;
 
     if (!title || !location || !rent) {
       return res.status(400).json({
@@ -29,6 +30,7 @@ export const createProperty = async (req, res) => {
       title,
       description,
       location,
+      city,
       rent,
       status: status || "available",
       ownerId: req.user.id,
@@ -159,6 +161,7 @@ export const updateProperty = async (req, res) => {
     property.location = req.body.location || property.location;
     property.rent = req.body.rent || property.rent;
     property.description = req.body.description || property.description;
+    property.city = req.body.city || property.city;
     // ⭐ NEW: Update status
     if (req.body.status) {
       property.status = req.body.status;

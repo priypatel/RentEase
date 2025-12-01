@@ -5,6 +5,7 @@ const propertySchema = new mongoose.Schema(
     title: { type: String, required: true, trim: true },
     description: { type: String, default: "" },
     location: { type: String, required: true, trim: true },
+    city: { type: String, required: true, trim: true },
     rent: { type: Number, required: true },
     // 🔹 Property Status (New Field)
     status: {
