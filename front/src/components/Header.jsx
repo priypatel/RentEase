@@ -24,10 +24,13 @@ export default function Header() {
         "
         >
           {/* Logo */}
-          <Link to="/" onClick={() => setOpen(false)}>
+          {/* <Link to="/" onClick={() => setOpen(false)}>
             <h1 className="text-2xl font-semibold tracking-tight">
               Rent<span className="text-[#2ECC71]">Ease</span>
             </h1>
+          </Link> */}
+          <Link to="/" onClick={() => setOpen(false)}>
+            <img src="/logo.png" alt="logo" className="h-10 w-auto" />
           </Link>
 
           {/* CENTER NAV — Public + Tenant */}
