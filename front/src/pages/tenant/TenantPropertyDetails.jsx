@@ -14,8 +14,8 @@ import { toast } from "react-toastify";
 import ImagePreviewModal from "../../components/common/ImagePreviewModal";
 import ConfirmModal from "../../components/common/ConfirmModal";
 
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+import Header from "../../components/common/Header";
+import Footer from "../../components/common/Footer";
 
 export default function TenantPropertyDetailsPage() {
   const { id } = useParams();

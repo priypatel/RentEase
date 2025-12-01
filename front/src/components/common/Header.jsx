@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { tenantNav } from "../config/navConfig";
+import { tenantNav } from "../../config/navConfig";
 import { HiMenu, HiX } from "react-icons/hi";
 
 export default function Header() {

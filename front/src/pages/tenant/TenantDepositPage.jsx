@@ -10,8 +10,8 @@ import { toast } from "react-toastify";
 
 import { Home, MapPin, IndianRupee } from "lucide-react";
 
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+import Header from "../../components/common/Header";
+import Footer from "../../components/common/Footer";
 
 export default function TenantDepositPage() {
   const { id } = useParams();
