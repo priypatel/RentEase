@@ -9,6 +9,7 @@ import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
 import ForgotPassword from "./pages/ForgotPassword";
 import ProfilePage from "./pages/ProfilePage";
+import Todo from "./pages/Todo";
 
 // LANDLORD
 import DashboardLayout from "./components/layout/DashboardLayout";
@@ -39,6 +40,7 @@ const appRoutes = [
   { path: "/register", element: <Register /> },
   { path: "/reset-password/:token", element: <ResetPassword /> },
   { path: "/forgot-password", element: <ForgotPassword /> },
+  { path: "/todo", element: <Todo /> },
 
   // Landlord (Protected + Dashboard Layout)
   {
