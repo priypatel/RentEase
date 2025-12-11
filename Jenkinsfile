@@ -15,5 +15,13 @@ pipeline {
                 }
             }
         }
+                stage('Build') {
+            steps {
+                dir('front') {
+                    sh 'npm run build'
+                }
+            }
+        }
+
     }
 }
