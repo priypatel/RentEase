@@ -1,80 +1,80 @@
-// import React, { useState } from "react";
+import React, { useState } from "react";
 
-// const Todo = () => {
-//   const [todos, setTodos] = useState([]);
-//   const [newTodo, setNewTodo] = useState("");
-//   const [editId, setEditId] = useState(null);
-//   const [editText, setEditText] = useState("");
+const Todo = () => {
+  const [todos, setTodos] = useState([]);
+  const [newTodo, setNewTodo] = useState("");
+  const [editId, setEditId] = useState(null);
+  const [editText, setEditText] = useState("");
 
-//   const handleAddTodo = () => {
-//     if (!newTodo.trim()) return;
+  const handleAddTodo = () => {
+    if (!newTodo.trim()) return;
 
-//     const newItem = {
-//       id: Date.now(),
-//       text: newTodo,
-//     };
-//     setNewTodo([...todos, newItem]);
-//     setNewTodo("");
-//   };
-//   const handleDeleteTodo = (id) => {
-//     setTodos(todos.filter((item) => item.id !== id));
-//   };
-//   const handleEditTodo = (id, text) => {
-//     setEditId(id);
-//     setEditText(text);
-//   };
+    const newItem = {
+      id: Date.now(),
+      text: newTodo,
+    };
+    setNewTodo([...todos, newItem]);
+    setNewTodo("");
+  };
+  const handleDeleteTodo = (id) => {
+    setTodos(todos.filter((item) => item.id !== id));
+  };
+  const handleEditTodo = (id, text) => {
+    setEditId(id);
+    setEditText(text);
+  };
 
-//   const handleSaveEdit = (id) => {
-//     setTodos(
-//       todos.map((item) => (item.id === id ? { ...item, text: editText } : item))
-//     );
-//     setEditId(null);
-//     setEditText("");
-//   };
+  const handleSaveEdit = (id) => {
+    setTodos(
+      todos.map((item) => (item.id === id ? { ...item, text: editText } : item))
+    );
+    setEditId(null);
+    setEditText("");
+  };
 
-//   return (
-//     <>
-//       <div style={{ padding: 20 }}>
-//         <h1>Todo Page</h1>
-//         <div>
-//           <input
-//             type="text"
-//             value={newTodo}
-//             onChange={(e) => setNewTodo(e.target.value)}
-//             placeholder="Add new todo"
-//           />
-//           <button onClick={handleAddTodo}>Add</button>
-//         </div>
-//         <ul>
-//           {todos.map((item) => (
-//             <li key={item.id} style={{ marginBottom: 10 }}>
-//               {editId === item.id ? (
-//                 <>
-//                   <input
-//                     type="text"
-//                     value={editText}
-//                     onChange={(e) => setEditText(e.target.value)}
-//                   />
-//                   <button onClick={() => handleSaveEdit(item.id)}>Save</button>
-//                 </>
-//               ) : (
-//                 <>
-//                   {item.text}
-//                   <button onClick={() => handleEditTodo(item.id, item.text)}>
-//                     Edit
-//                   </button>
-//                   <button onClick={() => handleDeleteTodo(item.id)}>
-//                     Delete
-//                   </button>
-//                 </>
-//               )}
-//             </li>
-//           ))}
-//         </ul>
-//       </div>
-//     </>
-//   );
-// };
+  return (
+    <>
+      <div style={{ padding: 20 }}>
+        <h1>Todo Page</h1>
+        <div>
+          <input
+            type="text"
+            value={newTodo}
+            onChange={(e) => setNewTodo(e.target.value)}
+            placeholder="Add new todo"
+          />
+          <button onClick={handleAddTodo}>Add</button>
+        </div>
+        <ul>
+          {todos.map((item) => (
+            <li key={item.id} style={{ marginBottom: 10 }}>
+              {editId === item.id ? (
+                <>
+                  <input
+                    type="text"
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                  />
+                  <button onClick={() => handleSaveEdit(item.id)}>Save</button>
+                </>
+              ) : (
+                <>
+                  {item.text}
+                  <button onClick={() => handleEditTodo(item.id, item.text)}>
+                    Edit
+                  </button>
+                  <button onClick={() => handleDeleteTodo(item.id)}>
+                    Delete
+                  </button>
+                </>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </>
+  );
+};
 
 // export default Todo;
 
@@ -367,111 +367,111 @@
 // A clean quiz component with Next, Prev, and Submit functionality.
 // Perfect for interviews — simple logic, readable, predictable.
 
-import React, { useState } from "react";
+// import React, { useState } from "react";
 
-const questions = [
-  {
-    id: "q1",
-    text: "Which language runs in a web browser?",
-    choices: ["Java", "C", "Python", "JavaScript"],
-    correct: "JavaScript",
-  },
-  {
-    id: "q2",
-    text: "What does CSS stand for?",
-    choices: [
-      "Central Style Sheets",
-      "Cascading Style Sheets",
-      "Computer Style System",
-    ],
-    correct: "Cascading Style Sheets",
-  },
-  {
-    id: "q3",
-    text: "React is a ___ ?",
-    choices: ["Library", "Framework", "Language"],
-    correct: "Library",
-  },
-];
-// export default function Quiz({ questions }) {
-export default function Quiz() {
-  const [index, setIndex] = useState(0); // current question index
-  const [answers, setAnswers] = useState({}); // store user answers
-  const [score, setScore] = useState(null); // score after submit
+// const questions = [
+//   {
+//     id: "q1",
+//     text: "Which language runs in a web browser?",
+//     choices: ["Java", "C", "Python", "JavaScript"],
+//     correct: "JavaScript",
+//   },
+//   {
+//     id: "q2",
+//     text: "What does CSS stand for?",
+//     choices: [
+//       "Central Style Sheets",
+//       "Cascading Style Sheets",
+//       "Computer Style System",
+//     ],
+//     correct: "Cascading Style Sheets",
+//   },
+//   {
+//     id: "q3",
+//     text: "React is a ___ ?",
+//     choices: ["Library", "Framework", "Language"],
+//     correct: "Library",
+//   },
+// ];
+// // export default function Quiz({ questions }) {
+// export default function Quiz() {
+//   const [index, setIndex] = useState(0); // current question index
+//   const [answers, setAnswers] = useState({}); // store user answers
+//   const [score, setScore] = useState(null); // score after submit
 
-  // ---------------- HANDLE ANSWER SELECTION ----------------
-  function selectAnswer(choice) {
-    const qId = questions[index].id; // current question ID
-    setAnswers((prev) => ({ ...prev, [qId]: choice })); // store selected value
-  }
+//   // ---------------- HANDLE ANSWER SELECTION ----------------
+//   function selectAnswer(choice) {
+//     const qId = questions[index].id; // current question ID
+//     setAnswers((prev) => ({ ...prev, [qId]: choice })); // store selected value
+//   }
 
-  // ---------------- NAVIGATION ----------------
-  function next() {
-    setIndex((i) => Math.min(i + 1, questions.length - 1)); // safe next index
-  }
+//   // ---------------- NAVIGATION ----------------
+//   function next() {
+//     setIndex((i) => Math.min(i + 1, questions.length - 1)); // safe next index
+//   }
 
-  function prev() {
-    setIndex((i) => Math.max(i - 1, 0)); // safe previous index
-  }
+//   function prev() {
+//     setIndex((i) => Math.max(i - 1, 0)); // safe previous index
+//   }
 
-  // ---------------- FINAL SUBMIT ----------------
-  function submitQuiz() {
-    let marks = 0;
+//   // ---------------- FINAL SUBMIT ----------------
+//   function submitQuiz() {
+//     let marks = 0;
 
-    questions.forEach((q) => {
-      if (answers[q.id] === q.correct) marks++; // correct answer check
-    });
+//     questions.forEach((q) => {
+//       if (answers[q.id] === q.correct) marks++; // correct answer check
+//     });
 
-    setScore(marks); // set final score
-  }
+//     setScore(marks); // set final score
+//   }
 
-  // ---------------- SCORE SCREEN ----------------
-  if (score !== null) {
-    return (
-      <div>
-        <h2>
-          Your Score: {score}/{questions.length}
-        </h2>
-      </div>
-    );
-  }
+//   // ---------------- SCORE SCREEN ----------------
+//   if (score !== null) {
+//     return (
+//       <div>
+//         <h2>
+//           Your Score: {score}/{questions.length}
+//         </h2>
+//       </div>
+//     );
+//   }
 
-  // ---------------- CURRENT QUESTION ----------------
-  const q = questions[index];
+//   // ---------------- CURRENT QUESTION ----------------
+//   const q = questions[index];
 
-  return (
-    <div style={{ padding: 20 }}>
-      <h3>
-        Question {index + 1} / {questions.length}
-      </h3>
+//   return (
+//     <div style={{ padding: 20 }}>
+//       <h3>
+//         Question {index + 1} / {questions.length}
+//       </h3>
 
-      <p>{q.text}</p>
+//       <p>{q.text}</p>
 
-      {/* answer options */}
-      {q.choices.map((choice) => (
-        <label key={choice} style={{ display: "block", marginBottom: 8 }}>
-          <input
-            type="radio"
-            name={q.id}
-            checked={answers[q.id] === choice}
-            onChange={() => selectAnswer(choice)}
-          />{" "}
-          {choice}
-        </label>
-      ))}
+//       {/* answer options */}
+//       {q.choices.map((choice) => (
+//         <label key={choice} style={{ display: "block", marginBottom: 8 }}>
+//           <input
+//             type="radio"
+//             name={q.id}
+//             checked={answers[q.id] === choice}
+//             onChange={() => selectAnswer(choice)}
+//           />{" "}
+//           {choice}
+//         </label>
+//       ))}
 
-      {/* navigation buttons */}
-      <button onClick={prev} disabled={index === 0}>
-        Prev
-      </button>
-      <button onClick={next} disabled={index === questions.length - 1}>
-        Next
-      </button>
+//       {/* navigation buttons */}
+//       <button onClick={prev} disabled={index === 0}>
+//         Prev
+//       </button>
+//       <button onClick={next} disabled={index === questions.length - 1}>
+//         Next
+//       </button>
 
-      {/* submit button */}
-      <button onClick={submitQuiz} style={{ marginLeft: 10 }}>
-        Submit
-      </button>
-    </div>
-  );
-}
+//       {/* submit button */}
+//       <button onClick={submitQuiz} style={{ marginLeft: 10 }}>
+//         Submit
+//       </button>
+//     </div>
+//   );
+// }
