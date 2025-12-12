@@ -27,5 +27,13 @@ pipeline {
                 }
             }
         }
+        stage('Deploy Frontend') {
+            steps {
+                sh '''
+                    rm -rf /var/www/rentapp/*
+                    cp -R front/dist/* /var/www/rentapp/
+                '''
+            }
+        }
     }
 }
