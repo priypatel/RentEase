@@ -29,14 +29,16 @@ pipeline {
             }
         }
 
-        stage('Deploy Frontend') {
-            steps {
-                sh '''
-                    rm -rf /var/www/rentapp/*
-                    cp -R front/dist/* /var/www/rentapp/
-                '''
-            }
-        }
+     stage('Deploy Frontend') {
+    steps {
+        sh '''
+            sudo rm -rf /var/www/rentapp/*
+            sudo cp -R front/dist/* /var/www/rentapp/
+            sudo chown -R www-data:www-data /var/www/rentapp
+        '''
+    }
+}
+
 
     }
 }
