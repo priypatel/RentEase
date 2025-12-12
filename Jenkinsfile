@@ -2,13 +2,14 @@ pipeline {
     agent any
 
     options {
-        timeout(time: 10, unit: 'MINUTES')
+        timeout(time: 20, unit: 'MINUTES')
     }
 
     stages {
-        stage('Test') {
+
+        stage('Checkout') {
             steps {
-                echo "Jenkins pipeline is working"
+                git branch: 'front-end', url: 'git@github.com:priypatel/RentEase.git'
             }
         }
 
@@ -23,10 +24,11 @@ pipeline {
         stage('Build') {
             steps {
                 dir('front') {
-                    sh 'npm run build --max-old-space-size=256'
+                    sh 'npm run build'
                 }
             }
         }
+
         stage('Deploy Frontend') {
             steps {
                 sh '''
@@ -35,5 +37,6 @@ pipeline {
                 '''
             }
         }
+
     }
 }
