@@ -32,7 +32,7 @@ import RentalStatusPage from "./pages/tenant/RentalStatusPage";
 import Payments from "./pages/tenant/Payments";
 import PaymentHistory from "./pages/tenant/PaymentHistory";
 import TenantDepositPage from "./pages/tenant/TenantDepositPage";
-
+import Tailwind from "./pages/Tailwind";
 const appRoutes = [
   // Public
   { path: "/", element: <Home /> },
@@ -41,6 +41,7 @@ const appRoutes = [
   { path: "/reset-password/:token", element: <ResetPassword /> },
   { path: "/forgot-password", element: <ForgotPassword /> },
   { path: "/todo", element: <Todo /> },
+  { path: "/tailwind", element: <Tailwind /> },
 
   // Landlord (Protected + Dashboard Layout)
   {
