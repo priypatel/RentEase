@@ -18,10 +18,15 @@ export const createProperty = async (req, res) => {
 
     if (req.files?.length > 0) {
       uploadedImages = req.files.map((file) => ({
+        // url:
+        //   process.env.USE_CLOUDINARY === "true"
+        //     ? file.path
+        //     : `${process.env.BASE_URL}/uploads/properties/${file.filename}`,
         url:
           process.env.USE_CLOUDINARY === "true"
             ? file.path
-            : `${process.env.BASE_URL}/uploads/properties/${file.filename}`,
+            : `/uploads/properties/${file.filename}`,
+
         public_id: file.filename,
       }));
     }
@@ -218,10 +223,15 @@ export const updateProperty = async (req, res) => {
     // ------------------------------
     if (req.files?.length > 0) {
       const newImages = req.files.map((file) => ({
+        // url:
+        //   process.env.USE_CLOUDINARY === "true"
+        //     ? file.path
+        //     : `${process.env.BASE_URL}/uploads/properties/${file.filename}`,
         url:
           process.env.USE_CLOUDINARY === "true"
             ? file.path
-            : `${process.env.BASE_URL}/uploads/properties/${file.filename}`,
+            : `/uploads/properties/${file.filename}`,
+
         public_id: file.filename,
       }));
 
