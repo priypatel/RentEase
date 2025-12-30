@@ -29,7 +29,7 @@ export default function AvailableProperties() {
   const [priceRange, setPriceRange] = useState([0, 200000]);
   const [showFilter, setShowFilter] = useState(false);
   const [page, setPage] = useState(1);
-  const limit = 1;
+  const limit = 10;
 
   const [searchQuery, setSearchQuery] = useState("");
 

@@ -85,22 +85,22 @@ export default function PropertyDetailsPage() {
               {property.images.map((img, i) => (
                 <div key={i} className="w-full flex-shrink-0">
                   <div className="w-full aspect-[16/9] overflow-hidden rounded-2xl">
-                    {/* <img
+                    <img
                       src={img.url}
                       className="w-full h-full object-cover cursor-pointer"
                       onClick={() => {
                         setShowPreview(true);
                         setCurrentIndex(i);
                       }}
-                    /> */}
-                    <img
+                    />
+                    {/* <img
                       src={getImageUrl(img.url)}
                       className="w-full h-full object-cover cursor-pointer"
                       onClick={() => {
                         setShowPreview(true);
                         setCurrentIndex(i);
                       }}
-                    />
+                    /> */}
                   </div>
                 </div>
               ))}
