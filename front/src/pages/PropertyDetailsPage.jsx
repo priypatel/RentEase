@@ -66,6 +66,10 @@ export default function PropertyDetailsPage() {
       setShowConfirm(false);
     }
   };
+  const getImageUrl = (url) => {
+    if (!url) return "";
+    return url.replace("http://localhost:5005", "");
+  };
 
   return (
     <div className="min-h-screen page-container">
@@ -81,8 +85,16 @@ export default function PropertyDetailsPage() {
               {property.images.map((img, i) => (
                 <div key={i} className="w-full flex-shrink-0">
                   <div className="w-full aspect-[16/9] overflow-hidden rounded-2xl">
-                    <img
+                    {/* <img
                       src={img.url}
+                      className="w-full h-full object-cover cursor-pointer"
+                      onClick={() => {
+                        setShowPreview(true);
+                        setCurrentIndex(i);
+                      }}
+                    /> */}
+                    <img
+                      src={getImageUrl(img.url)}
                       className="w-full h-full object-cover cursor-pointer"
                       onClick={() => {
                         setShowPreview(true);
