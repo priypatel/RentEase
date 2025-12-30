@@ -7,7 +7,6 @@ export default function PaymentSuccessModal({
   amount,
   month,
   nextMonth,
-  onPrint,
 }) {
   return (
     <AnimatePresence>
@@ -19,38 +18,62 @@ export default function PaymentSuccessModal({
           exit={{ opacity: 0 }}
         >
           <motion.div
-            initial={{ scale: 0.7, opacity: 0 }}
+            initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.7, opacity: 0 }}
-            className="bg-white/60 backdrop-blur-xl rounded-2xl shadow-xl p-6 w-[90%] sm:w-[420px] border border-white/40 text-green-900"
+            exit={{ scale: 0.9, opacity: 0 }}
+            className="
+              w-[90%] sm:w-[440px]
+              bg-white
+              rounded-2xl
+              p-7
+              shadow-[0_16px_40px_rgba(0,0,0,0.12)]
+              text-slate-900
+            "
           >
-            <h2 className="text-2xl font-bold text-green-800 mb-3">
+            {/* TITLE */}
+            <h2 className="text-2xl font-bold text-center mb-6">
               Payment Successful 🎉
             </h2>
 
-            <div className="space-y-2 text-lg">
-              <p>
-                <b>Month Paid:</b> {month}
-              </p>
-              <p>
-                <b>Amount:</b> ₹{amount}
-              </p>
-              <p>
-                <b>Next Due:</b> {nextMonth}
-              </p>
+            {/* DETAILS */}
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between">
+                <span className="text-slate-500">Month Paid</span>
+                <span className="font-semibold">{month}</span>
+              </div>
+
+              <div className="flex justify-between">
+                <span className="text-slate-500">Amount</span>
+                <span className="font-semibold">₹{amount}</span>
+              </div>
+
+              {nextMonth && (
+                <div className="flex justify-between">
+                  <span className="text-slate-500">Next Due</span>
+                  <span className="font-semibold">{nextMonth}</span>
+                </div>
+              )}
             </div>
 
-            <div className="mt-6 flex flex-col gap-3">
-              <button
-                onClick={onPrint}
-                className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-xl shadow-lg transition"
-              >
-                Print / Download Receipt
-              </button>
+            {/* STATUS */}
+            <div className="flex justify-center mt-5">
+              <span className="px-4 py-1.5 rounded-full text-xs font-bold bg-green-100 text-green-700">
+                PAID
+              </span>
+            </div>
 
+            {/* CLOSE BUTTON */}
+            <div className="mt-7">
               <button
                 onClick={onClose}
-                className="w-full bg-white/40 border border-green-300 py-2 rounded-xl hover:bg-white/60 transition"
+                className="
+                  w-full
+                  py-3
+                  rounded-xl
+                  font-semibold
+                  text-white
+                  btn-primary
+                "
               >
                 Close
               </button>
