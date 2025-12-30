@@ -63,12 +63,18 @@ export default function TenantDepositPage() {
       theme: { color: "#2ECC71" },
 
       handler: async function (response) {
-        const res = await verifyPayment(response);
-        if (res.data.success) {
-          toast.success("Deposit Paid Successfully!");
-          dispatch(fetchRentalRequest(id));
-          navigate(`/tenant/rental-status/${id}`);
-        } else toast.error("Payment verification failed");
+        // const res = await verifyPayment(response);
+        // if (res.data.success) {
+        //   toast.success("Deposit Paid Successfully!");
+        //   dispatch(fetchRentalRequest(id));
+        //   navigate(`/tenant/rental-status/${id}`);
+        // } else toast.error("Payment verification failed");
+        try {
+          const res = await verifyPayment(response);
+          console.log("Verify response:", res.data);
+        } catch (err) {
+          console.error("Verify error:", err.response?.data || err);
+        }
       },
 
       prefill: {

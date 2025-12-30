@@ -70,137 +70,139 @@ export default function RentalStatusPage() {
 
   return (
     <>
-      <Header />
+      <div className="min-h-screen bg-app">
+        <Header />
 
-      <section className="px-6 md:px-12 lg:px-20 py-12 min-h-screen bg-app">
-        <div className="max-w-4xl mx-auto">
-          {/* PAGE TITLE */}
-          <motion.h1
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl font-bold text-primary text-center mb-8"
-          >
-            Rental Request Status
-          </motion.h1>
-
-          {/* PREVIOUS + NEXT BUTTONS */}
-          <div className="flex justify-between gap-4 mb-12">
-            <button
-              onClick={goPrevious}
-              disabled={step === 1}
-              className={`btn-neutral px-6 py-2 rounded-full ${
-                step === 1 ? "opacity-40 cursor-not-allowed" : ""
-              }`}
+        <section className="px-6 md:px-12 lg:px-20 py-12">
+          <div className="max-w-4xl mx-auto">
+            {/* PAGE TITLE */}
+            <motion.h1
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-4xl font-bold text-primary text-center mb-8"
             >
-              Previous Step
-            </button>
+              Rental Request Status
+            </motion.h1>
 
-            <button
-              onClick={goNext}
-              disabled={nextDisabled}
-              className={`btn-primary px-6 py-2 rounded-full ${
-                nextDisabled ? "opacity-40 cursor-not-allowed" : ""
-              }`}
-            >
-              Next Step
-            </button>
-          </div>
+            {/* PREVIOUS + NEXT BUTTONS */}
+            <div className="flex justify-between gap-4 mb-12">
+              <button
+                onClick={goPrevious}
+                disabled={step === 1}
+                className={`btn-neutral px-6 py-2 rounded-full ${
+                  step === 1 ? "opacity-40 cursor-not-allowed" : ""
+                }`}
+              >
+                Previous Step
+              </button>
 
-          {/* TIMELINE */}
-          <div className="relative mt-4 mb-14">
-            <div className="absolute top-[22px] left-0 w-full h-[3px] bg-primaryLight rounded-full"></div>
+              <button
+                onClick={goNext}
+                disabled={nextDisabled}
+                className={`btn-primary px-6 py-2 rounded-full ${
+                  nextDisabled ? "opacity-40 cursor-not-allowed" : ""
+                }`}
+              >
+                Next Step
+              </button>
+            </div>
 
-            <div className="grid grid-cols-4 relative z-10">
-              {steps.map((s, i) => {
-                const forcedActive =
-                  (s.id === 1 || s.id === 2) && backendStep === 1;
-                const isActive = forcedActive || step >= s.id;
+            {/* TIMELINE */}
+            <div className="relative mt-4 mb-14">
+              <div className="absolute top-[22px] left-0 w-full h-[3px] bg-primaryLight rounded-full"></div>
 
-                return (
-                  <motion.div
-                    key={s.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.15 }}
-                    className="flex flex-col items-center"
-                  >
-                    <div
-                      className={`w-12 h-12 flex items-center justify-center rounded-full border-[3px] transition-all
+              <div className="grid grid-cols-4 relative z-10">
+                {steps.map((s, i) => {
+                  const forcedActive =
+                    (s.id === 1 || s.id === 2) && backendStep === 1;
+                  const isActive = forcedActive || step >= s.id;
+
+                  return (
+                    <motion.div
+                      key={s.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.15 }}
+                      className="flex flex-col items-center"
+                    >
+                      <div
+                        className={`w-12 h-12 flex items-center justify-center rounded-full border-[3px] transition-all
                         ${
                           isActive
                             ? "bg-primary border-primaryDark text-white shadow-md scale-105"
                             : "bg-white border-primaryLight text-primary"
                         }`}
-                    >
-                      {s.id}
-                    </div>
+                      >
+                        {s.id}
+                      </div>
 
-                    <p
-                      className={`mt-3 text-sm font-semibold ${
-                        isActive ? "text-primaryDark" : "text-grayText"
-                      }`}
-                    >
-                      {s.label}
-                    </p>
-                  </motion.div>
-                );
-              })}
+                      <p
+                        className={`mt-3 text-sm font-semibold ${
+                          isActive ? "text-primaryDark" : "text-grayText"
+                        }`}
+                      >
+                        {s.label}
+                      </p>
+                    </motion.div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
 
-          {/* ⭐ UPDATED STATUS BOX (same as Property Details card) */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="
+            {/* ⭐ UPDATED STATUS BOX (same as Property Details card) */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="
               bg-white/80 backdrop-blur-xl 
               p-6 mt-6 rounded-2xl
               border border-gray-200
               shadow-md hover:shadow-lg
               transition
             "
-          >
-            {step === 1 && (
-              <p className="text-primaryDark font-medium text-lg">
-                Your rental request has been created.
-              </p>
-            )}
-
-            {step === 2 && (
-              <p className="text-primaryDark font-medium text-lg">
-                {backendStep === 1
-                  ? "Waiting for landlord approval..."
-                  : "✔ Landlord approved your request."}
-              </p>
-            )}
-
-            {step === 3 && (
-              <div>
+            >
+              {step === 1 && (
                 <p className="text-primaryDark font-medium text-lg">
-                  Please pay your deposit to continue.
+                  Your rental request has been created.
                 </p>
+              )}
 
-                <button
-                  onClick={() =>
-                    navigate(`/tenant/deposit/${singleRequest._id}`)
-                  }
-                  className="btn-primary mt-5 px-5 py-2.5 text-sm rounded-xl"
-                >
-                  Proceed to Deposit
-                </button>
-              </div>
-            )}
+              {step === 2 && (
+                <p className="text-primaryDark font-medium text-lg">
+                  {backendStep === 1
+                    ? "Waiting for landlord approval..."
+                    : "✔ Landlord approved your request."}
+                </p>
+              )}
 
-            {step === 4 && (
-              <p className="text-primaryDark font-medium text-lg">
-                Rent cycle started. Enjoy your stay!
-              </p>
-            )}
-          </motion.div>
-        </div>
-      </section>
+              {step === 3 && (
+                <div>
+                  <p className="text-primaryDark font-medium text-lg">
+                    Please pay your deposit to continue.
+                  </p>
 
-      <Footer />
+                  <button
+                    onClick={() =>
+                      navigate(`/tenant/deposit/${singleRequest._id}`)
+                    }
+                    className="btn-primary mt-5 px-5 py-2.5 text-sm rounded-xl"
+                  >
+                    Proceed to Deposit
+                  </button>
+                </div>
+              )}
+
+              {step === 4 && (
+                <p className="text-primaryDark font-medium text-lg">
+                  Rent cycle started. Enjoy your stay!
+                </p>
+              )}
+            </motion.div>
+          </div>
+        </section>
+
+        <Footer />
+      </div>
     </>
   );
 }
