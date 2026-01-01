@@ -49,7 +49,7 @@ export default function Home() {
             >
               {/* Badge: Custom border and text color */}
               <span className="inline-block py-1 px-3 rounded-full bg-white border border-[#2ECC71]/30 text-[#2ECC71] text-xs font-bold tracking-wider uppercase mb-6 shadow-sm">
-                ✨ The Smart Way to Rent home process
+                ✨ The Smart Way to Rent home
               </span>
 
               <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight leading-tight mb-6">
