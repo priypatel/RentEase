@@ -19,7 +19,7 @@ import { SlidersHorizontal } from "lucide-react";
 export default function AvailableProperties() {
   const dispatch = useDispatch();
   const { items, loading, pagination } = useSelector(
-    (state) => state.properties
+    (state) => state.properties,
   );
 
   // ⭐ FIX: always ensure items is an array
@@ -36,10 +36,10 @@ export default function AvailableProperties() {
   // Fetch when page/search changes
   useEffect(() => {
     const delay = setTimeout(() => {
-      if (searchQuery.trim() === "") {
-        dispatch(getAllProperties({ page, limit }));
-      } else {
+      if (searchQuery.trim().length > 0) {
         dispatch(searchProperties({ query: searchQuery, page, limit }));
+      } else {
+        dispatch(getAllProperties({ page, limit }));
       }
     }, 400);
 

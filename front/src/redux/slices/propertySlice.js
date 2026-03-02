@@ -9,14 +9,14 @@ export const getAllProperties = createAsyncThunk(
   async ({ page = 1, limit = 6 } = {}, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.get(
-        `/properties?page=${page}&limit=${limit}`
+        `/properties?page=${page}&limit=${limit}`,
       );
       // return res.data.properties;
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 // ==========================================
 // SEARCH PROPERTIES (PUBLIC)
@@ -26,13 +26,13 @@ export const searchProperties = createAsyncThunk(
   async ({ query, page, limit }, { rejectWithValue }) => {
     try {
       const res = await axiosInstance.get(
-        `/properties/search?query=${query}&page=${page}&limit=${limit}`
+        `/properties/search?query=${query}&page=${page}&limit=${limit}`,
       );
       return res.data || res.data;
     } catch (err) {
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 
 // ==========================================
@@ -47,7 +47,7 @@ export const getMyProperties = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 
 // ==========================================
@@ -62,7 +62,7 @@ export const createProperty = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 
 // ==========================================
@@ -77,7 +77,7 @@ export const updateProperty = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 
 // ==========================================
@@ -92,7 +92,7 @@ export const deleteProperty = createAsyncThunk(
     } catch (err) {
       return rejectWithValue(err.response?.data?.message);
     }
-  }
+  },
 );
 
 // ==========================================
@@ -119,7 +119,10 @@ const propertySlice = createSlice({
       // GET ALL PROPERTIES (TENANT)
       // ==========================================
       .addCase(getAllProperties.pending, (state) => {
-        state.loading = true;
+        // Show skeleton ONLY if no data exists yet
+        if (state.items.length === 0) {
+          state.loading = true;
+        }
       })
       .addCase(getAllProperties.fulfilled, (state, action) => {
         state.loading = false;
@@ -168,7 +171,7 @@ const propertySlice = createSlice({
         state.updating = false;
 
         const index = state.items.findIndex(
-          (p) => p._id === action.payload._id
+          (p) => p._id === action.payload._id,
         );
 
         if (index !== -1) {
@@ -196,8 +199,15 @@ const propertySlice = createSlice({
     // SEARCH
     // ==========================================
     builder
-      .addCase(searchProperties.pending, (state) => {
-        state.loading = true;
+      .addCase(searchProperties.pending, (state, action) => {
+        // If searching AND page=1 → new search → show skeleton
+        // If searching but page>1 (pagination) → keep previous results
+        const isNewSearch = action.meta.arg.page === 1;
+
+        if (isNewSearch) {
+          state.loading = true;
+          state.items = []; // clear only on new search (page=1)
+        }
       })
       .addCase(searchProperties.fulfilled, (state, action) => {
         state.loading = false;
