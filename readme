@@ -1,411 +1,116 @@
-RentEase — Property Management & Rental Platform
+# RentEase – Property Management System
 
-Stack: React, Node.js, Express, MongoDB, Cloudinary, JWT
+RentEase is a full-stack property management platform designed to help landlords and tenants manage rental properties efficiently.
+The platform provides tools for property listing, tenant management, rent tracking, and secure online payments in a centralized dashboard.
 
-Core Features:
+---
 
-Property listing with image uploads
+## 🚀 Features
 
-Tenant & landlord authentication
+* Property listing and management
+* Tenant management system
+* Multi-role access control (Admin / Landlord / Tenant)
+* Secure authentication using JWT
+* Online payment integration for **rent and security deposits**
+* Rental payment tracking and history
+* Responsive UI optimized for mobile and desktop
+* Dashboard for property and tenant overview
+* REST API based backend architecture
 
-Rent payment tracking and due alerts
+---
 
-Maintenance request management
+## 🏗️ Tech Stack
 
-Rating/review system
+**Frontend**
 
-Dashboard for both tenant & landlord
+* React
+* Tailwind CSS
+* React Router
 
+**Backend**
 
-We’ll cover:
+* Node.js
+* Express.js
 
-Overall Goal & Tech Stack
+**Database**
 
-Modules / Features Breakdown
+* MongoDB
 
-Architecture Plan
+**Authentication**
 
-Development Phases (with timeline)
+* JWT (JSON Web Token)
 
-Feature Priorities (MVP → Advanced)
+**Deployment**
 
-Tools, Libraries & Integrations
+* Vercel / Render 
 
-Time Estimate (realistic)
+---
 
-Resume Positioning
+## ⚙️ Installation
 
-🧠 1. Project Goal
+Clone the repository
 
-A full-stack platform for tenants and landlords to manage rental properties:
+```bash
+git clone https://github.com/priypatel/rentease.git
+```
 
-Landlords can list, manage, and track rent payments.
+Navigate into the project directory
 
-Tenants can browse, request, pay, and review.
+```bash
+cd rentease
+```
 
-Both have dashboards showing key info (payments, properties, requests, etc.).
+Install dependencies
 
-Tech Stack:
+```bash
+npm install
+```
 
-Frontend: React.js + Redux Toolkit + TailwindCSS
+Run the development server
 
-Backend: Node.js + Express.js
+```bash
+npm run dev
+```
 
-Database: MongoDB + Mongoose
+---
 
-Image Storage: Cloudinary
+## 🧩 System Architecture
 
-Auth: JWT + bcrypt
+Frontend (React)
+⬇
+Backend API (Node.js + Express)
+⬇
+Database (MongoDB)
 
-Payments (optional): Razorpay / Stripe (mocked in MVP)
+Authentication and role-based access are handled using **JWT tokens**.
 
-Deployment: Render (Backend) + Vercel (Frontend) + MongoDB Atlas (DB)
+---
 
+## 🔗 Live Demo
 
+https://rent-ease-631omnsgl-priys-projects-dd54a42a.vercel.app/
 
+---
 
+## 📂 Repository
 
+https://github.com/priypatel/rentease
 
+---
 
+## 📈 Future Improvements
 
+* Email notifications for rent reminders
+* Property analytics dashboard
+* Document upload for rental agreements
+* Maintenance request management
 
+---
 
+## 📬 Contact
 
+Priy Patel
+Full-Stack MERN Developer
 
-🗓 WEEK 1 — Core Setup & Authentication
-
-🎯 Goal: Finish full backend & frontend authentication (tenant/landlord roles).
-
-Day 1 – Setup & Environment
-
-Initialize backend → npm init, install:
-
-express mongoose cors dotenv bcryptjs jsonwebtoken multer cloudinary nodemon
-
-
-Create folder structure:
-
-/backend
-  /config (db, cloudinary)
-  /models
-  /routes
-  /controllers
-  server.js
-
-
-Connect to MongoDB Atlas.
-
-Test sample route /api/test.
-
-✅ Deliverable: Server running, MongoDB connected, one dummy GET route working.
-
-Day 2 – User Model & Auth Routes
-
-Create User model: { name, email, password, role: "tenant"|"landlord" }
-
-Implement:
-
-Register API (hash password)
-
-Login API (JWT return)
-
-Test using Postman.
-
-✅ Deliverable: JWT working and returning on login.
-
-Day 3 – Auth Middleware & Role Protection
-
-Create verifyToken middleware.
-
-Add verifyRole("tenant") / verifyRole("landlord") middleware.
-
-Test protected routes.
-
-✅ Deliverable: Role-based access verified via token.
-
-Day 4 – Frontend Setup (React)
-
-Create frontend → npx create-react-app frontend
-
-Install:
-
-axios react-router-dom reduxjs/toolkit react-redux react-toastify tailwindcss
-
-
-Setup Tailwind + folder structure.
-
-Add routing:
-
-/login
-/register
-/dashboard
-
-
-✅ Deliverable: React app bootstrapped with working routing.
-
-Day 5 – Auth UI + Redux
-
-Create Register/Login forms with validation (formik + yup).
-
-Connect to backend via axios.
-
-Store token + user info in Redux.
-
-Handle redirects after login.
-
-Add toast notifications.
-
-✅ Deliverable: Full authentication system functional end-to-end.
-
-🗓 WEEK 2 — Property Management & Dashboards
-
-🎯 Goal: Build property CRUD + image upload + dashboards for roles.
-
-Day 6 – Property Schema & Routes
-
-Create Property model:
-
-{ title, description, location, rent, ownerId, images[], tenants[] }
-
-
-Backend routes:
-
-POST /api/properties (landlord only)
-
-GET /api/properties (all)
-
-GET /api/properties/:id
-
-PUT /api/properties/:id (owner only)
-
-DELETE /api/properties/:id (owner only)
-
-✅ Deliverable: Tested CRUD routes via Postman.
-
-Day 7 – Cloudinary Integration
-
-Setup Cloudinary config + multer for image upload.
-
-Update create/edit property routes to handle image upload.
-
-Test single and multiple image uploads.
-
-✅ Deliverable: Property images uploaded and stored in Cloudinary.
-
-Day 8 – Frontend Property Management (Landlord)
-
-Create pages:
-
-MyProperties.jsx (list landlord’s properties)
-
-AddProperty.jsx (create/edit form)
-
-Connect via axios to backend.
-
-Show preview of uploaded images.
-
-✅ Deliverable: Landlord can add, edit, and delete properties.
-
-Day 9 – Frontend Property List (Tenant View)
-
-Create:
-
-PropertyList.jsx → view all available properties.
-
-PropertyDetails.jsx → detail page with images, rent, landlord info.
-
-Add “Request Rent” or “Apply to Rent” button.
-
-✅ Deliverable: Tenant can view and request to rent properties.
-
-Day 10 – Rent Requests / Tenancy Model
-
-Create Tenancy model:
-
-{ tenantId, propertyId, startDate, rentStatus: "Pending"|"Paid" }
-
-
-Routes:
-
-Tenant: POST /api/tenancies (request rent)
-
-Landlord: PATCH /api/tenancies/:id (approve/reject)
-
-Update dashboard to show active tenancies.
-
-✅ Deliverable: Rent requests flow functional.
-
-🗓 WEEK 3 — Payments, Maintenance & Reviews
-
-🎯 Goal: Build rent tracking, payment management, and maintenance system.
-
-Day 11 – Payment Model & Routes
-
-Create Payment model:
-
-{ tenantId, propertyId, amount, month, status }
-
-
-Add manual rent payment route (for MVP):
-Tenant → /api/payments → marks “Paid”.
-
-✅ Deliverable: Rent payment logic working (manual version).
-
-Day 12 – Payment Integration (Optional Razorpay/Stripe)
-
-Integrate Razorpay (test mode).
-Use payment ID & verify signature.
-
-Store transaction in DB.
-
-✅ Deliverable: Real/Mock payment system integrated.
-
-Day 13 – Tenant Dashboard
-
-Components:
-
-Rented Properties
-
-Payment History
-
-Maintenance Requests (table)
-
-API integration for /properties, /payments, /requests.
-
-✅ Deliverable: Tenant dashboard with dynamic data.
-
-Day 14 – Landlord Dashboard
-
-Components:
-
-My Properties
-
-Tenant List (for each property)
-
-Rent Status Overview
-
-Maintenance Requests
-
-✅ Deliverable: Landlord dashboard with all relevant info.
-
-Day 15 – Maintenance Request System
-
-Request model:
-
-{ tenantId, propertyId, issue, status: "Pending"|"Resolved" }
-
-
-API routes for CRUD.
-
-Tenant UI → Create maintenance request.
-
-Landlord UI → Mark as resolved.
-
-✅ Deliverable: Request system end-to-end done.
-
-Day 16 – Rating & Review System
-
-Review model:
-
-{ tenantId, propertyId, rating, comment }
-
-
-API endpoints for create/read.
-
-Tenant adds review after payment.
-
-Show average rating on property detail.
-
-✅ Deliverable: Rating system live.
-
-🗓 WEEK 4 — Testing, Optimization & Deployment
-
-🎯 Goal: Make it production-grade and deploy.
-
-Day 17–18 – Validation & Error Handling
-
-Add backend validation (check role before CRUD).
-
-Add centralized error middleware.
-
-Validate frontend inputs via Yup.
-
-✅ Deliverable: Stable backend with proper validation.
-
-Day 19–20 – UI Polish
-
-Add responsive layouts (Tailwind).
-
-Add skeleton loaders/spinners.
-
-Improve empty state UIs and toasts.
-
-✅ Deliverable: UI looks clean and professional.
-
-Day 21 – Notifications (Optional Enhancement)
-
-Add rent due reminders using:
-
-Node cron job
-
-Nodemailer for email alerts (mock)
-
-Display in dashboard as “Rent Due” badges.
-
-✅ Deliverable: Notification system ready (optional).
-
-Day 22–23 – Testing & QA
-
-Test every route with Postman.
-
-Validate flows:
-
-Login → Add Property → Tenant Request → Payment → Review.
-
-Fix any bugs and UI mismatches.
-
-✅ Deliverable: Stable, bug-free version.
-
-Day 24 – Deployment
-
-Host backend on Render or Railway.
-
-Frontend on Vercel.
-
-MongoDB on MongoDB Atlas.
-
-Set environment variables properly (.env).
-
-✅ Deliverable: Live production build online.
-
-Day 25 – Documentation & Resume Prep
-
-Create README.md:
-
-Overview
-
-Tech Stack
-
-Features
-
-Setup Instructions
-
-Screenshots
-
-Write summary for resume + LinkedIn project section.
-
-✅ Deliverable: Full production-grade project, portfolio ready.
-
-🚀 After Finishing MVP
-
-Add bonus features to make it stand out:
-
-Rent due email scheduler (Nodemailer + cron)
-
-Charts in dashboard (Recharts)
-
-Activity logs (“X tenant paid rent on …”)
-
-Search & filter for properties
-
-Role-based analytics (total rent collected, etc.)
+LinkedIn: https://linkedin.com/in/your-profile
+Email: patelpriy29@gmail.com
