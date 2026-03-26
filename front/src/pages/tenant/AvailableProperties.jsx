@@ -173,7 +173,7 @@ export default function AvailableProperties() {
   const { items, loading, pagination } = useSelector(
     (state) => state.properties,
   );
-
+  // deploy fix
   // Ensure items is always an array
   const safeItems = Array.isArray(items) ? items : [];
 
