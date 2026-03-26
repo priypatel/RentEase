@@ -119,10 +119,7 @@ const propertySlice = createSlice({
       // GET ALL PROPERTIES (TENANT)
       // ==========================================
       .addCase(getAllProperties.pending, (state) => {
-        // Show skeleton ONLY if no data exists yet
-        if (state.items.length === 0) {
-          state.loading = true;
-        }
+        state.loading = true;
       })
       .addCase(getAllProperties.fulfilled, (state, action) => {
         state.loading = false;

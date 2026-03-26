@@ -195,17 +195,15 @@ export default function AvailableProperties() {
     }
   }, [loading, safeItems]);
 
-  // Fetch Data
+  // Fetch Data — debounce only search, dispatch getAllProperties immediately
   useEffect(() => {
-    const delay = setTimeout(() => {
-      if (searchQuery.trim().length > 0) {
+    if (searchQuery.trim().length > 0) {
+      const delay = setTimeout(() => {
         dispatch(searchProperties({ query: searchQuery, page, limit }));
-      } else {
-        dispatch(getAllProperties({ page, limit }));
-      }
-    }, 400);
-
-    return () => clearTimeout(delay);
+      }, 400);
+      return () => clearTimeout(delay);
+    }
+    dispatch(getAllProperties({ page, limit }));
   }, [page, searchQuery, dispatch]);
 
   // Local Filters
